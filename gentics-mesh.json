@@ -69,5 +69,6 @@
     "Content Model / Schema Versioning": "Yes",
     "Content Migration": "Yes",
     "Workflows": "No",
-    "Special Features": "Webroot API for routing frameworks"
+    "Special Features": "Webroot API for routing frameworks",
+    "Feedback": ""
   }

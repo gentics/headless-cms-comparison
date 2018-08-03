@@ -48,6 +48,7 @@
     "Plugin System": "No",
     "Customizable UI": "No",
     "Custom Field Types": "No",
+    "User Management": "",
     "Role Based Permissions": "Yes",
     "Document Level Permissions": "No",
     "OAuth 2.0 Support": "Yes",
@@ -59,11 +60,15 @@
     "Tagging": "Yes",
     "Content Relations": "1:1, 1:n, n:n, n:1",
     "Nesting of Fields": "Yes",
+    "GDPR Compliance": "",
     "Editing Conflict Detection": "Yes",
     "Versioning": "Yes",
     "Content Scheduling": "Yes",
     "Content Branches": "No",
     "Content Models / Schemas": "Yes",
     "Content Model / Schema Versioning": "No",
-    "Workflows": "Yes"
+    "Content Migration": "",
+    "Workflows": "Yes",
+    "Special Features": "",
+    "Feedback": ""
   }

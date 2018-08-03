@@ -57,12 +57,18 @@
     "Project Support": "Yes",
     "I18N Localized Content": "Yes",
     "Content Trees": "No",
+    "Tagging": "",
+    "Content Relations": "",
+    "Nesting of Fields": "",
     "GDPR Compliance": "No",
+    "Editing Conflict Detection": "",
     "Versioning": "No",
     "Content Scheduling": "No",
     "Content Branches": "No",
     "Content Models / Schemas": "Yes",
     "Content Model / Schema Versioning": "No",
     "Content Migration": "No",
-    "Workflows": "No"
+    "Workflows": "No",
+    "Special Features": "",
+    "Feedback": ""
   }

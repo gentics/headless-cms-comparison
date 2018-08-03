@@ -24,6 +24,7 @@
     "Image Manipulation": "Yes",
     "Optimized Image Encoding": "No",
     "CDN Support": "Yes",
+    "Antivirus Scanning": "",
     "Custom Binary Handler": "No",
     "System Requirements": "?",
     "Supported Databases": "?",
@@ -68,5 +69,6 @@
     "Content Model / Schema Versioning": "Yes",
     "Content Migration": "Yes",
     "Workflows": "Yes",
-    "Special Features": "Replication, Publishing, Rules Engine, Content Type Builder, SSO"
+    "Special Features": "Replication, Publishing, Rules Engine, Content Type Builder, SSO",
+    "Feedback": ""
   }

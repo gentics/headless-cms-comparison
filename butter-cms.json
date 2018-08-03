@@ -22,6 +22,7 @@
     "Search Features [Geospatial Search]": "No",
     "Search Features [Search within uploads (pdf,doc)]": "No",
     "Image Manipulation": "Yes",
+    "Optimized Image Encoding": "",
     "CDN Support": "No",
     "Antivirus Scanning": "No",
     "Custom Binary Handler": "No",
@@ -57,6 +58,7 @@
     "I18N Localized Content": "Yes",
     "Content Trees": "No",
     "Tagging": "Yes",
+    "Content Relations": "",
     "Nesting of Fields": "No",
     "GDPR Compliance": "No",
     "Editing Conflict Detection": "No",
@@ -66,5 +68,7 @@
     "Content Models / Schemas": "Yes",
     "Content Model / Schema Versioning": "No",
     "Content Migration": "No",
-    "Workflows": "No"
+    "Workflows": "No",
+    "Special Features": "",
+    "Feedback": ""
   }

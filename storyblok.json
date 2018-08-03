@@ -69,6 +69,5 @@
     "Content Model / Schema Versioning": "Yes",
     "Content Migration": "Yes",
     "Workflows": "Yes",
-    "Special Features": "Instant Live Preview",
-    "Feedback": "Would be better as Git Repository & allowing Pull Requests directly - to see who made which answers and be more open about this data. Maybe reach out to the guys at Netlify to combine it with headlesscms.org and other useful resources out there."
-  }
+    "Special Features": "Instant Live Preview"
+}

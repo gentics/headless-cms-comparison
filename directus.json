@@ -69,6 +69,5 @@
     "Content Model / Schema Versioning": "No",
     "Content Migration": "Yes",
     "Workflows": "Yes",
-    "Special Features": "custom status (Draft, Reveiw, Published)",
-    "Feedback": "Excellent questions! The only confusing question was regarding strict Content Schema. With our system you can choose any schema you want (completely customizable and fluid), but it's strict in that it conforms to the SQL standard.\n\nOur answers are based on the upcoming version 7 of Directus (currently in beta).\n\nThank you for putting this together! We're excited to see the results!"
-  }
+    "Special Features": "custom status (Draft, Reveiw, Published)"
+}

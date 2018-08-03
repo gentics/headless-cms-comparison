@@ -48,6 +48,7 @@
     "Plugin System": "Yes",
     "Customizable UI": "Yes",
     "Custom Field Types": "Yes",
+    "User Management": "",
     "Role Based Permissions": "Yes",
     "Document Level Permissions": "Yes",
     "OAuth 2.0 Support": "No",
@@ -67,5 +68,7 @@
     "Content Models / Schemas": "Yes",
     "Content Model / Schema Versioning": "Yes",
     "Content Migration": "No",
-    "Workflows": "No"
+    "Workflows": "No",
+    "Special Features": "",
+    "Feedback": ""
   }

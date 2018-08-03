@@ -3,7 +3,7 @@
     "Name of the System": "Name of the CMS System",
     "Version": "Version of the system",
     "License": "License of the system",
-    "Target Audience": "Enterprise",
+    "Target Audience": "Enterprise/Professional/Small Project/Your Target",
     "Open Source": "Yes/No",
     "Cloud Service": "Yes/No",
     "On Premises Installation": "Yes/No",
@@ -21,17 +21,25 @@
     "Search Features [Result Highlighting]": "Yes/No",
     "Search Features [Geospatial Search]": "Yes/No",
     "Search Features [Search within uploads (pdf,doc)]": "Yes/No",
+    // Can images be cropped / resized?
     "Image Manipulation": "Yes/No",
+    // Is it possible to optimize images (e.g. WebP, Progressive JPEG)
     "Optimized Image Encoding": "Yes/No",
+    // Can Assets be distributed to a CDN in order to speed-up content delivery?
     "CDN Support": "Yes/No",
+    // Can uploads be scanned via an antivirus system?
     "Antivirus Scanning": "Yes/No",
+    // Is it possible to directly process uploaded assets  (e.g. re-encode videos, shrink large images)?
     "Custom Binary Handler": "Yes/No",
     "System Requirements": "",
     "Supported Databases": "",
-    "Clustering": "Yes/No",
-    "Docker Support": "Yes/No",
-    "Backup Feature": "Yes/No",
+    // Can the system be setup in a cluster (e.g. HA) - On Premise Only
+    "Clustering": "Yes/No/NA",
+    // On Premise Only
+    "Docker Support": "Yes/No/NA",
+    "Backup Feature": "Yes/No/NA",
     "Import/Export": "Yes/No",
+    // Is there a CLI which can be used to interact with the System from the console?
     "CLI": "Yes/No",
     "SDK [Java]": "Yes/No",
     "SDK [C#]": "Yes/No",
@@ -41,34 +49,54 @@
     "SDK [AngularJS]": "Yes/No",
     "SDK [TypeScript]": "Yes/No",
     "Web Hooks": "Yes/No",
+    // Is there a websocket eventbus to which clients can connect in order to exchange messages or to get informed about content changes?
     "Eventbus": "Yes/No",
     "Bulk Import": "Yes/No",
+    // Is it possible to manage forms with the System? (e.g. Add a poll to a website and store the data  in the CMS)
     "Client Side Forms": "Yes/No",
+    // Does the system provide ways to automatically generate a sitemap / google sitemap?
     "Sitemap Generation": "Yes/No",
     "Plugin System": "Yes/No",
+    // Can the UI be customized? (e.g. by adding custom form elements)
     "Customizable UI": "Yes/No",
+    // Is it possible to add  custom field types?
     "Custom Field Types": "Yes/No",
+    // Does the system provide a way to manage users?
     "User Management": "Yes/No",
+    // Are permissions bound to roles?
     "Role Based Permissions": "Yes/No",
     "Document Level Permissions": "Yes/No",
     "OAuth 2.0 Support": "Yes/No",
+    // Will actions be logged? Is it possible to see what changes have been made by whom?
     "Auditing": "Yes/No",
     "API Keys": "Yes/No",
+    // Is it possible to have multiple projects which dedicated contents?
     "Project Support": "Yes/No",
     "I18N Localized Content": "Yes/No",
+    // Can contents be structured in a tree? Can folders be used?
     "Content Trees": "Yes/No",
     "Tagging": "Yes/No",
+    // How can individual contents be linked to each other? Please choose all options that the system supports.
     "Content Relations": "1:1, 1:n, n:n, n:1",
+    // Is it possible to nest a field within a different field in order to create complex field types? (e.g. vcard type which consists of name field and address field)
     "Nesting of Fields": "Yes/No",
+    // Is the system GDPR compliant? Is it possible to quickly find and anonymize stored contents which contain user specific information (e.g. Name, Address, Date of Birth). Summarize compliance support.
     "GDPR Compliance": "Yes/No",
+    // Will conflicts for concurrent updates / edits be detected?
     "Editing Conflict Detection": "Yes/No",
     "Versioning": "Yes/No",
+    // Is it possible to publish a specific content on a specific date?
     "Content Scheduling": "Yes/No",
+    // Can contents be branched in order to e.g. refactor the content structure for a relaunch of the connected website?
     "Content Branches": "Yes/No",
+    // Does the System provide a strict content schema?
     "Content Models / Schemas": "Yes/No",
+    // Are the content models versioned? Can older versions be accessed?
     "Content Model / Schema Versioning": "Yes/No",
+    // Is it possible to migrate contents if the underlying schema changes? (e.g. Change field type from number to string)
     "Content Migration": "Yes/No",
     "Workflows": "Yes/No",
+    // Mention any special feature that you want to highlight or list here
     "Special Features": ""
   }
   

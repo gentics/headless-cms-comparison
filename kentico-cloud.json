@@ -67,7 +67,7 @@
     "Content Branches": "No",
     "Content Models / Schemas": "Yes",
     "Content Model / Schema Versioning": "No",
-    "Content Migration": "Yes",
+    "Content Migration": "No",
     "Workflows": "Yes",
     "Special Features": ""
 }

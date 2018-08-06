@@ -60,7 +60,7 @@
     "Tagging": "Yes",
     "Content Relations": "1:1, 1:n, n:n, n:1",
     "Nesting of Fields": "Yes",
-    "GDPR Compliance": "Yes",
+    "GDPR Compliance": "Yes, Personal Data API",
     "Editing Conflict Detection": "Yes",
     "Versioning": "Yes",
     "Content Scheduling": "Yes",

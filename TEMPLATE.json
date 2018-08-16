@@ -3,6 +3,7 @@
     "Name": "Name of the CMS System",
     "Version": "Version of the system",
     "License": "License of the system",
+    "Inception": "Month-Year",
     "Target Audience": "Enterprise/Professional/Small Project/Your Target",
     "Open Source": "Yes/No",
     "Cloud Service": "Yes/No",

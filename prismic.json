@@ -23,6 +23,8 @@
     "Search Features [Geospatial Search]": "No",
     "Search Features [Search within uploads (pdf,doc)]": "No",
     "Image Manipulation": "Yes",
+    "Image Focalpoint support": "",
+    "Image Facedetection": "",
     "Optimized Image Encoding": "No",
     "CDN Support": "",
     "Antivirus Scanning": "No",

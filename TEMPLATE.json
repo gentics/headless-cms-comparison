@@ -24,8 +24,14 @@
     "Search Features [Search within uploads (pdf,doc)]": "Yes/No",
     // Can images be cropped / resized?
     "Image Manipulation": "Yes/No",
+    // Can a focal point be set to images in order to apply smart cropping?
+    "Image Focalpoint support": "Yes/No",
+    // Can faces in images be detected and added to the metadata of the images?
+    "Image Facedetection": "Yes/No",
     // Is it possible to optimize images (e.g. WebP, Progressive JPEG)
     "Optimized Image Encoding": "Yes/No",
+    // Can fingerprints of assets (image, video, audio) be generated in order to find similar assets?
+    "Asset fingerprinting": "Yes/No",
     // Can Assets be distributed to a CDN in order to speed-up content delivery?
     "CDN Support": "Yes/No",
     // Can uploads be scanned via an antivirus system?

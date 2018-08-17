@@ -70,8 +70,8 @@
     "Content Scheduling": "Yes",
     "Content Branches": "No",
     "Content Models / Schemas": "Yes",
-    "Content Model / Schema Versioning": "",
-    "Content Migration": "",
+    "Content Model / Schema Versioning": "No",
+    "Content Migration": "No",
     "Workflows": "No",
     "Special Features": "No write API"
 }

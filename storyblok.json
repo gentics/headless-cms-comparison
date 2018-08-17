@@ -65,13 +65,13 @@
     "Content Relations": "1:1, 1:n, n:n, n:1",
     "Nesting of Fields": "Yes",
     "GDPR Compliance": "",
-    "Editing Conflict Detection": "Yes",
+    "Editing Conflict Detection": "No",
     "Versioning": "Yes",
     "Content Scheduling": "Yes",
-    "Content Branches": "Yes",
+    "Content Branches": "No",
     "Content Models / Schemas": "Yes",
-    "Content Model / Schema Versioning": "Yes",
+    "Content Model / Schema Versioning": "No",
     "Content Migration": "Yes",
-    "Workflows": "Yes",
+    "Workflows": "No",
     "Special Features": "Instant Live Preview"
 }

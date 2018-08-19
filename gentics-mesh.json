@@ -36,7 +36,7 @@
     "Docker Support": "Yes",
     "Backup Feature": "Yes",
     "Import/Export": "No",
-    "CLI": "No",
+    "CLI": "Yes",
     "SDK [Java]": "Yes",
     "SDK [C#]": "No",
     "SDK [PHP]": "No",

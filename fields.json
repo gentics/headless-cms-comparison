@@ -48,7 +48,6 @@
     "Eventbus": "Is there a websocket eventbus to which clients can connect in order to exchange messages or to get informed about content changes?",
     "Bulk Import": "Is there a feature for bulk imports?",
     "Client Side Forms": "Is it possible to manage forms with the System? (e.g. Add a poll to a website and store the data  in the CMS)",
-    "Sitemap Generation": "Does the system provide ways to automatically generate a sitemap / google sitemap?",
     "Plugin System": "Can the system be extended via custom plugins?",
     "Customizable UI": "Can the UI be customized? (e.g. by adding custom form elements)",
     "Custom Field Types": "Is it possible to add custom field types?",

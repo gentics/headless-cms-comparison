@@ -61,8 +61,6 @@
     "Bulk Import": "Yes/No",
     // Is it possible to manage forms with the System? (e.g. Add a poll to a website and store the data  in the CMS)
     "Client Side Forms": "Yes/No",
-    // Does the system provide ways to automatically generate a sitemap / google sitemap?
-    "Sitemap Generation": "Yes/No",
     "Plugin System": "Yes/No",
     // Can the UI be customized? (e.g. by adding custom form elements)
     "Customizable UI": "Yes/No",

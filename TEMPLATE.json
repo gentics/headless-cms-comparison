@@ -11,7 +11,14 @@
     "Cloud Service Hosted in Europe": "Yes/No/NA",
     "Commercial Support Available?": "Yes/No",
     "GraphQL API": "Yes/No",
+    "GraphQL [Mutations]": "Yes/No",
+    "GraphQL [Subscriptions]": "Yes/No",
     "REST API": "Yes/No",
+    "REST [Create]": "Can elements be created via REST? [Yes/No]",
+    "REST [Read]": "Can elements be read via REST? [Yes/No]",
+    "REST [Update]": "Can elements be updated via REST? [Yes/No]",
+    "REST [Delete]": "Can elements be deleted via REST? [Yes/No]",
+    "REST [Upload]": "Can uploads be performed via REST? [Yes/No]",
     "Search API": "Yes/No",
     "Search Features [Full Text Search]": "Yes/No",
     "Search Features [Stemming]": "Yes/No",
@@ -22,32 +29,21 @@
     "Search Features [Result Highlighting]": "Yes/No",
     "Search Features [Geospatial Search]": "Yes/No",
     "Search Features [Search within uploads (pdf,doc)]": "Yes/No",
-    // Can images be cropped / resized?
-    "Image Manipulation": "Yes/No",
-    // Can a focal point be set to images in order to apply smart cropping?
-    "Image Focalpoint support": "Yes/No",
-    // Can faces in images be detected and added to the metadata of the images?
-    "Image Facedetection": "Yes/No",
-    // Is it possible to optimize images (e.g. WebP, Progressive JPEG)
-    "Optimized Image Encoding": "Yes/No",
-    // Can fingerprints of assets (image, video, audio) be generated in order to find similar assets?
-    "Asset fingerprinting": "Yes/No",
-    // Can Assets be distributed to a CDN in order to speed-up content delivery?
-    "CDN Support": "Yes/No",
-    // Can uploads be scanned via an antivirus system?
-    "Antivirus Scanning": "Yes/No",
-    // Is it possible to directly process uploaded assets  (e.g. re-encode videos, shrink large images)?
-    "Custom Binary Handler": "Yes/No",
+    "Image Manipulation": "Can images be cropped / resized? [Yes/No]",
+    "Image Focalpoint support": "Can a focal point be set to images in order to apply smart cropping? [Yes/No]",
+    "Image Facedetection": "Can faces in images be detected and added to the metadata of the images? [Yes/No]",
+    "Optimized Image Encoding": "Is it possible to optimize images (e.g. WebP, Progressive JPEG) [Yes/No]",
+    "Asset fingerprinting": "Can fingerprints of assets (image, video, audio) be generated in order to find similar assets? [Yes/No]",
+    "CDN Support": "Can assets be distributed to a CDN in order to speed-up content delivery? [Yes/No]",
+    "Antivirus Scanning": "Can uploads be scanned via an antivirus system? [Yes/No]",
+    "Custom Binary Handler": "Is it possible to directly process uploaded assets  (e.g. re-encode videos, shrink large images)? [Yes/No]",
     "System Requirements": "",
     "Supported Databases": "",
-    // Can the system be setup in a cluster (e.g. HA) - On Premise Only
-    "Clustering": "Yes/No/NA",
-    // On Premise Only
-    "Docker Support": "Yes/No/NA",
-    "Backup Feature": "Yes/No/NA",
+    "Clustering": "Can the system be setup in a cluster (e.g. HA) - On Premise Only [Yes/No/NA]",
+    "Docker Support": "On Premise Only - [Yes/No/NA]",
+    "Backup Feature": "On Premise Only - [Yes/No/NA]",
     "Import/Export": "Yes/No",
-    // Is there a CLI which can be used to interact with the System from the console?
-    "CLI": "Yes/No",
+    "CLI": "Is there a CLI which can be used to interact with the System from the console? [Yes/No]",
     "SDK [Java]": "Yes/No",
     "SDK [C#]": "Yes/No",
     "SDK [PHP]": "Yes/No",
@@ -56,11 +52,9 @@
     "SDK [AngularJS]": "Yes/No",
     "SDK [TypeScript]": "Yes/No",
     "Web Hooks": "Yes/No",
-    // Is there a websocket eventbus to which clients can connect in order to exchange messages or to get informed about content changes?
-    "Eventbus": "Yes/No",
+    "Eventbus": "Is there a websocket eventbus to which clients can connect in order to exchange messages or to get informed about content changes? [Yes/No]",
     "Bulk Import": "Yes/No",
-    // Is it possible to manage forms with the System? (e.g. Add a poll to a website and store the data  in the CMS)
-    "Client Side Forms": "Yes/No",
+    "Client Side Forms": "Is it possible to manage forms with the System? (e.g. Add a poll to a website and store the data  in the CMS) [Yes/No]",
     "Plugin System": "Yes/No",
     // Can the UI be customized? (e.g. by adding custom form elements)
     "Customizable UI": "Yes/No",
@@ -101,7 +95,6 @@
     // Is it possible to migrate contents if the underlying schema changes? (e.g. Change field type from number to string)
     "Content Migration": "Yes/No",
     "Workflows": "Yes/No",
-    // Mention any special feature that you want to highlight or list here
-    "Special Features": ""
+    "Special Features": "Mention any special feature that you want to highlight or list here"
   }
   

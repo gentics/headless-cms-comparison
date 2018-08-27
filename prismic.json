@@ -11,7 +11,14 @@
     "Cloud Service Hosted in Europe": "?",
     "Commercial Support Available?": "Yes",
     "GraphQL API": "No",
+    "GraphQL [Mutations]": "No",
+    "GraphQL [Subscriptions]": "No",
     "REST API": "Yes",
+    "REST [Create]": "No",
+    "REST [Read]": "Yes",
+    "REST [Update]": "No",
+    "REST [Delete]": "No",
+    "REST [Upload]": "No",
     "Search API": "Yes",
     "Search Features [Full Text Search]": "Yes",
     "Search Features [Stemming]": "No",
@@ -72,5 +79,5 @@
     "Content Model / Schema Versioning": "No",
     "Content Migration": "No",
     "Workflows": "No",
-    "Special Features": "No write API"
+    "Special Features": ""
 }

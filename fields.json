@@ -28,7 +28,7 @@
     "Search Features [Autosuggestion]": "Yes/No",
     "Search Features [Result Highlighting]": "Yes/No",
     "Search Features [Geospatial Search]": "Yes/No",
-    "Search Features [Search within uploads (pdf,doc)]": "Yes/No",
+    "Search Features [Search within uploads (pdf,doc)]": "Is it possible to search within uploaded documents (PDF, Doc)? ",
     "Image Manipulation": "Can images be cropped / resized?",
     "Image Focalpoint support": "Can a focal point be set to images in order to apply smart cropping?",
     "Image Facedetection": "Can faces in images be detected and added to the metadata of the images?",

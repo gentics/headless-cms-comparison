@@ -56,43 +56,27 @@
     "Bulk Import": "Yes",
     "Client Side Forms": "Yes",
     "Plugin System": "No",
-    // Can the UI be customized? (e.g. by adding custom form elements)
     "Customizable UI": "Yes",
-    // Is it possible to add  custom field types?
     "Custom Field Types": "Yes",
-    // Does the system provide a way to manage users?
     "User Management": "Yes",
-    // Are permissions bound to roles?
     "Role Based Permissions": "Yes",
     "Document Level Permissions": "Yes",
     "OAuth 2.0 Support": "NA",
-    // Will actions be logged? Is it possible to see what changes have been made by whom?
     "Auditing": "Yes",
     "API Keys": "Yes",
-    // Is it possible to have multiple projects which dedicated contents?
     "Project Support": "Yes",
     "I18N Localized Content": "Yes",
-    // Can contents be structured in a tree? Can folders be used?
     "Content Trees": "NA",
     "Tagging": "Yes",
-    // How can individual contents be linked to each other? Please choose all options that the system supports.
     "Content Relations": "1:1, 1:n",
-    // Is it possible to nest a field within a different field in order to create complex field types? (e.g. vcard type which consists of name field and address field)
     "Nesting of Fields": "Yes",
-    // Is the system GDPR compliant? Is it possible to quickly find and anonymize stored contents which contain user specific information (e.g. Name, Address, Date of Birth). Summarize compliance support.
     "GDPR Compliance": "No",
-    // Will conflicts for concurrent updates / edits be detected?
     "Editing Conflict Detection": "No",
     "Versioning": "Yes",
-    // Is it possible to publish a specific content on a specific date?
     "Content Scheduling": "NA",
-    // Can contents be branched in order to e.g. refactor the content structure for a relaunch of the connected website?
     "Content Branches": "NA",
-    // Does the System provide a strict content schema?
     "Content Models / Schemas": "Yes",
-    // Are the content models versioned? Can older versions be accessed?
     "Content Model / Schema Versioning": "NA",
-    // Is it possible to migrate contents if the underlying schema changes? (e.g. Change field type from number to string)
     "Content Migration": "NA",
     "Workflows": "Yes",
     "Special Features": "Live preview while editing, advanced field types (e.g. similar to Gutenberg editor), advanced permission and validation definition, using expressions"

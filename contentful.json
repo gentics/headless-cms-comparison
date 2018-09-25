@@ -45,7 +45,7 @@
     "Import/Export": "Yes",
     "CLI": "Yes",
     "SDK [Java]": "Yes",
-    "SDK [C#]": "No",
+    "SDK [C#]": "Yes",
     "SDK [PHP]": "Yes",
     "SDK [JavaScript]": "Yes",
     "SDK [React]": "No",

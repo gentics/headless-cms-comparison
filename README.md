@@ -8,4 +8,5 @@ For a general overview of Headless CMS systems please visit https://headlesscms.
 
 ## Contributing
 
-If you want to contribute the list please copy the [TEMPLATE.json](TEMPLATE.json) and open a pull request.
+If you want to contribute the list please copy the [fields.json](fields.json) and open a pull request.
+Please include links to the documentation of the listed features in order to allow review of the changes.

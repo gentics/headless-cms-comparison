@@ -57,7 +57,7 @@
     "Client Side Forms": "No",
     "Plugin System": "No",
     "Customizable UI": "Yes",
-    "Custom Field Types": "No",
+    "Custom Field Types": "Yes",
     "User Management": "Yes",
     "Role Based Permissions": "Yes",
     "Document Level Permissions": "No",

@@ -27,7 +27,7 @@
     "Search Features [Autocompletion]": "No",
     "Search Features [Autosuggestion]": "No",
     "Search Features [Result Highlighting]": "No",
-    "Search Features [Geospatial Search]": "No",
+    "Search Features [Geospatial Search]": "Yes",
     "Search Features [Search within uploads (pdf,doc)]": "No",
     "Image Manipulation": "Yes",
     "Image Focalpoint support": "Yes",

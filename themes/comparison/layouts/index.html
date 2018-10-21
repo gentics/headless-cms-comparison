@@ -1,0 +1,16 @@
+homepage
+
+<table border=1>
+{{ range $index, $element := $.Site.Data }}
+
+<tr>
+  {{ if ne $index "fields"}}  
+  {{ range $index2, $element2 := $element }}
+    <td>{{$index2}}</td>
+  {{end}}
+  <li>{{ $element.Name }}</li>
+  {{end}}
+</tr>
+
+{{ end }}
+</table>

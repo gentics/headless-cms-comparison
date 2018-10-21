@@ -1,0 +1,11 @@
+languageCode = "en-us"
+title = "Headless CMS Comparison"
+baseurl = ""
+theme = "comparison"
+
+DefaultContentLanguage = "en-us"
+
+relativeURLs = true
+canonifyurls = true
+paginate = 3
+publishDir = "docs"

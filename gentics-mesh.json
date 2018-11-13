@@ -46,7 +46,7 @@
     "CLI": "Yes",
     "SDK [Java]": "Yes",
     "SDK [C#]": "No",
-    "SDK [PHP]": "No",
+    "SDK [PHP]": "Yes",
     "SDK [JavaScript]": "Yes",
     "SDK [React]": "No",
     "SDK [AngularJS]": "No",

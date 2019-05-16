@@ -1,0 +1,27 @@
+{
+  "name": "headless-cms-comparison",
+  "version": "1.0.0",
+  "description": "This repository contains the sources for the [Headless CMS Comparison Sheet](https://docs.google.com/spreadsheets/d/1L2KNUf-8um8_yevKRTmUUQKy4DcoKWZ-GZR0HavrtoQ)",
+  "main": "feature",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gentics/headless-cms-comparison.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gentics/headless-cms-comparison/issues"
+  },
+  "bin": {
+    "feature": "./feature"
+  },
+  "homepage": "https://github.com/gentics/headless-cms-comparison#readme",
+  "dependencies": {
+    "edit-json-file": "^1.2.1",
+    "fast-glob": "^2.2.6",
+    "yargs": "^13.2.4"
+  }
+}

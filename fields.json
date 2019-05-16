@@ -81,5 +81,4 @@
     "Content Migration": "Is it possible to automatically migrate contents if the underlying schema changes? (e.g. Change field type from number to string)",
     "Workflows": "Does the system support editing workflows?",
     "Special Features": "Noteworthy features"
-  }
-  
+}

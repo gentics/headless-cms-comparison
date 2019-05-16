@@ -4,6 +4,16 @@ This repository contains the sources for the [Headless CMS Comparison Sheet](htt
 
 For a general overview of Headless CMS systems please visit https://headlesscms.org/.
 
+## Adding and removing features
+
+```bash
+npm install
+./feature add <title> <description>
+./feature remove <title>
+```
+
+See `./feature --help` for more details
+
 ## [Generated Overview](https://docs.google.com/spreadsheets/d/1L2KNUf-8um8_yevKRTmUUQKy4DcoKWZ-GZR0HavrtoQ)
 
 ## Contributing

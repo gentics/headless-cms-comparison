@@ -8,7 +8,7 @@
     "Open Source": "No",
     "Cloud Service": "Yes",
     "On Premises Installation": "No",
-    "Cloud Service Hosted in Europe": "No",
+    "Cloud Service Hosted in Europe": "Yes",
     "Commercial Support Available?": "Yes",
     "GraphQL API": "Yes",
     "GraphQL [Mutations]": "No",

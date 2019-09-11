@@ -33,7 +33,7 @@
     "Image Focalpoint support": "Yes",
     "Image Facedetection": "No",
     "Optimized Image Encoding": "Yes",
-    "Asset fingerprinting": "No",
+    "Asset fingerprinting": "Yes",
     "CDN Support": "Yes",
     "Antivirus Scanning": "No",
     "Custom Binary Handler": "No",

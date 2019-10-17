@@ -1,5 +1,5 @@
 {
-    "Timestamp": "Data when the entry was submitted",
+    "Timestamp": "Date when the entry was submitted",
     "Name": "Name of the CMS System",
     "Version": "Version of the system",
     "License": "License of the system",

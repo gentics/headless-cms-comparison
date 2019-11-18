@@ -1,7 +1,7 @@
 {
-    "Timestamp": "2018-07-28T17:34:41.227Z",
+    "Timestamp": "2019-11-18T09:42:00.000Z",
     "Name": "Contentful",
-    "Version": "08-2018",
+    "Version": "11-2019",
     "License": "Proprietary",
     "Inception": "07-2010",
     "Category": "Essential - Professional",
@@ -74,7 +74,7 @@
     "GDPR API": "No",
     "Editing Conflict Detection": "Yes, via locking",
     "Versioning": "Yes",
-    "Content Scheduling": "No",
+    "Content Scheduling": "Yes",
     "Content Branches": "No",
     "Content Models / Schemas": "Yes",
     "Content Model / Schema Versioning": "Yes",

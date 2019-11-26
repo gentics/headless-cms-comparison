@@ -50,7 +50,7 @@
     "SDK [JavaScript]": "Yes",
     "SDK [React]": "No",
     "SDK [AngularJS]": "No",
-    "SDK [TypeScript]": "No",
+    "SDK [TypeScript]": "Yes",
     "Web Hooks": "Yes",
     "Eventbus": "No",
     "Bulk Import": "No",

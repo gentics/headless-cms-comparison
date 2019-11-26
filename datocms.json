@@ -52,7 +52,7 @@
     "SDK [AngularJS]": "No",
     "SDK [TypeScript]": "No",
     "Web Hooks": "Yes",
-    "Eventbus": "Yes",
+    "Eventbus": "No",
     "Bulk Import": "Yes",
     "Client Side Forms": "No",
     "Plugin System": "Yes",

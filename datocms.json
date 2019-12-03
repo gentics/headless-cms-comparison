@@ -60,7 +60,7 @@
     "Custom Field Types": "Yes",
     "User Management": "Yes",
     "Role Based Permissions": "Yes",
-    "Document Level Permissions": "Yes",
+    "Document Level Permissions": "No",
     "OAuth 2.0 Support": "No",
     "Auditing": "No",
     "API Keys": "Yes",

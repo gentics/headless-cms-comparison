@@ -61,7 +61,7 @@
     "User Management": "Yes",
     "Role Based Permissions": "Yes",
     "Document Level Permissions": "Yes",
-    "OAuth 2.0 Support": "Yes",
+    "OAuth 2.0 Support": "No",
     "Auditing": "No",
     "API Keys": "Yes",
     "Project Support": "Yes",

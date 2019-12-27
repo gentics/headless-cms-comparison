@@ -57,7 +57,6 @@
     "Client Side Forms": "Is it possible to manage forms with the System? (e.g. Add a poll to a website and store the data  in the CMS)",
     "Plugin System": "Can the system be extended via custom plugins?",
     "Customizable UI": "Can the UI be customized? (e.g. by adding custom form elements)",
-    "Custom Field Types": "Is it possible to add custom field types? (e.g. date field, markdown field)",
     "User Management": "Does the system provide a way to manage users?",
     "Role Based Permissions": "Are permissions bound to roles?",
     "Document Level Permissions": "Can individual documents have dedicated permissions?",

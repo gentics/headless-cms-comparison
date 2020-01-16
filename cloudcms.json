@@ -1,7 +1,7 @@
 {
     "Timestamp": "2018-07-28T13:05:54.590Z",
     "Name": "Cloud CMS",
-    "Version": "3.2.0",
+    "Version": "3.2.47",
     "License": "Proprietary",
     "Inception": "05-2009",
     "Category": "Professional - Enterprise",
@@ -10,7 +10,7 @@
     "On Premises Installation": "Yes",
     "Cloud Service Hosted in Europe": "No",
     "Commercial Support Available?": "Yes",
-    "GraphQL API": "No",
+    "GraphQL API": "Yes",
     "GraphQL [Mutations]": "No",
     "GraphQL [Subscriptions]": "No",
     "REST API": "Yes",
@@ -45,8 +45,8 @@
     "Import/Export": "Yes",
     "CLI": "Yes",
     "SDK [Java]": "Yes",
-    "SDK [C#]": "No",
-    "SDK [PHP]": "No",
+    "SDK [C#]": "Yes",
+    "SDK [PHP]": "Yes",
     "SDK [JavaScript]": "Yes",
     "SDK [React]": "Yes",
     "SDK [AngularJS]": "Yes",
@@ -69,7 +69,7 @@
     "Tagging": "Yes",
     "Content Relations": "1:1, 1:n, n:n, n:1",
     "Nesting of Fields": "Yes",
-    "GDPR Statement": "No",
+    "GDPR Statement": "Yes",
     "GDPR API": "No",
     "Editing Conflict Detection": "Yes",
     "Versioning": "Yes",
@@ -79,5 +79,5 @@
     "Content Model / Schema Versioning": "Yes",
     "Content Migration": "Yes",
     "Workflows": "Yes",
-    "Special Features": "Replication, Publishing, Rules Engine, Content Type Builder, SSO"
+    "Special Features": "Git-like Versioning, SSO, Deployment, Replication, Publishing, Rules Engine, Content Type Builder"
 }

@@ -10,7 +10,7 @@
     "On Premises Installation": "No",
     "Cloud Service Hosted in Europe": "?",
     "Commercial Support Available?": "Yes",
-    "GraphQL API": "No",
+    "GraphQL API": "Yes",
     "GraphQL [Mutations]": "No",
     "GraphQL [Subscriptions]": "No",
     "REST API": "Yes",

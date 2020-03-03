@@ -12,7 +12,7 @@
     "Commercial Support Available?": "Yes",
     "GraphQL API": "Yes",
     "GraphQL [Mutations]": "No",
-    "GraphQL [Subscriptions]": "No",
+    "GraphQL [Subscriptions]": "Yes",
     "REST API": "Pluggable",
     "REST [Create]": "Pluggable",
     "REST [Read]": "Pluggable",

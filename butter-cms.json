@@ -10,7 +10,7 @@
     "On Premises Installation": "No",
     "Cloud Service Hosted in Europe": "No",
     "Commercial Support Available?": "Yes",
-    "GraphQL API": "Yes with Gatsby",
+    "GraphQL API": "No",
     "GraphQL [Mutations]": "No",
     "GraphQL [Subscriptions]": "No",
     "REST API": "Yes",
@@ -76,7 +76,7 @@
     "Content Scheduling": "Yes",
     "Content Branches": "Yes",
     "Content Models / Schemas": "Yes",
-    "Content Model / Schema Versioning": "Yes",
+    "Content Model / Schema Versioning": "No",
     "Content Migration": "Yes",
     "Workflows": "Yes",
     "Special Features": ""

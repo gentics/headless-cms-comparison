@@ -1,3 +1,5 @@
+import 'devextreme/dist/css/dx.common.css';
+import 'devextreme/dist/css/dx.light.css';
 import React from 'react';
 import logo from './logo.svg';
 import Button from 'react-bootstrap/Button';

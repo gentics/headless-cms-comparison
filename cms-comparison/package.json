@@ -13,12 +13,9 @@
     "bootstrap": "^4.5.0",
     "devextreme": "20.1-stable",
     "devextreme-react": "20.1-stable",
-    "fs": "0.0.1-security",
-    "material-table": "^1.63.1",
     "primereact": "^4.2.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
-    "react-bootstrap-table-next": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "typescript": "^3.9.6"

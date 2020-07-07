@@ -8,35 +8,48 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
+import Nav from 'react-bootstrap/Nav';
 import Accordion from 'react-bootstrap/Accordion';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import './App.css';
 
-import CmsList from './CmsList.tsx';
+import CmsList from './CmsList';
+import CmsCardList from './CmsCardList';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a> */}
-
-        <h1>Welcome to the headless CMS Comparison Website!</h1>
+        <h1>Welcome to the headless CMS Comparison Website!</h1>  
       </header>
+      
       <Container fluid className="mt-3">
         <Row>
           <Col>
-            <h3>Apply filters to search for CMS which match your requirements!</h3>
+          <Nav variant="pills" defaultActiveKey="/home">
+            <Nav.Item>
+              <Nav.Link href="/home">List View</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="link-1">Card View</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="disabled" disabled>
+                Disabled
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Col>
+        <Col>
+          <h3>Apply filters to search for CMS which match your requirements!</h3>
+          </Col>
+        </Row>
+      </Container>
+      <Container fluid className="my-3">
+        <Row>
+          <Col>
+            <CmsCardList></CmsCardList>
           </Col>
         </Row>
       </Container>

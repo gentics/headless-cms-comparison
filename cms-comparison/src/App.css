@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+div.cmsCard {
+  transition: all .2s ease-in-out;
+}
+
+div.cmsCard:hover {
+  transform: scale(1.1);
+}

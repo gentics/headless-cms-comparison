@@ -10,8 +10,7 @@ import DataGrid, {
   SearchPanel,
   Scrolling,
   Sorting,
-  FilterRow,
-  ColumnChooser
+  FilterRow
 } from 'devextreme-react/data-grid';
 
 
@@ -25,33 +24,23 @@ export default function CmsList() {
     fetch('cms-list.json')
                   .then(response => response.json())
                   .then(data => {return fetchCmsData(data.cms);})
+                  .then(rawCmsData => {return cleanUpCmsData(rawCmsData)})
                   .then(setCmsData);
   }, []);
   
   // Show progressBar as long as fetch is not completed, otherwise table
   if (cmsData) {
-    let cols: any[] = [];
-    cmsData.fields.forEach((field: any) => {
-        cols.push(<Column key={field.name}
-          dataField={field.name} dataType="string" 
-          width={field.name === "Name" ? 200 : "auto"} 
-          fixed={field.name === "Name" ? true : false }/>);
-    });
-
-    /*} else if (lastField.includes("Search") && (searchCols.length > 0)) {
-        cols.push(<Column caption = "Search Features">{searchCols}</Column>);
-        cols.push(<Column key={field.name} dataField={field.name} dataType="string" />); 
-     */
-
+    const cols = constructColumns(cmsData.fields);
     return (
       <div>
          <DataGrid
           dataSource={cmsData.cms}
           showBorders={true}
           columnAutoWidth={true}
-          height={750}
+          hoverStateEnabled={true}
+          selection={{ mode: 'single' }}
+          height={800}
         >
-          <ColumnChooser enabled={true} mode="dragAndDrop" />
           <FilterRow visible={true} />
           <Sorting mode="multiple" />
           <SearchPanel visible={true} highlightCaseSensitive={true} />
@@ -92,9 +81,64 @@ function softSanitizeCms(cms: Array<any>): Array<any> {
 
 
 
-function generalizeCms(cms: any) {
-  cms.Category = cms.Category.includes(); // TODO: Implement clean-up
-  return null;
+function cleanUpCmsData(cmsData: any) {
+  cmsData.cms = cmsData.cms.map((cms: Array<any>) => {
+    const obj = Object.create(null);
+    Object.entries(cms).forEach(([property, value]) => {
+      obj[property] = value.replace("?","Not specified");
+      if (obj[property].length === 0) {
+        obj[property] = "Not specified";
+      }
+    });
+    return obj;
+  });
+  return cmsData;
+}
+
+
+/**
+ * Constructs the columns for the DataTable by categorizing certain properties
+ * @param fields represents the available property fields in the table
+ * @returns an array containing the columns
+ */
+function constructColumns(fields: Array<any>): Array<any> {
+  let cols: any[] = [];
+  let categoryCols: any[] = [];
+  let activeCategory = "";
+
+  for (let i = 0; i < fields.length; i++) {
+    const field = fields[i];
+    const fieldCategory = field.name.split('(')[0];
+    const fieldHasCategory = fieldCategory.length < field.name.length;
+    
+
+    if (fieldHasCategory) {
+      if (activeCategory.length > 0) {
+        if (fieldCategory === activeCategory) {
+          categoryCols.push(<Column dataField={field.name} dataType="string" />);
+        } else {
+          cols.push(<Column caption={activeCategory}>{categoryCols}</Column>);
+          categoryCols = [];
+          categoryCols.push(<Column dataField={field.name} dataType="string" />);
+          activeCategory = fieldCategory;
+        }
+      } else {
+        // assert (categoryCols.length === 0);
+        categoryCols.push(<Column dataField={field.name} dataType="string" />);
+        activeCategory = fieldCategory;
+      }
+    } else {
+      if (activeCategory.length > 0) {
+        cols.push(<Column caption={activeCategory}>{categoryCols}</Column>);
+        categoryCols = [];
+        activeCategory = "";
+      }
+      cols.push(<Column dataField={field.name} dataType="string" 
+      width={field.name === "Name" ? 200 : "auto"} 
+      fixed={field.name === "Name" ? true : false }/>);
+    }
+  }
+  return cols;
 }
 
 /**

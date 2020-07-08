@@ -63,22 +63,25 @@ export default function CardList() {
 }
 
 function constructCards(cmsData: any, filterData: Array<any>): Array<any> {
-  let filteredCms;
+  let requiredCms;
   if (filterData) {
     const entries = Object.entries(filterData);
-    filteredCms = cmsData.cms.filter((cms: any) => {
+    requiredCms = cmsData.cms.filter((cms: any) => {
       return entries.every(property => {
         const name = property[0]; // String
-        const filterValues = property[1]; // Array
+        // Remove "Nice-To-Haves", these are treated extra...
+        const requiredValues = property[1].map((value: string) => {return (value === "Nice-To-Have" ? "" : value)}); // Array
         // return true, if a specific cms property does contain all specified values
-        return filterValues.some((value: string) => {return cms[name].includes(value)});
+        return requiredValues.some((value: string) => {return cms[name].includes(value)});
       });
     });
   } else {
-    filteredCms = cmsData.cms;
+    requiredCms = cmsData.cms;
   }
 
-  if (filteredCms.length === 0) {
+
+
+  if (requiredCms.length === 0) {
     return[(
       <div className={'my-2 mx-2 w-75'}>
         <Card>
@@ -92,7 +95,7 @@ function constructCards(cmsData: any, filterData: Array<any>): Array<any> {
       </div>
     )];
   } else {
-    return filteredCms.map((cms: any) => {
+    return requiredCms.map((cms: any) => {
       return (
         <div className={'my-2 mx-2'} key={cms.Name}>
           <Card style={{ width: '18rem' }} className={'cmsCard'}>
@@ -127,11 +130,24 @@ function FilterPanel(props: any) {
   const fieldValues = constructFieldValues(props.cmsData);
 
   const tableRows = fieldValues.map(field => { // TODO: Add for
-    const options = field.values.sort().map((value: string) => {
-      return (
-        <span key={field.name.concat("_" + value)}><input type="checkbox" name={field.name} value={value} />{' '}<label>{value}</label>{' '}</span>
-      )
-    });
+    let options = [];
+    if (field.values.includes("Yes") && field.values.includes("No")) {
+      options.push(
+        <span key={field.name.concat("_" + 0)}><input type="radio" name={field.name} value="" defaultChecked={true}/>{' '}<label>don't care</label>{' '}</span>
+      );
+      options.push(
+        <span key={field.name.concat("_" + 1)}><input type="radio" name={field.name} value="Nice-To-Have" />{' '}<label>nice-to-have</label>{' '}</span>
+      );
+      options.push(
+        <span key={field.name.concat("_" + 2)}><input type="radio" name={field.name} value="Yes" />{' '}<label>required</label>{' '}</span>
+      );
+    } else {
+      options = field.values.sort().map((value: string) => {
+        return (
+          <span key={field.name.concat("_" + value)}><input type="checkbox" name={field.name} value={value} />{' '}<label>{value}</label>{' '}</span>
+        )
+      });
+    }
     return (
       <tr key={field.name}>
         <td style={{textAlign: "left"}}>{field.name}</td>
@@ -152,6 +168,7 @@ function FilterPanel(props: any) {
         </Table>
         <div className="d-flex justify-content-end mb-2 mx-2">
           <Button variant="secondary" className="mr-1" disabled>Maybe Filter-Export possibility?</Button>
+          <Button variant="danger" className="mr-1" disabled>Reset filter</Button>
           <input className="btn btn-success" type="submit" value="Apply filter" />
         </div>
       </form>
@@ -160,7 +177,7 @@ function FilterPanel(props: any) {
 }
 
 function constructFieldValues(cmsData: any): Array<any> {
-  return cmsData.fields.filter((field: any) => {
+  const fields = cmsData.fields.filter((field: any) => {
     return !(IGNORE_FIELDS.includes(field.name));
   }).map((field: any) => {
     const fieldObj = Object.create(null);
@@ -177,6 +194,12 @@ function constructFieldValues(cmsData: any): Array<any> {
     });
     fieldObj.values = values;
     return fieldObj;
+  });
+  // Filter useless fields, e.g. a property that no CMS has or every CMS has
+  return fields.filter((field: any) => {
+    const values = Object.values(field)[1] as string[];
+    return !((values.includes("Yes") && !values.includes("No")) || 
+           (!values.includes("Yes") && values.includes("No")));
   });
 }
 

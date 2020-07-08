@@ -70,25 +70,25 @@ function constructColumns(fields: Array<any>): Array<any> {
     if (fieldHasCategory) {
       if (activeCategory.length > 0) {
         if (fieldCategory === activeCategory) {
-          categoryCols.push(<Column dataField={field.name} dataType="string" />);
+          categoryCols.push(<Column key={field.name} dataField={field.name} dataType="string" />);
         } else {
-          cols.push(<Column caption={activeCategory}>{categoryCols}</Column>);
+          cols.push(<Column key={activeCategory} caption={activeCategory}>{categoryCols}</Column>);
           categoryCols = [];
-          categoryCols.push(<Column dataField={field.name} dataType="string" />);
+          categoryCols.push(<Column key={field.name} dataField={field.name} dataType="string" />);
           activeCategory = fieldCategory;
         }
       } else {
         // assert (categoryCols.length === 0);
-        categoryCols.push(<Column dataField={field.name} dataType="string" />);
+        categoryCols.push(<Column key={field.name} dataField={field.name} dataType="string" />);
         activeCategory = fieldCategory;
       }
     } else {
       if (activeCategory.length > 0) {
-        cols.push(<Column caption={activeCategory}>{categoryCols}</Column>);
+        cols.push(<Column key={activeCategory} caption={activeCategory}>{categoryCols}</Column>);
         categoryCols = [];
         activeCategory = "";
       }
-      cols.push(<Column dataField={field.name} dataType="string" 
+      cols.push(<Column key={field.name} dataField={field.name} dataType="string" 
       width={field.name === "Name" ? 200 : "auto"} 
       fixed={field.name === "Name" ? true : false }/>);
     }

@@ -42,7 +42,6 @@ function App() {
           </Nav>
         </Col>
         <Col>
-          <h3>Apply filters to search for CMS which match your requirements!</h3>
           </Col>
         </Row>
       </Container>

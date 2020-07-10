@@ -33,6 +33,7 @@ export default function CmsList() {
           hoverStateEnabled={true}
           selection={{ mode: 'single' }}
           height={800}
+          onEditorPreparing={overrideOnValueChanged}
         >
           <FilterRow visible={true} />
           <Sorting mode="multiple" />
@@ -49,6 +50,10 @@ export default function CmsList() {
       <ProgressBar animated now={100} />
     );
   }
+}
+
+function overrideOnValueChanged(e: any) {  
+  e.updateValueTimeout = 100;
 }
 
 /**

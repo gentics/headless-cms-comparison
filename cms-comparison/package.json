@@ -12,11 +12,12 @@
     "@types/react-dom": "^16.9.8",
     "bootstrap": "^4.5.0",
     "devextreme": "20.1-stable",
-    "devextreme-react": "20.1-stable",
+    "devextreme-react": "^20.1.4",
     "primereact": "^4.2.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^3.10.0",
     "react-scripts": "3.4.1",
     "typescript": "^3.9.6"
   },

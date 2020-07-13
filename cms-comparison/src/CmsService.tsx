@@ -23,14 +23,18 @@ const CmsService = {
  * @returns a promise containing all fetch-processes, 
  * when resolved the promise returns an object in the form of
  * fields: Array of fields [name: ... , description: ...]
- * cms: Array of cms [Timestamp: ..., Name: ..., License: ..., etc.]
+ * cms: Array of cms-objects [{Timestamp: ..., Name: ..., License: ..., etc.}, {...}, ...]
  */
 function fetchCmsData(cmsList: [string]): Promise<Array<any>> {
   let promises: Promise<Array<any>>[] = [];
 
   cmsList.forEach(cms => {
     promises.push(fetch(CMS_REPO_BASE_URL + cms + ".json")
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response.json();})
     .then(data => {
       return data;
     }))

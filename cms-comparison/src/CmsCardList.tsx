@@ -4,11 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import Alert from 'react-bootstrap/Alert';
 import CmsService from './CmsService';
 import Table from 'react-bootstrap/Table';
 import Accordion from 'react-bootstrap/Accordion';
 import Form from 'react-bootstrap/Form'
-import { ColCountByScreen } from 'devextreme-react/data-grid';
 /*import { IconName } from "react-icons/ai";*/
 
 
@@ -23,7 +23,13 @@ const IGNORE_FIELDS = [
 export default function CardList() {
   const [cmsData, setCmsData] = React.useState<any>();
   const [filterData, setFilterData] = React.useState<any>(null);
-  React.useEffect(() => {console.log("Fetching"); CmsService.getCmsData().then(setCmsData);}, []);
+  const [fetchError, setFetchError] = React.useState<any>(null);
+  React.useEffect(() => {
+    console.log("Fetching..."); 
+    CmsService.getCmsData()
+    .then(setCmsData)
+    .catch(e => {console.log("Error detected!"); setFetchError(e)});}
+  , []);
   React.useEffect(() => {console.log("Filter updated!"); console.log(filterData);}, [filterData])
   
   const updateFilter = function(filter: Array<any>) {
@@ -32,7 +38,6 @@ export default function CardList() {
 
   if(cmsData) {
     const cards = constructCards(cmsData, filterData);
-    
     return (
       <div>      
         <FilterPanel cmsData={cmsData} updateFilter={updateFilter}/>
@@ -41,10 +46,16 @@ export default function CardList() {
         </div>
       </div>
     );
+  } else if (fetchError) {
+    return (
+      <Alert variant="danger">
+        An error occurred while fetching: {fetchError.message}
+    </Alert>
+    );
   } else {
     return (
       <ProgressBar animated now={100} />
-    )
+    );
   }
 }
 
@@ -79,10 +90,10 @@ function constructCards(cmsData: any, filterData: Array<any>): Array<any> {
 
     filter = requiredCms.map((tupel: any) => {
       const niceToHave: string[][] = [];
-      filter["niceToHave"].forEach((property: string) => { // TODO: BUG
+      filter["niceToHave"].forEach((property: string) => {
         niceToHave.push([
           property,
-          tupel[property].includes("Yes") ? "Yes" : "No"
+          tupel.cms[property].includes("Yes") ? "Yes" : "No"
         ]);
       });
       tupel["niceToHave"] = niceToHave;

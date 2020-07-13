@@ -9,7 +9,10 @@ import CmsService from './CmsService';
 import Table from 'react-bootstrap/Table';
 import Accordion from 'react-bootstrap/Accordion';
 import Form from 'react-bootstrap/Form'
-/*import { IconName } from "react-icons/ai";*/
+import { AiFillCheckCircle } from "react-icons/ai";
+import { AiFillLike } from "react-icons/ai";
+import { AiFillDislike } from "react-icons/ai";
+import { AiFillStar } from "react-icons/ai";
 
 
 const IGNORE_FIELDS = [
@@ -60,11 +63,11 @@ export default function CardList() {
 }
 
 function constructCards(cmsData: any, filterData: Array<any>): Array<any> {
+  console.log("ConstructCards() is called!");
   let filter: any;
-  let cmsCardData: any;
   if (filterData) {
     filter = parseFilterData(filterData);
-
+    console.log(filter);
     const requiredCms: any[] = [];
     cmsData.cms.forEach((cms: any) => {
       const matchingProperties: string[][] = [];
@@ -127,16 +130,53 @@ function constructCards(cmsData: any, filterData: Array<any>): Array<any> {
     )];
   } else {
     return filter.map((tripel: any) => {
+      const requiredProgress = 
+      (tripel.required.length > 0 || tripel.niceToHave.length > 0) ? 
+      (tripel.required.length / (tripel.required.length + tripel.niceToHave.length)) * 100 : 0;
+
+      const niceToHaveProgress = 
+      (tripel.niceToHave.length > 0) ? (tripel.niceToHave.filter((property:Array<any>) => {
+        return property[1] === "Yes"
+      }).length / (tripel.required.length + tripel.niceToHave.length)
+      ) * 100 : 0;
+
+      const niceToHaveShare = 
+      (tripel.niceToHave.length > 0) ? (tripel.niceToHave.filter((property:Array<any>) => {
+        return property[1] === "Yes"
+      }).length / tripel.niceToHave.length  * 100) : 0;
+
+      const requiredText = tripel.required.length > 0 ? 
+      <li><AiFillCheckCircle />{' '}Matches all needed requirements</li> : <li></li>;
+
+      const niceToHaveText = tripel.niceToHave.length > 0 ? 
+      <li>{(niceToHaveShare > 0) ? ((niceToHaveShare === 100) ? <AiFillStar /> : <AiFillLike />) : <AiFillDislike />}
+      {' '}Has {(niceToHaveShare > 0) ? (niceToHaveShare.toFixed(0) + "% ") : "none "} 
+      of the specified Nice-To-Have's.</li> : <li></li>; 
+      
+      const progressBars = (tripel.required.length > 0 || tripel.niceToHave.length > 0) ?
+      <ProgressBar className="mb-2">
+        <ProgressBar key={1} animated variant="info"
+          now={requiredProgress} />
+        <ProgressBar key={2} animated variant="warning" 
+          now={niceToHaveProgress} />
+      </ProgressBar> : <p></p>;
+
       return (
         <div className={'my-2 mx-2'} key={tripel.cms.Name}>
           <Card style={{ width: '18rem' }} className={'cmsCard'}>
-            <Card.Body>
+            <Card.Body style={{textAlign: "left"}} >
               <Card.Title>{tripel.cms.Name}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">Version {tripel.cms.Version}</Card.Subtitle>
+              <Card.Subtitle className="mb-2 text-muted">
+                Version {tripel.cms.Version}
+              </Card.Subtitle>
               <Card.Text>
-                Beispieltext, eventuell Featureabeckung-Prozente?
+                <ul style={{listStyle: "none", paddingLeft: 0}}>
+                  {requiredText}
+                  {niceToHaveText}
+                </ul>
               </Card.Text>
-              <Button variant="info">Details</Button>
+              {progressBars}
+              <div className="d-flex justify-content-start"><Button variant="info">Details</Button></div>
             </Card.Body>
           </Card>
         </div>
@@ -150,7 +190,12 @@ function FilterPanel(props: any) {
   const fieldFilterForm = React.useRef<any>();
   const resetPanelButton = React.useRef<any>();
 
-  const [fieldFilter, setFieldFilter] = React.useState<string>("");
+  const [fieldFilter, setFieldFilter] = React.useState<any>(["",false]);
+
+  React.useEffect(() => {
+    console.log("FieldFilter updated!");
+    console.log(fieldFilter);
+  }, [fieldFilter])
 
   React.useEffect(() => {
     filterForm.current.addEventListener('change', (e: any) => {
@@ -159,20 +204,34 @@ function FilterPanel(props: any) {
     });
 
     fieldFilterForm.current.addEventListener('input', (e: any) => {
-      setFieldFilter(fieldFilterForm.current.querySelectorAll("input")[0].value);
+      const form = fieldFilterForm.current.querySelectorAll("input");
+      setFieldFilter([form[0].value, form[1].checked]);
     });
 
     resetPanelButton.current.addEventListener('click', (e: any) => {
+      fieldFilterForm.current.reset();
+      setFieldFilter(["",false]);
       filterForm.current.reset();
       props.updateFilter(null);
     });
   }, []); // On mount, add eventListeners to forms
 
   let fieldValues = constructFieldValues(props.cmsData);
-  if (fieldFilter.length > 0) {
-    fieldValues = fieldValues.filter(field => {
-      return field.name.toUpperCase().includes(fieldFilter.toUpperCase());
+
+  if (fieldFilter[1]) {
+    const filter = getFormValues(filterForm.current);
+    const modifiedFields = filter.filter((property: Array<any>) => {
+      return property[1].length > 0 && property[1][0].length > 0;
     });
+    fieldValues = fieldValues.filter(field => {
+      return modifiedFields.some((modField:any) => {return modField.includes(field.name)});
+    });
+  }
+
+  if (fieldFilter[0].length > 0) {
+    fieldValues = fieldValues.filter(field => {
+      return field.name.toUpperCase().includes(fieldFilter[0].toUpperCase());
+    }); // TODO: BUG: When filtering and no match, form gets reset
   }
 
   let tableRows: any;
@@ -197,7 +256,7 @@ function FilterPanel(props: any) {
       } else {
         options = field.values.sort().map((value: string) => {
           return (
-            <span key={field.name.concat("_" + value)}><input type="checkbox" name={field.name} value={value} />{' '}<label>{value}</label>{' '}</span>
+            <span key={field.name.concat("_" + value)}><label>{value}{' '}<input type="checkbox" name={field.name} value={value}/></label>{' '}</span>
           )
         });
       }
@@ -226,11 +285,16 @@ function FilterPanel(props: any) {
           <Card.Header>
             <div className="d-flex justify-content-between">
               <h4 style={{lineHeight: 1.5, marginBottom: 0}}>Filter Panel</h4>
-              <Form className="w-50" ref={fieldFilterForm}>
-                <Form.Control type="text" name="filter" placeholder="Filter for properties..." />
+              <Form className="w-50 d-flex justify-content-between" ref={fieldFilterForm}>
+                <div>
+                  <Form.Control type="text" name="filterString" placeholder="Filter for properties..." />
+                </div>
+                <div className="d-flex align-items-center ml-2"> {/* TODO: Looks bad on mobile */}
+                  <Form.Check type="checkbox" name="onlyModified" label="Show modified properties only" />
+                </div>
               </Form>
               <div className="d-flex justify-content-between">
-                <Button variant="info" ref={resetPanelButton}>Clear Selection</Button>
+                <Button variant="info" ref={resetPanelButton}>Clear</Button>
                 <Accordion.Toggle as={Button} variant="secondary" eventKey="0" className="ml-2">
                   Toggle
                 </Accordion.Toggle>
@@ -288,23 +352,25 @@ function constructFieldValues(cmsData: any): Array<any> {
 }
 
 function getFormValues(form: any) {
-  var obj:any = {};
-  var elements = form.querySelectorAll( "input, select" );
+  const formValues: any = [];
+  const elements = form.querySelectorAll( "input, select" );
+
   for( var i = 0; i < elements.length; ++i ) {
     const element = elements[i];
     const name:string = element.name;
     const value = element.value;
-    if( name ) {
-      if (element.checked || element instanceof HTMLSelectElement) {
-        if (obj[name]) {
-          obj[name].push(value);
+    if(name) {
+      if (element.checked || (element instanceof HTMLSelectElement && value.length > 0)) {
+        const existingPropIndex = formValues.findIndex((property: any) => {return property[0] === name});
+        if (existingPropIndex === -1) {
+          formValues.push([name, [value]]);
         } else {
-          obj[name] = [value];
+          formValues[existingPropIndex][1].push(value);
         }
       }
     }
   }
-  return obj;
+  return formValues;
 }
 
 /**
@@ -313,12 +379,12 @@ function getFormValues(form: any) {
  * Array [PROPERTY_NAME, SELECTED_VALUE]
  */
 function parseFilterData(filterData: Array<any>) {
-  const filterObj = Object.create(null);
+  const filterObj:any = {};
   filterObj["required"] = [];
   filterObj["niceToHave"] = [];
   
-  const entries = Object.entries(filterData);
-  entries.forEach(property => {
+
+  filterData.forEach(property => {
     const name = property[0]; // String
     const value = property[1]; // Array
     const propertyArray = [];

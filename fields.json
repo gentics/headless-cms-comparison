@@ -45,12 +45,12 @@
       "value": null
     },
     "cloudServiceHostedInEurope": {
-      "name": "Cloud Service Hosted in Europe?",
+      "name": "Cloud Service Hosted in Europe",
       "description": "Yes/No",
       "value": null
     },
     "commercialSupportAvailable": {
-      "name": "Commercial Support Available",
+      "name": "Commercial Support Available?",
       "description": "Yes/No",
       "value": null
     },
@@ -185,7 +185,7 @@
       }
     },
     "assetFingerprinting": {
-      "name": "Asset Fingerprinting",
+      "name": "Asset fingerprinting",
       "description": "Can fingerprints of assets (image, video, audio) be generated in order to find similar assets?",
       "value": null
     },

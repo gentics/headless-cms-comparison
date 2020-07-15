@@ -409,7 +409,7 @@
         "value": null
       },
       "modelsSchemaVersioning": {
-        "name": "Models / Schema Versioning",
+        "name": "Model / Schema Versioning",
         "description": "Are the content models versioned? Can older versions be accessed?",
         "value": null
       },

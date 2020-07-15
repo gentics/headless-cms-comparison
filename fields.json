@@ -124,7 +124,7 @@
         "value": null
       },
       "feature_stemming": {
-        "name": "Feature [Stemming]",
+        "name": "Features [Stemming]",
         "description": "Yes/No",
         "value": null
       },

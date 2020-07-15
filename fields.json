@@ -119,42 +119,42 @@
         "value": null
       },
       "feature_fullTextSearch": {
-        "name": "Feature: Full Text Search",
+        "name": "Features [Full Text Search]",
         "description": "Yes/No",
         "value": null
       },
       "feature_stemming": {
-        "name": "Feature: Stemming",
+        "name": "Feature [Stemming]",
         "description": "Yes/No",
         "value": null
       },
       "feature_stopWords": {
-        "name": "Feature: Stop Words",
+        "name": "Features [Stop Words]",
         "description": "Yes/No",
         "value": null
       },
       "feature_autoCompletion": {
-        "name": "Feature: Auto Completion",
+        "name": "Features [Autocompletion]",
         "description": "Yes/No",
         "value": null
       },
       "feature_autoSuggestions": {
-        "name": "Feature: Auto Suggestions",
+        "name": "Features [Autosuggestion]",
         "description": "Yes/No",
         "value": null
       },
       "feature_resultHighlighting": {
-        "name": "Feature: Result Highlighting",
+        "name": "Features [Result Highlighting]",
         "description": "Yes/No",
         "value": null
       },
       "feature_geospatialSearch": {
-        "name": "Geospatial Search",
+        "name": "Features [Geospatial Search]",
         "description": "Yes/No",
         "value": null
       },
       "feature_searchWithinUploads": {
-        "name": "Feature: Search within Uploads",
+        "name": "Features [Search within uploads (pdf,doc)]",
         "description": "Is it possible to search within uploaded documents (PDF, Doc)?",
         "value": null
       }

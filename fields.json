@@ -1,5 +1,5 @@
 {
-  "cms": {
+  "fields": {
     "timeStamp": {
       "name": "Timestamp",
       "description": "Date when the entry was submitted"

@@ -1,7 +1,8 @@
-import { Cms } from './Cms';
+import { Cms } from "./Cms";
+import { stringify } from "querystring";
 
 const CMS_REPO_BASE_URL =
-  "https://raw.githubusercontent.com/gentics/headless-cms-comparison/master/";
+  "https://raw.githubusercontent.com/gentics/headless-cms-comparison/refactor/";
 // TODO: Add 'cms-list.json' to cms-comparison repo and fetch from there
 const CMS_LIST_PATH = "./cms-list.json";
 
@@ -65,7 +66,8 @@ function fetchCmsData(cmsList: [string]): Promise<any> {
       ),
       cms: softSanitizeCms(values.slice(1)),
     };
-
+    
+    reformatCms(cmsData.fields, cmsData.cms[0]);
     console.log(cmsData);
     return cmsData;
   });
@@ -85,14 +87,9 @@ function softSanitizeFields(
   });
 }
 
-function prepareCms(cms: any): Cms {
-  let preparedCms: Cms;
-  preparedCms.name = cms.Name;
-  
-}
-
 function softSanitizeCms(cms: Array<any>): Array<any> {
-  return cms.map((cms) => {
+  return cms;
+  /*return cms.map((cms) => {
     let sanCms = Object.create(null);
     const properties = Object.entries(cms);
 
@@ -104,7 +101,7 @@ function softSanitizeCms(cms: Array<any>): Array<any> {
       sanCms[sanProp] = property[1];
     });
     return sanCms;
-  });
+  });*/
 }
 
 function cleanUpCmsData(cmsData: any): Array<any> {
@@ -122,3 +119,70 @@ function cleanUpCmsData(cmsData: any): Array<any> {
 }
 
 export default CmsService;
+
+const start = Date.now();
+function reformatCms(fields: Array<any>, cms: any): Cms {
+  
+  const cmsEntries: [string, string][] = Object.entries(cms);
+  let cmsFields: [string, any][] = Object.entries(fields[fields.length - 1].description);
+
+
+  const cmsProperties = cmsFields.map(([propertyName, propertyObject]: [string, any]) => {
+    delete propertyObject.description;
+    const propertyDisplayName: string = propertyObject.name;
+    const propertyIsCategory: boolean = !propertyObject.hasOwnProperty("value");
+    if (propertyIsCategory) {
+      delete propertyObject.description;
+
+      const propName = propertyObject.name;
+      delete propertyObject.name; // Temp remove name!
+      let propertySubPropertyNames = Object.keys(propertyObject);
+      let propertySubProperties = Object.values(propertyObject); 
+      propertyObject.name = propName; // Add name back!
+
+      propertySubProperties.forEach((property: any, index: number) => {
+        delete property.description;
+        if (cms[property.name]) {
+          property.value = cms[property.name];
+          propertyObject[propertySubPropertyNames[index]] = property;
+        } else if(cms[`${propertyDisplayName} ${property.name}`]) {
+          property.value = cms[`${propertyDisplayName} ${property.name}`];
+          propertyObject[propertySubPropertyNames[index]] = property;
+        } else { // Conduct deep search
+          console.log(`Conducting deep search for ${property.name}`);
+          const propIndex = cmsEntries.findIndex(([name, _]: [string, string]) =>
+            name.toUpperCase().includes(property.name.toUpperCase())
+          );
+          if (propIndex !== -1) {
+            property.value = cms[cmsEntries[propIndex][0]];
+            propertyObject[propertySubPropertyNames[index]] = property;
+          } else {
+            console.log(`CMS has no ${property.name} or ${propertyDisplayName} ${property.name} property!`);
+          }
+        }
+      });
+    } else {
+      if (cms[propertyDisplayName]) {
+        propertyObject.value = cms[propertyDisplayName];
+      } else {
+        console.log(`CMS has no ${propertyDisplayName} property or it is empty!`);
+      }
+    }
+
+    return propertyObject;
+  });
+
+  let preparedCms: Cms = {
+    timeStamp: cms.Timestamp,
+    name: cms.Name,
+    version: cms.Version,
+    license: cms.License,
+    inception: cms.Inception,
+    properties: cmsProperties,
+  };  
+
+  console.log(preparedCms);
+  const elapsed = Date.now() - start;
+  console.log(`This operation took ${elapsed}ms`); // TODO: This is too slow
+  return preparedCms;
+}

@@ -13,7 +13,6 @@ import { AiFillDislike } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
 
 export default function CardList() {
-  test();
   const [cmsData, setCmsData] = React.useState<any>();
   const [filterData, setFilterData] = React.useState<any>(null);
   const [fetchError, setFetchError] = React.useState<any>(null);

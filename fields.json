@@ -408,8 +408,8 @@
         "description": "Does the System provide a strict content schema?",
         "value": null
       },
-      "modelsSchemasVersioning": {
-        "name": "Models / Schemas Versioning",
+      "modelsSchemaVersioning": {
+        "name": "Models / Schema Versioning",
         "description": "Are the content models versioned? Can older versions be accessed?",
         "value": null
       },

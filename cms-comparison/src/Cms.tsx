@@ -1,23 +1,47 @@
-/*enum License {
-  GPL,
-  BSD,
-  Proprietary,
-};*/
-
-type FieldType = boolean | string | ArrayType;
-// type Test = { name: string, value?: string | boolean};
-type ArrayType = { [key: string] : FieldType };
-// type SimpleProperty = {name: string, description?: string, value?: FieldType};
-
-// type categoryProperty = {name: string, description?: string, }
+export enum License {
+  GPLv3 = "GPLv3",
+  Proprietary = "Proprietary",
+  Apache_2 = "Apache-2.0",
+  BSD_3 = "BSD 3-Clause",
+  MIT = "MIT",
+  Commercial = "Commercial",
+  Freemium = "Freemium",
+  Other = "Other", // No match fallback value
+}
 
 export interface Cms {
-  timeStamp: Date;
+  lastUpdated: Date;
   name: string;
   version: string;
-  license: string; // TODO: Create License Enum
+  license: License[];
   inception: Date;
-  properties: {name: string, value?: string}[]; 
-  // properties: ArrayType;
-};
+  category: { essential: boolean; professional: boolean; enterprise: boolean };
+  properties: {
+    [x: string]: Property // Category | FieldObject
+  };
+}
 
+export interface Property {
+  name: string;
+  description?: string;
+}
+
+export interface SimpleProperty extends Property {
+  value: string | boolean;
+}
+
+export interface CategoryProperty extends Property {
+  [index: string]: any;
+}
+
+// Boolean form property
+interface FormProperty {
+  name: string;
+  description: string;
+  value: boolean | string;
+}
+
+// Complex form property
+interface ComplexFormProperty extends FormProperty {
+  possibleValues: string[];
+}

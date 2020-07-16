@@ -4,20 +4,21 @@ import Table from "react-bootstrap/Table";
 import Accordion from "react-bootstrap/Accordion";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-
-const IGNORE_FIELDS = [
-  "Timestamp",
-  "Special Features",
-  "Name",
-  "Version",
-  "Inception",
-  "Content Relations",
-]; // TODO: refactor jsons, many-to-many, ...
+import { useFormik } from 'formik';
 
 export default function FilterPanel(props: any) {
   const filterForm = React.useRef<any>();
   const fieldFilterForm = React.useRef<any>();
   const resetPanelButton = React.useRef<any>();
+
+
+  // TODO: Put Filter-Table-Generation in React.memo
+
+  
+
+  const cmsData = props.cmsData;
+  
+
 
   const [
     [fieldFilterString, showOnlyModified],
@@ -44,7 +45,7 @@ export default function FilterPanel(props: any) {
       filterForm.current.reset();
       props.updateFilter(null);
     });
-  }, []); // On mount, add eventListeners to forms
+  }, []); // On mount, add eventListeners to forms*/
 
   let fieldValues = constructFieldValues(props.cmsData);
 
@@ -317,12 +318,9 @@ function getFieldValue(field: any, filterData: any): [string] {
   return [""];
 }
 
-// Needs rework
-function constructFieldValues(cmsData: any): Array<any> {
+
+/*function constructFieldValues(cmsData: any): Array<any> {
   const fields = cmsData.fields
-    .filter((field: any) => {
-      return !IGNORE_FIELDS.includes(field.name);
-    })
     .map((field: any) => {
       const fieldObj = Object.create(null);
       fieldObj.name = field.name;
@@ -347,4 +345,10 @@ function constructFieldValues(cmsData: any): Array<any> {
       (!values.includes("Yes") && values.includes("No"))
     );
   });
+}*/
+
+function constructFieldValues(cms: Cms[]): any {
+  
 }
+
+

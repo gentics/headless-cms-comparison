@@ -1,4 +1,5 @@
-import { Cms } from "./Cms";
+import { Cms, Property, SimpleProperty, CategoryProperty } from "./Cms";
+import { License } from "./Cms";
 import { stringify } from "querystring";
 
 const CMS_REPO_BASE_URL =
@@ -6,10 +7,10 @@ const CMS_REPO_BASE_URL =
 // TODO: Add 'cms-list.json' to cms-comparison repo and fetch from there
 const CMS_LIST_PATH = "./cms-list.json";
 
-let cmsData: any; //TODO: Type
+let cmsData: Promise<any>; // TODO: Difficulties while typing Promises
 
 const CmsService = {
-  getCmsData: function (): Promise<Array<any>> {
+  getCmsData: function (): Promise<any> {
     if (!cmsData) {
       cmsData = fetch(CMS_LIST_PATH)
         .then((response) => response.json())
@@ -17,7 +18,7 @@ const CmsService = {
           return fetchCmsData(data.cms);
         })
         .then((rawCmsData) => {
-          return cleanUpCmsData(rawCmsData);
+          return rawCmsData;
         });
     }
     return cmsData;
@@ -29,14 +30,29 @@ const CmsService = {
  * @param cmsList represents the list of cms
  * with the names set to match the json-files in the repo.
  * @returns a promise containing all fetch-processes,
- * when resolved the promise returns an object in the form of
- * fields: Array of fields [name: ... , description: ...]
- * cms: Array of cms-objects [{Timestamp: ..., Name: ..., License: ..., etc.}, {...}, ...]
+ * when resolved the promise returns an object with two properties:
+ * fields: Object containing field-properties
+ * cms: Array containing cms-objects
  */
-function fetchCmsData(cmsList: [string]): Promise<any> {
-  let promises: Promise<Array<any>>[] = [];
+function fetchCmsData(cmsList: string[]): Promise<any> {
+  let promises: Promise<any>[] = [];
 
-  cmsList.forEach((cms) => {
+  /*
+  <
+    | Array<Cms>
+    | {
+        lastUpdated: DescriptionField;
+        name: DescriptionField;
+        version: DescriptionField;
+        license: DescriptionField;
+        inception: DescriptionField;
+        category: DescriptionField;
+        properties: any;
+      }
+  >[]
+  */
+
+  cmsList.forEach((cms: string) => {
     promises.push(
       fetch(CMS_REPO_BASE_URL + cms + ".json")
         .then((response) => {
@@ -56,27 +72,72 @@ function fetchCmsData(cmsList: [string]): Promise<any> {
     const elapsed = Date.now() - start;
     console.log(`Fetch took ${elapsed} ms`);
 
-    // Move 'fields'-array and cms-entries in seperate Object-Properties
-    const fields = values[0];
     const cmsData = {
-      fields: softSanitizeFields(
-        Object.entries(fields).map(([n, d]: [string, string]) => {
-          return { name: n, description: d };
-        })
-      ),
-      cms: softSanitizeCms(values.slice(1)),
+      fields: values[0],
+      cms: values.slice(1).map((cms: Cms) => parseCms(cms)),
     };
     
-    reformatCms(cmsData.fields, cmsData.cms[0]);
     console.log(cmsData);
     return cmsData;
   });
 }
 
 /**
+ * Looks at each property of a cms and replaces 
+ * Yes's and No's with their equivalent boolean values
+ */
+function parseCms(cms: Cms): Cms {
+  const start = Date.now();
+  const propertyKeys: string[] = Object.keys(cms.properties);
+  propertyKeys.forEach((propertyKey: string) => {
+    // Is property a simple property?
+    const property: Property = cms.properties[propertyKey];
+    if (isSimpleProperty(property)) {
+      // Yes? Replace Yes's with true and No's with false
+      const value = property.value;
+      property.value = value === "Yes" ? true : value === "No" ? false : value;
+      cms.properties[propertyKey] = property;
+    } else if (isCategoryProperty(property)) {
+      // No? Look into the sub-properties and do the same replacing as above.
+      const subPropertyKeys = Object.keys(property);
+      subPropertyKeys.forEach((subPropertyKey: string) => {
+        const subProperty: Property = property[subPropertyKey];
+        if (isSimpleProperty(subProperty)) {
+          const value = subProperty.value;
+          subProperty.value =
+            value === "Yes" ? true : value === "No" ? false : value;
+          cms.properties[propertyKey] = subProperty;
+        }
+      });
+    }
+  });
+  console.log(cms);
+  console.log(`Parsing of CMS ${cms.name} took ${Date.now() - start}ms`);
+  return cms;
+}
+
+function isSimpleProperty(
+  x: SimpleProperty | CategoryProperty
+): x is SimpleProperty {
+  return (x as SimpleProperty).value !== undefined;
+}
+
+function isCategoryProperty(
+  x: SimpleProperty | CategoryProperty
+): x is CategoryProperty {
+  return (x as CategoryProperty).value === undefined;
+}
+
+export default CmsService;
+
+/////////////////////////////////////////////////////////////////
+// BECAUSE OF A MAJOR REFACTOR, THE FOLLOWING CODE IS OBSOLETE //
+/////////////////////////////////////////////////////////////////
+
+/**
  * Replaces special chars which interfere with devextreme datagrid with safe chars
  */
-function softSanitizeFields(
+/*function softSanitizeFields(
   fields: Array<{ name: string; description: string }>
 ): Array<{ name: string; description: string }> {
   return fields.map((field) => {
@@ -85,11 +146,11 @@ function softSanitizeFields(
       description: field.description,
     };
   });
-}
+}*/
 
-function softSanitizeCms(cms: Array<any>): Array<any> {
+/*function softSanitizeCms(cms: Array<any>): Array<any> {
   return cms;
-  /*return cms.map((cms) => {
+  return cms.map((cms) => {
     let sanCms = Object.create(null);
     const properties = Object.entries(cms);
 
@@ -101,10 +162,10 @@ function softSanitizeCms(cms: Array<any>): Array<any> {
       sanCms[sanProp] = property[1];
     });
     return sanCms;
-  });*/
-}
+  });
+}*/
 
-function cleanUpCmsData(cmsData: any): Array<any> {
+/*function cleanUpCmsData(cmsData: any): Array<any> {
   cmsData.cms = cmsData.cms.map((cms: Array<any>) => {
     const obj = Object.create(null);
     Object.entries(cms).forEach(([property, value]) => {
@@ -116,73 +177,140 @@ function cleanUpCmsData(cmsData: any): Array<any> {
     return obj;
   });
   return cmsData;
-}
+}*/
 
-export default CmsService;
+// This function was needed to transform the old JSON format into the new one.
+// This method has fulfilled it's purpose and is safe to delete.
 
-const start = Date.now();
-function reformatCms(fields: Array<any>, cms: any): Cms {
-  
+/*function reformatCms(fields: Array<any>, cms: any): Cms {
   const cmsEntries: [string, string][] = Object.entries(cms);
-  let cmsFields: [string, any][] = Object.entries(fields[fields.length - 1].description);
+  let cmsFields: [string, any][] = Object.entries(
+    fields[fields.length - 1].description
+  );
+  const properties: {
+    [key: string]: {
+      name: string;
+      [x: string]:
+        | { name: string; description?: string; value: FieldType }
+        | FieldType;
+    };
+  } = {};
 
-
-  const cmsProperties = cmsFields.map(([propertyName, propertyObject]: [string, any]) => {
-    delete propertyObject.description;
-    const propertyDisplayName: string = propertyObject.name;
-    const propertyIsCategory: boolean = !propertyObject.hasOwnProperty("value");
-    if (propertyIsCategory) {
+  cmsFields.forEach(
+    ([propertyName, propertyObject]: [
+      string,
+      {
+        name: string;
+        [x: string]:
+          | { name: string; description?: string; value: FieldType }
+          | FieldType;
+      }
+    ]) => {
       delete propertyObject.description;
+      const propertyDisplayName: string = propertyObject.name;
+      const propertyIsCategory: boolean = !propertyObject.hasOwnProperty(
+        "value"
+      );
 
-      const propName = propertyObject.name;
-      delete propertyObject.name; // Temp remove name!
-      let propertySubPropertyNames = Object.keys(propertyObject);
-      let propertySubProperties = Object.values(propertyObject); 
-      propertyObject.name = propName; // Add name back!
+      if (propertyIsCategory) {
+        delete propertyObject.description;
 
-      propertySubProperties.forEach((property: any, index: number) => {
-        delete property.description;
-        if (cms[property.name]) {
-          property.value = cms[property.name];
-          propertyObject[propertySubPropertyNames[index]] = property;
-        } else if(cms[`${propertyDisplayName} ${property.name}`]) {
-          property.value = cms[`${propertyDisplayName} ${property.name}`];
-          propertyObject[propertySubPropertyNames[index]] = property;
-        } else { // Conduct deep search
-          console.log(`Conducting deep search for ${property.name}`);
-          const propIndex = cmsEntries.findIndex(([name, _]: [string, string]) =>
-            name.toUpperCase().includes(property.name.toUpperCase())
-          );
-          if (propIndex !== -1) {
-            property.value = cms[cmsEntries[propIndex][0]];
+        const propName = propertyObject.name;
+        delete propertyObject.name; // Temp remove name!
+        let propertySubPropertyNames = Object.keys(propertyObject);
+        let propertySubProperties = Object.values(propertyObject);
+        propertyObject.name = propName; // Add name back!
+        propertySubProperties.forEach((property: any, index: number) => {
+          delete property.description;
+          if (cms[property.name]) {
+            const value = cms[property.name];
+            property.value = (value === "NA" || value === "?" || value === "-") ? null : value;
+            propertyObject[propertySubPropertyNames[index]] = property;
+          } else if (cms[`${propertyDisplayName} ${property.name}`]) {
+            const value = cms[`${propertyDisplayName} ${property.name}`];
+            property.value = (value === "NA" || value === "?" || value === "-") ? null : value;
             propertyObject[propertySubPropertyNames[index]] = property;
           } else {
-            console.log(`CMS has no ${property.name} or ${propertyDisplayName} ${property.name} property!`);
+            // Conduct deep search
+            const propIndex = cmsEntries.findIndex(
+              ([name, _]: [string, string]) =>
+                name.toUpperCase().includes(property.name.toUpperCase())
+            );
+            if (propIndex !== -1) {
+              const value = cms[cmsEntries[propIndex][0]];
+              property.value = (value === "NA" || value === "?" || value === "-") ? null : value;
+              propertyObject[propertySubPropertyNames[index]] = property;
+            }
           }
-        }
-      });
-    } else {
-      if (cms[propertyDisplayName]) {
-        propertyObject.value = cms[propertyDisplayName];
+        });
       } else {
-        console.log(`CMS has no ${propertyDisplayName} property or it is empty!`);
+        if (cms[propertyDisplayName]) {
+          const value = cms[propertyDisplayName];
+          propertyObject.value = (value === "NA" || value === "?" || value === "-") ? null : value;
+        }
       }
+      properties[propertyName] = propertyObject;
     }
+  );
 
-    return propertyObject;
-  });
+  const categories: string[] = cms["Category"].split(" - ");
+  const hasEssential = categories.some(
+    (str) => str.toUpperCase() === "ESSENTIAL"
+  );
+  const hasProfessional = categories.some(
+    (str) => str.toUpperCase() === "PROFESSIONAL"
+  );
+  const hasEnterprise = categories.some(
+    (str) => str.toUpperCase() === "ENTERPRISE"
+  );
 
   let preparedCms: Cms = {
-    timeStamp: cms.Timestamp,
+    lastUpdated: cms.Timestamp.slice(0, 10),
     name: cms.Name,
     version: cms.Version,
-    license: cms.License,
+    license: getLicense(cms.License),
     inception: cms.Inception,
-    properties: cmsProperties,
-  };  
+    category: {
+      essential: hasEssential,
+      professional: hasProfessional,
+      enterprise: hasEnterprise,
+    },
+    properties: properties,
+  };
 
   console.log(preparedCms);
-  const elapsed = Date.now() - start;
-  console.log(`This operation took ${elapsed}ms`); // TODO: This is too slow
+  console.log(JSON.stringify(preparedCms, undefined, 2));
   return preparedCms;
 }
+
+function getLicense(licenseString: string): License[] {
+  let result: License[] = [];
+
+  if (licenseString.includes("BSD")) {
+    result.push(License.BSD_3);
+  }
+  if (licenseString.includes("Apache")) {
+    result.push(License.Apache_2);
+  }
+  if (licenseString.includes("GPL")) {
+    result.push(License.GPLv3);
+  }
+  if (licenseString.includes("Freemium")) {
+    result.push(License.Freemium);
+  }
+  if (licenseString.includes("Commercial")) {
+    result.push(License.Commercial);
+  }
+  if (licenseString.includes("Proprietary")) {
+    result.push(License.Proprietary);
+  }
+  if (licenseString.includes("MIT")) {
+    result.push(License.MIT);
+  }
+
+  if (result.length === 0) {
+    console.log(`No license found in ${licenseString}.`);
+    return [License.Other];
+  }
+  return result;
+}*/

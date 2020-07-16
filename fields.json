@@ -1,7 +1,8 @@
 {
-  "timeStamp": {
-    "name": "Timestamp",
-    "description": "Date when the entry was submitted"
+  "lastUpdated": {
+    "name": "Last Updated",
+    "description": "Date when the entry was re/submitted",
+    "value": null
   },
   "name": {
     "name": "Name",
@@ -23,12 +24,12 @@
     "description": "When was the project started?",
     "value": null
   },
+  "category": {
+    "name": "Category",
+    "description": "Which featureset is offered by the cms? String containing a subset of the following values seperated by slashes'/': Essential,Professional,Enterprise. E.g. xyz-CMS has professional and enterprise functionality: 'Professional/Enterprise'",
+    "value": null
+  },
   "properties": {
-    "category": {
-      "name": "Category",
-      "description": "Which featureset is offered by the cms? Array containing a subset of the following values: Essential/Professional/Enterprise",
-      "value": null
-    },
     "openSource": {
       "name": "Open Source",
       "description": "Yes/No",

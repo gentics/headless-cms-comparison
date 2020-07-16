@@ -1,83 +1,328 @@
 {
-    "Timestamp": "2018-08-02T21:04:23.741Z",
-    "Name": "Storyblok",
-    "Version": "08-2018",
-    "License": "Freemium/Commercial",
-    "Inception": "08-2016",
-    "Category": "Essential - Professional",
-    "Open Source": "No",
-    "Cloud Service": "Yes",
-    "On Premises Installation": "Yes",
-    "Cloud Service Hosted in Europe": "Yes",
-    "Commercial Support Available?": "Yes",
-    "GraphQL API": "No",
-    "GraphQL [Mutations]": "No",
-    "GraphQL [Subscriptions]": "No",
-    "REST API": "Yes",
-    "REST [Create]": "Yes",
-    "REST [Read]": "Yes",
-    "REST [Update]": "Yes",
-    "REST [Delete]": "Yes",
-    "REST [Upload]": "Yes",
-    "Search API": "Yes",
-    "Search Features [Full Text Search]": "Yes",
-    "Search Features [Stemming]": "No",
-    "Search Features [Stop Words]": "No",
-    "Search Features [Boosting]": "No",
-    "Search Features [Autocompletion]": "Yes",
-    "Search Features [Autosuggestion]": "Yes",
-    "Search Features [Result Highlighting]": "Yes",
-    "Search Features [Geospatial Search]": "No",
-    "Search Features [Search within uploads (pdf,doc)]": "No",
-    "Image Manipulation": "Yes",
-    "Image Focalpoint support": "No",
-    "Image Facedetection": "Yes",
-    "Optimized Image Encoding": "Yes",
-    "Asset fingerprinting": "No",
-    "CDN Support": "Yes",
-    "Antivirus Scanning": "No",
-    "Custom Binary Handler": "No",
-    "System Requirements": "NA",
-    "Supported Databases": "NA",
-    "Clustering": "Yes",
-    "Docker Support": "NA",
-    "Backup Feature": "Yes",
-    "Import/Export": "Yes",
-    "CLI": "Yes",
-    "SDK [Java]": "Yes",
-    "SDK [C#]": "No",
-    "SDK [PHP]": "Yes",
-    "SDK [JavaScript]": "Yes",
-    "SDK [React]": "Yes",
-    "SDK [AngularJS]": "Yes",
-    "SDK [TypeScript]": "Yes",
-    "Web Hooks": "Yes",
-    "Eventbus": "Yes",
-    "Bulk Import": "Yes",
-    "Client Side Forms": "No",
-    "Plugin System": "Yes",
-    "Customizable UI": "Yes",
-    "User Management": "No",
-    "Role Based Permissions": "Yes",
-    "Document Level Permissions": "Yes",
-    "OAuth 2.0 Support": "Yes",
-    "Auditing": "Yes",
-    "API Keys": "Yes",
-    "Project Support": "Yes",
-    "I18N Localized Content": "Yes",
-    "Content Trees": "Yes",
-    "Tagging": "Yes",
-    "Content Relations": "1:1, 1:n, n:n, n:1",
-    "Nesting of Fields": "Yes",
-    "GDPR Statement": "",
-    "GDPR API": "No",
-    "Editing Conflict Detection": "No",
-    "Versioning": "Yes",
-    "Content Scheduling": "Yes",
-    "Content Branches": "No",
-    "Content Models / Schemas": "Yes",
-    "Content Model / Schema Versioning": "No",
-    "Content Migration": "Yes",
-    "Workflows": "No",
-    "Special Features": "Instant Live Preview"
+  "lastUpdated": "2018-08-02",
+  "name": "Storyblok",
+  "version": "08-2018",
+  "license": ["Freemium", "Commercial"],
+  "inception": "08-2016",
+  "category": {
+    "essential": true,
+    "professional": true,
+    "enterprise": false
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "No"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "Yes"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": "Yes"
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "No"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "No"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "No"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Yes"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Yes"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Yes"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Yes"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": "No"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": "No"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": "Yes"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": "Yes"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": "Yes"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": "No"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "No"
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": "No"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": "Yes"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "Yes"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "Yes"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": "No"
+    },
+    "systemRequirements": {
+      "name": "System Requirements",
+      "value": null
+    },
+    "supportedDatabases": {
+      "name": "Supported Databases",
+      "value": null
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": "Yes"
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": null
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": "Yes"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "Yes"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "Yes"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": "Yes"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": "No"
+      },
+      "php": {
+        "name": "PHP",
+        "value": "Yes"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "Yes"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "Yes"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "Yes"
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "Yes"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": "Yes"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "Yes"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "No"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "Yes"
+    },
+    "userManagement": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "Yes"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "Yes"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "Yes"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "Yes"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "value": "1:1, 1:n, n:n, n:1"
+    },
+    "nestingOfFields": {
+      "name": "Nesting of Fields",
+      "value": "Yes"
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": "Yes"
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "No"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "Yes"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "No"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "No"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "Yes"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "No"
+    },
+    "specialFeatures": {
+      "name": "Special Features",
+      "value": "Instant Live Preview"
+    }
+  }
 }

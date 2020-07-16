@@ -1,84 +1,328 @@
 {
-  "Timestamp": "2019-10-20",
-  "Name": "Ghost",
-  "Version": "2.37.0",
-  "License": "MIT",
-  "Inception": "?",
-  "Category": "essential",
-  "Open Source": "Yes",
-  "Cloud Service": "Yes",
-  "On Premises Installation": "Yes",
-  "Cloud Service Hosted in Europe": "?",
-  "Commercial Support Available?": "Yes",
-  "GraphQL API": "No",
-  "GraphQL [Mutations]": "No",
-  "GraphQL [Subscriptions]": "No",
-  "REST API": "Yes",
-  "REST [Create]": "Yes",
-  "REST [Read]": "Yes",
-  "REST [Update]": "Yes",
-  "REST [Delete]": "Yes",
-  "REST [Upload]": "Yes",
-  "Search API": "?",
-  "Search Features [Full Text Search]": "?",
-  "Search Features [Stemming]": "?",
-  "Search Features [Stop Words]": "?",
-  "Search Features [Boosting]": "?",
-  "Search Features [Autocompletion]": "?",
-  "Search Features [Autosuggestion]": "?",
-  "Search Features [Result Highlighting]": "?",
-  "Search Features [Geospatial Search]": "?",
-  "Search Features [Search within uploads (pdf,doc)]": "?",
-  "Image Manipulation": "?",
-  "Image Focalpoint support": "?",
-  "Image Facedetection": "?",
-  "Optimized Image Encoding": "?",
-  "Asset fingerprinting": "?",
-  "CDN Support": "?",
-  "Antivirus Scanning": "?",
-  "Custom Binary Handler": "?",
-  "System Requirements": "Nginx, Node.js, MySQL",
-  "Supported Databases": "MySQL",
-  "Clustering": "?",
-  "Docker Support": "Yes",
-  "Backup Feature": "?",
-  "Import/Export": "?",
-  "CLI": "Yes",
-  "SDK [Java]": "?",
-  "SDK [C#]": "?",
-  "SDK [PHP]": "?",
-  "SDK [JavaScript]": "Yes",
-  "SDK [React]": "?",
-  "SDK [AngularJS]": "?",
-  "SDK [TypeScript]": "?",
-  "Web Hooks": "Yes",
-  "Eventbus": "?",
-  "Bulk Import": "?",
-  "Client Side Forms": "?",
-  "Plugin System": "No",
-  "Customizable UI": "?",
-  "User Management": "?",
-  "Role Based Permissions": "Yes",
-  "Document Level Permissions": "No",
-  "OAuth 2.0 Support": "?",
-  "Auditing": "?",
-  "API Keys": "?",
-  "Project Support": "?",
-  "I18N Localized Content": "?",
-  "Content Trees": "?",
-  "Tagging": "Yes",
-  "Content Relations": "?",
-  "Nesting of Fields": "?",
-  "GDPR Statement": "?",
-  "GDPR API": "?",
-  "Editing Conflict Detection": "?",
-  "Versioning": "No",
-  "Content Scheduling": "Yes",
-  "Content Branches": "?",
-  "Content Models / Schemas": "?",
-  "Content Model / Schema Versioning": "?",
-  "Content Migration": "?",
-  "Workflows": "?",
-  "Special Features": "AMP (Accelerated Mobile Pages) support"
+  "lastUpdated": "2019-10-20",
+  "name": "Ghost",
+  "version": "2.37.0",
+  "license": ["MIT"],
+  "inception": "?",
+  "category": {
+    "essential": true,
+    "professional": false,
+    "enterprise": false
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "Yes"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "Yes"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": null
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "No"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "No"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "No"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Yes"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Yes"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Yes"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Yes"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": null
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": null
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": null
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": null
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": null
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": null
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": null
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": null
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": null
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": null
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": null
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": null
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": null
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": null
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": null
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": null
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": null
+    },
+    "systemRequirements": {
+      "name": "System Requirements",
+      "value": "Nginx, Node.js, MySQL"
+    },
+    "supportedDatabases": {
+      "name": "Supported Databases",
+      "value": "MySQL"
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": null
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": "Yes"
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": null
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": null
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "Yes"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": null
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": null
+      },
+      "php": {
+        "name": "PHP",
+        "value": null
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": null
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": null
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": null
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "Yes"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": null
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": null
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": null
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "No"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": null
+    },
+    "userManagement": {
+      "name": "Plugin System",
+      "value": "No"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "No"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": null
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": null
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": null
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": null
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": null
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": null
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "value": null
+    },
+    "nestingOfFields": {
+      "name": "Nesting of Fields",
+      "value": null
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": null
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": null
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": null
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "No"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "Yes"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": null
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": null
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": null
+      },
+      "migration": {
+        "name": "Migration",
+        "value": null
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": null
+    },
+    "specialFeatures": {
+      "name": "Special Features",
+      "value": "AMP (Accelerated Mobile Pages) support"
+    }
+  }
 }
-

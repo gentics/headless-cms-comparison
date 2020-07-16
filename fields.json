@@ -16,7 +16,7 @@
   },
   "license": {
     "name": "License",
-    "description": "License of the system",
+    "description": "License of the system. Seperated by slashes '/', a subset of the following values are allowed: GPLv3, Proprietary, Apache-2.0, BSD 3-Clause, MIT, Commercial, Freemium, Other",
     "value": null
   },
   "inception": {

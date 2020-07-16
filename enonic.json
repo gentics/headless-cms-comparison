@@ -1,83 +1,328 @@
 {
-    "Timestamp": "2020-02-10T17:10:29.733Z",
-    "Name": "Enonic XP",
-    "Version": "7.3",
-    "License": "GPL3/Commercial",
-    "Inception": "2015-03",
-    "Category": "Professional - Enterprise",
-    "Open Source": "Yes",
-    "Cloud Service": "Yes",
-    "On Premises Installation": "Yes",
-    "Cloud Service Hosted in Europe": "Yes",
-    "Commercial Support Available?": "Yes",
-    "GraphQL API": "Yes",
-    "GraphQL [Mutations]": "No",
-    "GraphQL [Subscriptions]": "Yes",
-    "REST API": "Pluggable",
-    "REST [Create]": "Pluggable",
-    "REST [Read]": "Pluggable",
-    "REST [Update]": "Pluggable",
-    "REST [Delete]": "Pluggable",
-    "REST [Upload]": "Pluggable",
-    "Search API": "Yes",
-    "Search Features [Full Text Search]": "Yes",
-    "Search Features [Stemming]": "Yes",
-    "Search Features [Stop Words]": "Yes",
-    "Search Features [Boosting]": "Yes",
-    "Search Features [Autocompletion]": "Yes",
-    "Search Features [Autosuggestion]": "No",
-    "Search Features [Result Highlighting]": "Yes",
-    "Search Features [Geospatial Search]": "Yes",
-    "Search Features [Search within uploads (pdf,doc)]": "No",
-    "Image Manipulation": "Yes",
-    "Image Focalpoint support": "Yes",
-    "Image Facedetection": "No",
-    "Optimized Image Encoding": "No",
-    "Asset fingerprinting": "No",
-    "CDN Support": "Yes",
-    "Antivirus Scanning": "Add-on",
-    "Custom Binary Handler": "No",
-    "System Requirements": "Compute 2vCPU and 2GB memory min.",
-    "Supported Databases": "Embedded NoSQL",
-    "Clustering": "Yes",
-    "Docker Support": "Yes",
-    "Backup Feature": "Yes",
-    "Import/Export": "Yes",
-    "CLI": "Yes",
-    "SDK [Java]": "Yes",
-    "SDK [C#]": "Yes",
-    "SDK [PHP]": "Yes",
-    "SDK [JavaScript]": "Yes",
-    "SDK [React]": "Yes",
-    "SDK [AngularJS]": "Yes",
-    "SDK [TypeScript]": "Yes",
-    "Web Hooks": "No",
-    "Eventbus": "Yes",
-    "Bulk Import": "No",
-    "Client Side Forms": "Yes",
-    "Plugin System": "Yes",
-    "Customizable UI": "Yes",
-    "User Management": "Yes",
-    "Role Based Permissions": "Yes",
-    "Document Level Permissions": "Yes",
-    "OAuth 2.0 Support": "Yes",
-    "Auditing": "Yes",
-    "API Keys": "No",
-    "Project Support": "Yes",
-    "I18N Localized Content": "Yes",
-    "Content Trees": "Yes",
-    "Tagging": "Yes",
-    "Content Relations": "Yes",
-    "Nesting of Fields": "Yes",
-    "GDPR Statement": "Yes",
-    "GDPR API": "No",
-    "Editing Conflict Detection": "No",
-    "Versioning": "Yes",
-    "Content Scheduling": "Yes",
-    "Content Branches": "Yes",
-    "Content Models / Schemas": "Yes",
-    "Content Model / Schema Versioning": "Yes",
-    "Content Migration": "No",
-    "Workflows": "Yes",
-    "Special Features": "Customisable GraphQL or Rest API, Powerful image handling, Content preview, Hybrid CMS support"
+  "lastUpdated": "2020-02-10",
+  "name": "Enonic XP",
+  "version": "7.3",
+  "license": ["GPLv3", "Commercial"],
+  "inception": "2015-03",
+  "category": {
+    "essential": false,
+    "professional": true,
+    "enterprise": true
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "Yes"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "Yes"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": "Yes"
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "No"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "Yes"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Pluggable"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Pluggable"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Pluggable"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Pluggable"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Pluggable"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Pluggable"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": "Yes"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": "Yes"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": "Yes"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": "No"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": "Yes"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": "Yes"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "No"
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": "Yes"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": "No"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "No"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "Yes"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "Add-on"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": "No"
+    },
+    "systemRequirements": {
+      "name": "System Requirements",
+      "value": "Compute 2vCPU and 2GB memory min."
+    },
+    "supportedDatabases": {
+      "name": "Supported Databases",
+      "value": "Embedded NoSQL"
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": "Yes"
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": "Yes"
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": "Yes"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "Yes"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "Yes"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": "Yes"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": "Yes"
+      },
+      "php": {
+        "name": "PHP",
+        "value": "Yes"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "Yes"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "Yes"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "Yes"
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "No"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": "Yes"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "No"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "Yes"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "Yes"
+    },
+    "userManagement": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "Yes"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "Yes"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "Yes"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "No"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "Yes"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "value": "Yes"
+    },
+    "nestingOfFields": {
+      "name": "Nesting of Fields",
+      "value": "Yes"
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": "Yes"
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "No"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "Yes"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "Yes"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "Yes"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "No"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "Yes"
+    },
+    "specialFeatures": {
+      "name": "Special Features",
+      "value": "Customisable GraphQL or Rest API, Powerful image handling, Content preview, Hybrid CMS support"
+    }
   }
+}

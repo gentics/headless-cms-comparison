@@ -1,83 +1,328 @@
 {
-    "Timestamp": "2019-10-10T12:58:40.506Z",
-    "Name": "Gentics Mesh",
-    "Version": "1.0.1",
-    "License": "Apache 2.0",
-    "Inception": "09-2014",
-    "Category": "Professional - Enterprise",
-    "Open Source": "Yes",
-    "Cloud Service": "No",
-    "On Premises Installation": "Yes",
-    "Cloud Service Hosted in Europe": "NA",
-    "Commercial Support Available?": "Yes",
-    "GraphQL API": "Yes",
-    "GraphQL [Mutations]": "No",
-    "GraphQL [Subscriptions]": "No",
-    "REST API": "Yes",
-    "REST [Create]": "Yes",
-    "REST [Read]": "Yes",
-    "REST [Update]": "Yes",
-    "REST [Delete]": "Yes",
-    "REST [Upload]": "Yes",
-    "Search API": "Yes",
-    "Search Features [Full Text Search]": "Yes",
-    "Search Features [Stemming]": "Yes",
-    "Search Features [Stop Words]": "Yes",
-    "Search Features [Boosting]": "Yes",
-    "Search Features [Autocompletion]": "Yes",
-    "Search Features [Autosuggestion]": "Yes",
-    "Search Features [Result Highlighting]": "Yes",
-    "Search Features [Geospatial Search]": "Yes",
-    "Search Features [Search within uploads (pdf,doc)]": "Yes",
-    "Image Manipulation": "Yes",
-    "Image Focalpoint support": "Yes",
-    "Image Facedetection": "No",
-    "Optimized Image Encoding": "No",
-    "Asset fingerprinting": "No",
-    "CDN Support": "No",
-    "Antivirus Scanning": "No",
-    "Custom Binary Handler": "No",
-    "System Requirements": "Java",
-    "Supported Databases": "Embedded (GraphDB)",
-    "Clustering": "Yes",
-    "Docker Support": "Yes",
-    "Backup Feature": "Yes",
-    "Import/Export": "No",
-    "CLI": "Yes",
-    "SDK [Java]": "Yes",
-    "SDK [C#]": "No",
-    "SDK [PHP]": "Yes",
-    "SDK [JavaScript]": "Yes",
-    "SDK [React]": "No",
-    "SDK [AngularJS]": "No",
-    "SDK [TypeScript]": "No",
-    "Web Hooks": "No",
-    "Eventbus": "Yes",
-    "Bulk Import": "Yes",
-    "Client Side Forms": "No",
-    "Plugin System": "Yes",
-    "Customizable UI": "No",
-    "User Management": "Yes",
-    "Role Based Permissions": "Yes",
-    "Document Level Permissions": "Yes",
-    "OAuth 2.0 Support": "Yes",
-    "Auditing": "No",
-    "API Keys": "Yes",
-    "Project Support": "Yes",
-    "I18N Localized Content": "Yes",
-    "Content Trees": "Yes",
-    "Tagging": "Yes",
-    "Content Relations": "1:1, 1:n, n:n, n:1",
-    "Nesting of Fields": "Yes",
-    "GDPR Statement": "NA",
-    "GDPR API": "No",
-    "Editing Conflict Detection": "Yes",
-    "Versioning": "Yes",
-    "Content Scheduling": "No",
-    "Content Branches": "Yes",
-    "Content Models / Schemas": "Yes",
-    "Content Model / Schema Versioning": "Yes",
-    "Content Migration": "Yes",
-    "Workflows": "No",
-    "Special Features": "Webroot API for routing frameworks"
+  "lastUpdated": "2019-10-10",
+  "name": "Gentics Mesh",
+  "version": "1.0.1",
+  "license": ["Apache-2.0"],
+  "inception": "09-2014",
+  "category": {
+    "essential": false,
+    "professional": true,
+    "enterprise": true
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "Yes"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "No"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "Yes"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": null
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "No"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "No"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Yes"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Yes"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Yes"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Yes"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": "Yes"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": "Yes"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": "Yes"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": "Yes"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": "Yes"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": "Yes"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "Yes"
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": "Yes"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": "No"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "No"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "No"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": "No"
+    },
+    "systemRequirements": {
+      "name": "System Requirements",
+      "value": "Java"
+    },
+    "supportedDatabases": {
+      "name": "Supported Databases",
+      "value": "Embedded (GraphDB)"
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": "Yes"
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": "Yes"
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": "Yes"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "No"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "Yes"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": "Yes"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": "No"
+      },
+      "php": {
+        "name": "PHP",
+        "value": "Yes"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "No"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "No"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "No"
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "No"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": "Yes"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "Yes"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "No"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "No"
+    },
+    "userManagement": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "Yes"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "Yes"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "No"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "Yes"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "value": "1:1, 1:n, n:n, n:1"
+    },
+    "nestingOfFields": {
+      "name": "Nesting of Fields",
+      "value": "Yes"
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": null
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "Yes"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "No"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "Yes"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "Yes"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "Yes"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "No"
+    },
+    "specialFeatures": {
+      "name": "Special Features",
+      "value": "Webroot API for routing frameworks"
+    }
+  }
 }

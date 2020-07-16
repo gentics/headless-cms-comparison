@@ -1,83 +1,328 @@
 {
-    "Timestamp": "2018-08-01T09:38:27.190Z",
-    "Name": "Squidex",
-    "Version": "09-2018",
-    "License": "MIT",
-    "Inception": "03-2017",
-    "Category": "Essential",
-    "Open Source": "Yes",
-    "Cloud Service": "Yes",
-    "On Premises Installation": "No",
-    "Cloud Service Hosted in Europe": "?",
-    "Commercial Support Available?": "Yes",
-    "GraphQL API": "No",
-    "GraphQL [Mutations]": "No",
-    "GraphQL [Subscriptions]": "No",
-    "REST API": "Yes",
-    "REST [Create]": "No",
-    "REST [Read]": "Yes",
-    "REST [Update]": "No",
-    "REST [Delete]": "No",
-    "REST [Upload]": "No",
-    "Search API": "Yes",
-    "Search Features [Full Text Search]": "Yes",
-    "Search Features [Stemming]": "No",
-    "Search Features [Stop Words]": "No",
-    "Search Features [Boosting]": "No",
-    "Search Features [Autocompletion]": "No",
-    "Search Features [Autosuggestion]": "No",
-    "Search Features [Result Highlighting]": "No",
-    "Search Features [Geospatial Search]": "No",
-    "Search Features [Search within uploads (pdf,doc)]": "No",
-    "Image Manipulation": "Yes",
-    "Image Focalpoint support": "",
-    "Image Facedetection": "",
-    "Optimized Image Encoding": "No",
-    "Asset fingerprinting": "",
-    "CDN Support": "No",
-    "Antivirus Scanning": "No",
-    "Custom Binary Handler": "No",
-    "System Requirements": "NA",
-    "Supported Databases": "NA",
-    "Clustering": "NA",
-    "Docker Support": "NA",
-    "Backup Feature": "Yes",
-    "Import/Export": "No",
-    "CLI": "No",
-    "SDK [Java]": "No",
-    "SDK [C#]": "",
-    "SDK [PHP]": "No",
-    "SDK [JavaScript]": "Yes",
-    "SDK [React]": "No",
-    "SDK [AngularJS]": "No",
-    "SDK [TypeScript]": "No",
-    "Web Hooks": "No",
-    "Eventbus": "No",
-    "Bulk Import": "No",
-    "Client Side Forms": "No",
-    "Plugin System": "Yes",
-    "Customizable UI": "Yes",
-    "User Management": "",
-    "Role Based Permissions": "No",
-    "Document Level Permissions": "No",
-    "OAuth 2.0 Support": "No",
-    "Auditing": "Yes",
-    "API Keys": "Yes",
-    "Project Support": "Yes",
-    "I18N Localized Content": "Yes",
-    "Content Trees": "No",
-    "Tagging": "",
-    "Content Relations": "",
-    "Nesting of Fields": "",
-    "GDPR Statement": "",
-    "GDPR API": "No",
-    "Editing Conflict Detection": "No",
-    "Versioning": "Yes",
-    "Content Scheduling": "No",
-    "Content Branches": "No",
-    "Content Models / Schemas": "Yes",
-    "Content Model / Schema Versioning": "No",
-    "Content Migration": "Yes",
-    "Workflows": "Yes",
-    "Special Features": ""
+  "lastUpdated": "2018-08-01",
+  "name": "Squidex",
+  "version": "09-2018",
+  "license": ["MIT"],
+  "inception": "03-2017",
+  "category": {
+    "essential": true,
+    "professional": false,
+    "enterprise": false
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "Yes"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "No"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": null
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "No"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "No"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "No"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "No"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "No"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "No"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "No"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": "No"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": "No"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": "No"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": "No"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": "No"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": "No"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "No"
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": ""
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": ""
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "No"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "No"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": "No"
+    },
+    "systemRequirements": {
+      "name": "System Requirements",
+      "value": null
+    },
+    "supportedDatabases": {
+      "name": "Supported Databases",
+      "value": null
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": null
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": null
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": "Yes"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "No"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "No"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": "No"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": ""
+      },
+      "php": {
+        "name": "PHP",
+        "value": "No"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "No"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "No"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "No"
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "No"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": "No"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "No"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "No"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "Yes"
+    },
+    "userManagement": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "No"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "No"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "No"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "Yes"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "No"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "value": "Yes"
+    },
+    "nestingOfFields": {
+      "name": "Nesting of Fields",
+      "value": "Yes"
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": "Yes"
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "No"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "No"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "No"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "No"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "Yes"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "Yes"
+    },
+    "specialFeatures": {
+      "name": "Special Features",
+      "value": "Real-time hosted backend, fully customizeable editor, powerful asset pipeline"
+    }
+  }
 }

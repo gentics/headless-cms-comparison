@@ -2,13 +2,9 @@
   "lastUpdated": "2019-08-28",
   "name": "Craft CMS",
   "version": "3.3.0",
-  "license": ["Proprietary"],
+  "license": "Proprietary",
   "inception": "01-2011",
-  "category": {
-    "essential": false,
-    "professional": true,
-    "enterprise": true
-  },
+  "category": "Professional/Enterprise",
   "properties": {
     "openSource": {
       "name": "Open Source",

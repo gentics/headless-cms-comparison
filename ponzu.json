@@ -2,13 +2,9 @@
   "lastUpdated": "2018-07-28",
   "name": "Ponzu CMS",
   "version": "0.9.4",
-  "license": ["BSD 3-Clause"],
+  "license": "BSD 3-Clause",
   "inception": "12-2016",
-  "category": {
-    "essential": true,
-    "professional": false,
-    "enterprise": false
-  },
+  "category": "Essential",
   "properties": {
     "openSource": {
       "name": "Open Source",

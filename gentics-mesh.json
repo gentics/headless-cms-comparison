@@ -2,13 +2,9 @@
   "lastUpdated": "2019-10-10",
   "name": "Gentics Mesh",
   "version": "1.0.1",
-  "license": ["Apache-2.0"],
+  "license": "Apache-2.0",
   "inception": "09-2014",
-  "category": {
-    "essential": false,
-    "professional": true,
-    "enterprise": true
-  },
+  "category": "Professional/Entreprise",
   "properties": {
     "openSource": {
       "name": "Open Source",

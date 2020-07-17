@@ -2,13 +2,9 @@
   "lastUpdated": "2018-07-29",
   "name": "comfortable.io",
   "version": "08-2018",
-  "license": ["Proprietary"],
+  "license": "Proprietary",
   "inception": "08-2014",
-  "category": {
-    "essential": true,
-    "professional": true,
-    "enterprise": false
-  },
+  "category": "Essential/Professional",
   "properties": {
     "openSource": {
       "name": "Open Source",

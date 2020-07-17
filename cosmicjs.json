@@ -2,13 +2,9 @@
   "lastUpdated": "2018-07-29",
   "name": "Cosmic JS",
   "version": "08-2018",
-  "license": ["Proprietary"],
+  "license": "Proprietary",
   "inception": "05-2014",
-  "category": {
-    "essential": false,
-    "professional": true,
-    "enterprise": false
-  },
+  "category": "Professional",
   "properties": {
     "openSource": {
       "name": "Open Source",

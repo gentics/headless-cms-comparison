@@ -2,13 +2,9 @@
   "lastUpdated": "2019-10-20",
   "name": "Ghost",
   "version": "2.37.0",
-  "license": ["MIT"],
-  "inception": "?",
-  "category": {
-    "essential": true,
-    "professional": false,
-    "enterprise": false
-  },
+  "license": "MIT",
+  "inception": null,
+  "category": "Essential",
   "properties": {
     "openSource": {
       "name": "Open Source",

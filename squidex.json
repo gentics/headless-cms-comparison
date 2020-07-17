@@ -2,13 +2,9 @@
   "lastUpdated": "2018-08-01",
   "name": "Squidex",
   "version": "09-2018",
-  "license": ["MIT"],
+  "license": "MIT",
   "inception": "03-2017",
-  "category": {
-    "essential": true,
-    "professional": false,
-    "enterprise": false
-  },
+  "category": "Essential",
   "properties": {
     "openSource": {
       "name": "Open Source",

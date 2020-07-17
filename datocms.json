@@ -2,13 +2,9 @@
   "lastUpdated": "2019-12-01",
   "name": "DatoCMS",
   "version": "11-2019",
-  "license": ["Commercial"],
+  "license": "Commercial",
   "inception": "08-2016",
-  "category": {
-    "essential": true,
-    "professional": true,
-    "enterprise": true
-  },
+  "category": "Essential/Professional/Enterprise",
   "properties": {
     "openSource": {
       "name": "Open Source",

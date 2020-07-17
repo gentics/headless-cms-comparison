@@ -2,7 +2,7 @@
   "lastUpdated": "2020-02-10",
   "name": "Enonic XP",
   "version": "7.3",
-  "license": "GPLv3/Commercial",
+  "license": "GPLv3",
   "inception": "2015-03",
   "category": "Professional/Enterprise",
   "properties": {
@@ -322,4 +322,3 @@
     }
   }
 }
-

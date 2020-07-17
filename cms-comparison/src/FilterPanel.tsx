@@ -4,7 +4,8 @@ import Table from "react-bootstrap/Table";
 import Accordion from "react-bootstrap/Accordion";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useFormik } from 'formik';
+import { useFormik, Formik, Field } from 'formik';
+import { Cms, FormProperty, BooleanFormProperty, ComplexFormProperty } from "./Cms";
 
 export default function FilterPanel(props: any) {
   const filterForm = React.useRef<any>();
@@ -28,11 +29,11 @@ export default function FilterPanel(props: any) {
   React.useEffect(() => {}, [fieldFilterString, showOnlyModified]);
 
   React.useEffect(() => {
-    filterForm.current.addEventListener("change", (e: any) => {
+    /*filterForm.current.addEventListener("change", (e: any) => {
       const json = parseFilterData(getFormValues(filterForm.current));
       console.log(json);
       props.setFilter(json);
-    });
+    });*/
 
     fieldFilterForm.current.addEventListener("input", (e: any) => {
       const form = fieldFilterForm.current.querySelectorAll("input");
@@ -51,7 +52,7 @@ export default function FilterPanel(props: any) {
 
   const filterData = props.getFilter(); // Get filter from parent
 
-  if (showOnlyModified) {
+  /*if (showOnlyModified) {
     // Add all fields of the current filter to the array
     const modifiedFieldNames: string[] = [filterData.niceToHave];
     filterData.required.forEach(([name, _]: [string, any]) => {
@@ -67,13 +68,13 @@ export default function FilterPanel(props: any) {
     fieldValues = fieldValues.filter((field: any) =>
       field.name.toUpperCase().includes(fieldFilterString.toUpperCase())
     );
-  }
+  }*/
 
   let tableRows: any;
   if (fieldValues.length > 0) {
     tableRows = fieldValues.map((field: any) => {
       // TODO: Add for
-      const curFieldValues: [string] = getFieldValue(field, filterData);
+      const curFieldValues: string[] = []; // getFieldValue(field, filterData);
       let options = [];
       if (field.values.includes("Yes") && field.values.includes("No")) {
         options.push(
@@ -138,7 +139,10 @@ export default function FilterPanel(props: any) {
   }
 
   return (
+    
     <div className="d-flex justify-content-center">
+      {Panel(cmsData)}
+      
       <div className="w-75">
         <Accordion>
           <Card>
@@ -202,151 +206,41 @@ export default function FilterPanel(props: any) {
       <input className="btn btn-success" type="submit" value="Apply filter" />
     </div>*/
   );
-}
-
-/**
- * Extracts the values of the filter table form.
- * @param form represents the form to extract the values from.
- * @returns the form values in a two-dimensional array in the form of
- * [Array [PROPERTY_NAME, SELECTED_VALUES]: [string, string[]],
- *  Array [PROPERTY_NAME, SELECTED_VALUES]: [string, string[]]]
- */
-function getFormValues(form: any): [[string, string[]]] {
-  const formValues: any = [];
-  const elements = form.querySelectorAll("input, select");
-
-  for (var i = 0; i < elements.length; ++i) {
-    const element = elements[i];
-    const name: string = element.name;
-    const value = element.value;
-    if (name) {
-      if (
-        element.checked ||
-        (element instanceof HTMLSelectElement && value.length > 0)
-      ) {
-        const existingPropIndex = formValues.findIndex((property: any) => {
-          return property[0] === name;
-        });
-        if (existingPropIndex === -1) {
-          formValues.push([name, [value]]);
-        } else {
-          formValues[existingPropIndex][1].push(value);
-        }
-      }
-    }
   }
-  return formValues;
-}
 
-/**
- * Parses raw filter data.
- * For the @param filterData the data-structure returned by @function getFormValues is expected.
- * @returns an object that contains the 2 properties "niceToHave" and "required".
- * The niceToHave-property contains an array in the form of:
- * [PROPERTY_NAME, PROPERTY_NAME, ...]: [string] (values are implicit "Nice-To-Have")
- * The required-property contains a two dimensional array in the form (same as input filterData) of:
- * [Array [PROPERTY_NAME, SELECTED_VALUES]: [string, string[]],
- *  Array [PROPERTY_NAME, SELECTED_VALUES]: [string, string[]]]
- */
-function parseFilterData(filterData: Array<any>) {
-  const filterObj: any = {};
-  filterObj["required"] = [];
-  filterObj["niceToHave"] = [];
-
-  // TODO: Use Array pattern matching
-  filterData.forEach((property) => {
-    const name = property[0]; // String
-    const value = property[1]; // Array
-    const propertyArray = [];
-
-    propertyArray[0] = name;
-    if (value.includes("Nice-To-Have") || value.includes("Yes")) {
-      // assert !(value.includes("Nice-To-Have") && value.includes("Yes"))
-      propertyArray[1] = ["Yes"];
-      if (value.includes("Nice-To-Have")) {
-        filterObj["niceToHave"].push(name); // In nice-to-have only names get pushed
-      } else {
-        filterObj["required"].push(propertyArray); // In required the form is PROPERTY_NAME: [SELECTED_PROPERTIES]
-      }
-    } else if (
-      value.some((val: string) => {
-        return val.length > 0;
-      })
-    ) {
-      propertyArray[1] = value;
-      filterObj["required"].push(propertyArray);
-    }
-  });
-  return filterObj;
-}
-
-/**
- * Is called by all select- and input-HTML-Elements
- * while rendering to simulate a two-way-data-binding.
- * @param field represents the field object that is currently in the render pipeline
- * @param filterData represents the current filterData (stored in state of parent component CardList)
- * @returns an array with the values of the elements
- * that are currently selected in the form for the given field
- */
-function getFieldValue(field: any, filterData: any): [string] {
-  if (filterData) {
-    if (field.values.includes("Yes") && field.values.includes("No")) {
-      if (
-        filterData.niceToHave.some(
-          (fieldName: string) => fieldName === field.name
-        )
-      ) {
-        return ["Nice-To-Have"];
-      } else if (
-        filterData.required.some(
-          ([fieldName, _]: [string, string[]]) => fieldName === field.name
-        )
-      ) {
-        return ["Yes"];
-      }
-    } else {
-      // Note: Properties which are not consisting of "Yes" & "No"
-      // but of arbitrary values cannot be in Nice-To-Have
-      const propIndex = filterData.required.findIndex(
-        ([fieldName, _]: [string, string[]]) => fieldName === field.name
-      );
-      if (propIndex !== -1) {
-        return filterData.required[propIndex][1]; // Array
-      }
-    }
-  }
-  return [""];
-}
-
-
-/*function constructFieldValues(cmsData: any): Array<any> {
-  const fields = cmsData.fields
-    .map((field: any) => {
-      const fieldObj = Object.create(null);
-      fieldObj.name = field.name;
-      const values: string[] = [];
-      cmsData.cms.forEach((cms: any) => {
-        const value = cms[field.name];
-        if (value.length > 0 && value !== "Not specified") {
-          const regex = new RegExp(values.join("|"), "i"); // Ignore case //TODO: to uppercase
-          if (!regex.test(value) || values.length === 0) {
-            values.push(cms[field.name]);
-          }
-        }
-      });
-      fieldObj.values = values;
-      return fieldObj;
+  function Panel(cmsData: {cms: Cms[], fields: any, formProperties: { [index: string]: FormProperty }} ) {
+    const formik = useFormik({
+      initialValues: {
+        showOnlyModified: (cmsData.formProperties.showOnlyModified as BooleanFormProperty).value,
+        propertyFilter: (cmsData.formProperties.propertyFilter as ComplexFormProperty).value
+      },
+      onSubmit: foo => {
+        console.log("Bar");
+      },
     });
-  // Filter useless fields, e.g. a property that no CMS or every CMS has
-  return fields.filter((field: any) => {
-    const values = Object.values(field)[1] as string[]; // TODO: Check logic
-    return !(
-      (values.includes("Yes") && !values.includes("No")) ||
-      (!values.includes("Yes") && values.includes("No"))
+    return (
+      <Accordion>
+        <Card>
+          <Card.Header>
+            <div className="d-flex justify-content-between">
+              <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>
+                Filter Panel
+              </h4>
+            </div>
+            <form onSubmit={formik.handleChange}>
+              <input type="text" id="propertyFilter" name="propertyFilter" onChange={formik.handleChange} value={formik.values.propertyFilter as string} />
+              <label htmlFor="showOnlyModified">
+                <input type="checkbox" id="showOnlyModified" name="showOnlyModified" onChange={formik.handleChange} value={formik.values.showOnlyModified} />
+                Show only modified properties
+              </label>
+            </form>
+          </Card.Header>
+          <Accordion.Collapse eventKey="0">
+              <div style={{ maxHeight: "500px", overflow: "auto" }}>
+                <h2>Hier gibt es noch nichts zu sehen...</h2>
+              </div>
+            </Accordion.Collapse>
+        </Card>
+      </Accordion>
     );
-  });
-}*/
-
-
-
-
+}

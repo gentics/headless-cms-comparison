@@ -6,7 +6,13 @@ export enum License {
   MIT = "MIT",
   Commercial = "Commercial",
   Freemium = "Freemium",
-  Other = "Other", // No match fallback value
+  Other = "Other", // No-match fallback value
+}
+
+export enum Category {
+  Essential = "Essential",
+  Professional = "Professional",
+  Enterprise = "Enterprise"
 }
 
 export interface Cms {
@@ -15,15 +21,23 @@ export interface Cms {
   version: string;
   license: License[];
   inception: Date;
-  category: { essential: boolean; professional: boolean; enterprise: boolean };
+  category: Category[];
   properties: {
     [x: string]: Property // Category | FieldObject
   };
 }
 
+///////////////////////////////////
+// INTERFACES FOR CMS PROPERTIES //
+///////////////////////////////////
+
 export interface Property {
   name: string;
   description?: string;
+}
+
+export interface DescriptionProperty extends Property {
+  description: string;
 }
 
 export interface SimpleProperty extends Property {
@@ -34,14 +48,34 @@ export interface CategoryProperty extends Property {
   [index: string]: any;
 }
 
-// Boolean form property
-interface FormProperty {
+////////////////////////////////////
+// INTERFACES FOR FORM PROPERTIES //
+////////////////////////////////////
+
+export interface FormProperty {
   name: string;
   description: string;
-  value: boolean | string;
 }
 
-// Complex form property
-interface ComplexFormProperty extends FormProperty {
+// Category form property, has other properties as "children"
+export interface CategoryFormProperty extends FormProperty {
+  [index: string]: any; // FormProperty
+}
+
+// Boolean form property
+export interface BooleanFormProperty extends FormProperty {
+  value: ScoreValue;
+}
+
+// Complex form property for properties with arbitrary values
+export interface ComplexFormProperty extends FormProperty {
+  value: ScoreValue | string | null;
   possibleValues: string[];
+}
+
+// Tristate boolean for "scoring"
+export enum ScoreValue {
+  DONT_CARE = 0,
+  NICE_TO_HAVE = 1,
+  REQUIRED = 2
 }

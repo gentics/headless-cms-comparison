@@ -23,6 +23,7 @@ export default function CardList() {
       .then(setCmsData)
       .catch((e) => {
         console.log("Error detected!");
+        console.log(e);
         setFetchError(e);
       });
   }, []);

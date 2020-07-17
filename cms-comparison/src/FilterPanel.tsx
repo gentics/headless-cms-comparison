@@ -47,7 +47,7 @@ export default function FilterPanel(props: any) {
     });
   }, []); // On mount, add eventListeners to forms*/
 
-  let fieldValues = constructFieldValues(props.cmsData);
+  let fieldValues: any[] = []; // constructFieldValues(props.cmsData);
 
   const filterData = props.getFilter(); // Get filter from parent
 
@@ -58,20 +58,20 @@ export default function FilterPanel(props: any) {
       modifiedFieldNames.push(name);
     });
     // Filter the field-set by searching for the fieldName in the modifiedFieldNames-Array
-    fieldValues = fieldValues.filter((field) =>
+    fieldValues = fieldValues.filter((field: any) =>
       modifiedFieldNames.some((fieldName: string) => fieldName === field.name)
     );
   }
 
   if (fieldFilterString.length > 0) {
-    fieldValues = fieldValues.filter((field) =>
+    fieldValues = fieldValues.filter((field: any) =>
       field.name.toUpperCase().includes(fieldFilterString.toUpperCase())
     );
   }
 
   let tableRows: any;
   if (fieldValues.length > 0) {
-    tableRows = fieldValues.map((field) => {
+    tableRows = fieldValues.map((field: any) => {
       // TODO: Add for
       const curFieldValues: [string] = getFieldValue(field, filterData);
       let options = [];
@@ -347,8 +347,6 @@ function getFieldValue(field: any, filterData: any): [string] {
   });
 }*/
 
-function constructFieldValues(cms: Cms[]): any {
-  
-}
+
 
 

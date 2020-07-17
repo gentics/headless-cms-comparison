@@ -2,13 +2,9 @@
   "lastUpdated": "2020-02-10",
   "name": "Enonic XP",
   "version": "7.3",
-  "license": ["GPLv3", "Commercial"],
+  "license": "GPLv3/Commercial",
   "inception": "2015-03",
-  "category": {
-    "essential": false,
-    "professional": true,
-    "enterprise": true
-  },
+  "category": "Professional/Enterprise",
   "properties": {
     "openSource": {
       "name": "Open Source",

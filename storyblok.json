@@ -2,13 +2,9 @@
   "lastUpdated": "2018-08-02",
   "name": "Storyblok",
   "version": "08-2018",
-  "license": ["Freemium", "Commercial"],
+  "license": "Freemium/Commercial",
   "inception": "08-2016",
-  "category": {
-    "essential": true,
-    "professional": true,
-    "enterprise": false
-  },
+  "category": "Essential/Professional",
   "properties": {
     "openSource": {
       "name": "Open Source",

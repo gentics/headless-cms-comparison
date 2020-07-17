@@ -2,13 +2,9 @@
   "lastUpdated": "2018-07-28",
   "name": "Directus",
   "version": "7.0.0",
-  "license": ["GPLv3"],
+  "license": "GPLv3",
   "inception": "01-2012",
-  "category": {
-    "essential": true,
-    "professional": true,
-    "enterprise": false
-  },
+  "category": "Essential/Professional",
   "properties": {
     "openSource": {
       "name": "Open Source",

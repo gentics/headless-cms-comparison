@@ -2,13 +2,9 @@
   "lastUpdated": "2019-03-11",
   "name": "Sanity",
   "version": "03-2019",
-  "license": ["Commercial", "MIT"],
+  "license": "Commercial/MIT",
   "inception": "05-2016",
-  "category": {
-    "essential": true,
-    "professional": true,
-    "enterprise": true
-  },
+  "category": "Essential/Professional/Enterprise",
   "properties": {
     "openSource": {
       "name": "Open Source",

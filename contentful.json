@@ -2,13 +2,9 @@
   "lastUpdated": "2019-11-18",
   "name": "Contentful",
   "version": "11-2019",
-  "license": ["Proprietary"],
+  "license": "Proprietary",
   "inception": "07-2010",
-  "category": {
-    "essential": true,
-    "professional": true,
-    "enterprise": false
-  },
+  "category": "Essential/Professional",
   "properties": {
     "openSource": {
       "name": "Open Source",

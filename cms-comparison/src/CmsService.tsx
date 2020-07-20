@@ -8,7 +8,7 @@ import {
   FormProperty,
   DescriptionProperty,
   CategoryFormProperty,
-  BooleanFormProperty,
+  SimpleFormProperty,
   ComplexFormProperty,
   License,
 } from "./Cms";
@@ -73,6 +73,10 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
       fields: values[0],
       cms: values.slice(1).map((cms: Cms) => parseCms(cms)),
       formProperties: {},
+      filterSettings: {
+        showModifiedOnly: false,
+        propertyFilterString: "",
+      },
     };
 
     cmsData.formProperties = getFormProperties(
@@ -149,19 +153,7 @@ function getFormProperties(
   cms: Cms[],
   fields: { [x: string]: Property }
 ): { [index: string]: FormProperty } {
-  const formProperties: { [index: string]: FormProperty } = {
-    propertyFilter: {
-      name: "Propertyfilter",
-      description: "",
-      value: "",
-      possibleValues: [],
-    } as ComplexFormProperty,
-    showOnlyModified: {
-      name: "Show only modified properties",
-      description: "",
-      value: ScoreValue.DONT_CARE,
-    } as BooleanFormProperty,
-  };
+  const formProperties: { [index: string]: FormProperty } = {};
   const propertyKeys: string[] = Object.keys(fields);
 
   propertyKeys.forEach((key: string) => {
@@ -176,7 +168,7 @@ function getFormProperties(
           name: currentProperty.name,
           description: (currentProperty as DescriptionProperty).description,
           value: ScoreValue.DONT_CARE,
-        } as BooleanFormProperty;
+        } as SimpleFormProperty;
       } else {
         // Is complex field, type ComplexFormProperty
         formProperties[key] = {
@@ -202,7 +194,7 @@ function getFormProperties(
               description: (currentSubProperty as DescriptionProperty)
                 .description,
               value: ScoreValue.DONT_CARE,
-            } as BooleanFormProperty;
+            } as SimpleFormProperty;
           } else {
             categoryFormProperty[subKey] = {
               name: currentSubProperty.name,

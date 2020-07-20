@@ -4,145 +4,229 @@ import Table from "react-bootstrap/Table";
 import Accordion from "react-bootstrap/Accordion";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useFormik, Formik, Field } from 'formik';
-import { Cms, FormProperty, BooleanFormProperty, ComplexFormProperty } from "./Cms";
+import {
+  Cms,
+  FormProperty,
+  SimpleFormProperty,
+  Property,
+  ScoreValue,
+  CategoryFormProperty,
+  Category,
+} from "./Cms";
 
 export default function FilterPanel(props: any) {
-  const filterForm = React.useRef<any>();
-  const fieldFilterForm = React.useRef<any>();
-  const resetPanelButton = React.useRef<any>();
+  // TODO: Put Filter-Table-Generation in React.memo, is this smart tho? Table Rows need to rerender!
 
-
-  // TODO: Put Filter-Table-Generation in React.memo
-
-  
-
-  const cmsData = props.cmsData;
-  
-
+  const [formProperties, setFormProperties] = React.useState<{
+    [x: string]: FormProperty;
+  }>(props.cmsData.formProperties);
 
   const [
-    [fieldFilterString, showOnlyModified],
-    setFieldFilter,
-  ] = React.useState<any>(["", false]);
+    [showModifiedOnly, propertyFilterString],
+    setFilterSettings,
+  ] = React.useState<[boolean, string]>([false, ""]);
 
-  React.useEffect(() => {}, [fieldFilterString, showOnlyModified]);
-
+  let emptyFormProperties: {
+    [x: string]: FormProperty;
+  };
   React.useEffect(() => {
-    /*filterForm.current.addEventListener("change", (e: any) => {
-      const json = parseFilterData(getFormValues(filterForm.current));
-      console.log(json);
-      props.setFilter(json);
-    });*/
+    emptyFormProperties = Object.assign({}, props.cmsData.formProperties);
+    console.log(emptyFormProperties);
+  }, []);
 
-    fieldFilterForm.current.addEventListener("input", (e: any) => {
-      const form = fieldFilterForm.current.querySelectorAll("input");
-      setFieldFilter([form[0].value, form[1].checked]);
-    });
+  const resetPanel = () => {
+    setFormProperties(emptyFormProperties);
+    console.log(formProperties);
+    setFilterSettings([false, ""]);
+  };
 
-    resetPanelButton.current.addEventListener("click", (e: any) => {
-      fieldFilterForm.current.reset();
-      setFieldFilter(["", false]);
-      filterForm.current.reset();
-      props.updateFilter(null);
-    });
-  }, []); // On mount, add eventListeners to forms*/
-
-  let fieldValues: any[] = []; // constructFieldValues(props.cmsData);
-
-  const filterData = props.getFilter(); // Get filter from parent
-
-  /*if (showOnlyModified) {
-    // Add all fields of the current filter to the array
-    const modifiedFieldNames: string[] = [filterData.niceToHave];
-    filterData.required.forEach(([name, _]: [string, any]) => {
-      modifiedFieldNames.push(name);
-    });
-    // Filter the field-set by searching for the fieldName in the modifiedFieldNames-Array
-    fieldValues = fieldValues.filter((field: any) =>
-      modifiedFieldNames.some((fieldName: string) => fieldName === field.name)
-    );
-  }
-
-  if (fieldFilterString.length > 0) {
-    fieldValues = fieldValues.filter((field: any) =>
-      field.name.toUpperCase().includes(fieldFilterString.toUpperCase())
-    );
-  }*/
-
-  let tableRows: any;
-  if (fieldValues.length > 0) {
-    tableRows = fieldValues.map((field: any) => {
-      // TODO: Add for
-      const curFieldValues: string[] = []; // getFieldValue(field, filterData);
-      let options = [];
-      if (field.values.includes("Yes") && field.values.includes("No")) {
-        options.push(
-          <option
-            key={field.name.concat("_" + 0)}
-            value=""
-            defaultChecked={curFieldValues.includes("")}
-          >
-            don't care
-          </option>
-        );
-        options.push(
-          <option
-            key={field.name.concat("_" + 1)}
-            value="Nice-To-Have"
-            defaultChecked={curFieldValues.includes("Nice-To-Have")}
-          >
-            nice-to-have
-          </option>
-        );
-        options.push(
-          <option
-            key={field.name.concat("_" + 2)}
-            value="Yes"
-            defaultChecked={curFieldValues.includes("Yes")}
-          >
-            required
-          </option>
-        );
-        options = [<select name={field.name}>{options}</select>];
+  const handleChange = (event: any, categoryKey?: string) => {
+    console.log("ChangeHandler was called!");
+    if (event.target.name === "showModifiedOnly") {
+      setFilterSettings([
+        event.target.checked ? true : false,
+        propertyFilterString,
+      ]);
+      console.log([showModifiedOnly, propertyFilterString]);
+    } else if (event.target.name === "propertyFilterString") {
+      setFilterSettings([showModifiedOnly, event.target.value]);
+      console.log([showModifiedOnly, propertyFilterString]);
+    } else {
+      let newFormProperties = Object.assign({}, formProperties); // Clone object, otherwise react won't re-render
+      if (categoryKey) {
+        (newFormProperties[categoryKey] as CategoryFormProperty)[
+          event.target.name
+        ].value = event.target.value;
       } else {
-        options = field.values.sort().map((value: string) => {
-          return (
-            // TODO: Make controllable
-            <span key={field.name.concat("_" + value)}>
-              <label>
-                {value}{" "}
-                <input
-                  type="checkbox"
-                  name={field.name}
-                  value={value}
-                  checked={curFieldValues.includes(value)}
-                />
-              </label>{" "}
-            </span>
-          );
-        });
+        (newFormProperties[event.target.name] as SimpleFormProperty).value =
+          event.target.value;
       }
-      return (
-        <tr key={field.name}>
-          <td style={{ textAlign: "left" }}>{field.name}</td>
-          <td style={{ textAlign: "right" }}>{options}</td>
+      console.log(
+        `Setting key ${event.target.name} (category: ${categoryKey}) to ${event.target.value}`
+      );
+      setFormProperties(newFormProperties);
+      console.log(formProperties);
+    }
+  };
+
+  const createTableRows = () => {
+    let propertyKeys = Object.keys(formProperties);
+
+    // If showModifiedOnly boolean is set, filter!
+    if (showModifiedOnly) {
+      propertyKeys = propertyKeys.filter((key: string) => {
+        const formProperty: FormProperty = formProperties[key];
+        if (isSimpleFormProperty(formProperty)) {
+          return formProperty.value !== ScoreValue.DONT_CARE;
+        }
+      });
+    }
+
+    // If a filter string exists, filter!
+    if (propertyFilterString.length > 0) {
+      const filterString: string = propertyFilterString;
+      propertyKeys = propertyKeys.filter((key: string) =>
+        formProperties[key].name
+          .toUpperCase()
+          .includes(filterString.toUpperCase())
+      );
+    }
+
+    let tableRows: JSX.Element[] = [];
+
+    // Add essential rows
+
+    let categoryCheckboxes: JSX.Element[] = [];
+
+    for (const cat in Category) {
+      categoryCheckboxes.push(<label><input type="checkbox" name="category" value={cat} />{' '}{cat}{' '}</label>);
+    } // TODO: Add onChange, etc. (continue here)
+
+    tableRows.push(
+      <tr>
+        <td>Category</td>
+        <td>{categoryCheckboxes}</td>
+      </tr>
+    );
+
+    for (const key of propertyKeys) {
+      const property: FormProperty =
+        formProperties[key];
+
+      if (isCategoryFormProperty(property)) {
+        tableRows.push(
+          <tr>
+            <td colSpan={2}>
+              <h4>{property.name}</h4>
+            </td>
+          </tr>
+        );
+
+        const subKeys = Object.keys(property).filter(
+          (key) => key !== "name" && key !== "description"
+        );
+
+        for (const subKey of subKeys) {
+          tableRows.push(createSimpleRow(subKey, key));
+        }
+      } else {
+        tableRows.push(createSimpleRow(key));
+      }
+    }
+
+    if (tableRows.length === 0) {
+      tableRows.push(
+        <tr>
+          <td>😐 No properties found...</td>
         </tr>
       );
-    });
-  } else {
-    tableRows = [
+    }
+    return tableRows;
+  };
+
+  const createSimpleRow = (key: string, categoryKey?: string): JSX.Element => {
+    let property: SimpleFormProperty = {
+      name: "",
+      description: "",
+      value: ScoreValue.DONT_CARE,
+    };
+
+    if (categoryKey) {
+      const categoryFormProperty = formProperties[categoryKey];
+      if (isCategoryFormProperty(categoryFormProperty)) {
+        property = categoryFormProperty[key];
+      } else {
+        throw Error(`Key ${categoryKey} is not a category key!`);
+      }
+    } else {
+      const simpleFormProperty = formProperties[key];
+      if (isSimpleFormProperty(simpleFormProperty)) {
+        property = simpleFormProperty;
+      }
+    }
+
+    if (!property.name)
+      throw Error(`Cannot get property information for key ${key}!`);
+
+    let options: JSX.Element[] = [];
+    for (let scoreValue in ScoreValue) {
+      if (!isNaN(Number(scoreValue))) {
+        const optionString =
+          scoreValue === ScoreValue.DONT_CARE.toString()
+            ? "Don't Care"
+            : scoreValue === ScoreValue.NICE_TO_HAVE.toString()
+            ? "Nice-To-Have"
+            : "Required";
+        options.push(
+          <option value={parseInt(scoreValue, 10)}>{optionString}</option>
+        ); // TODO: Pasting strings in state, need numbers
+      }
+    }
+
+    // Set style accordingly if it is a subRow
+    const style = categoryKey
+      ? { fontSize: `${0.8}em`, fontStyle: "italic" }
+      : {};
+
+    return (
       <tr>
-        <td>😐 No properties found...</td>
-      </tr>,
-    ];
-  }
+        <td style={style}>{property.name}</td>
+        <td>
+          <select
+            name={key} // Get value from state!
+            value={
+              categoryKey
+                ? (formProperties[categoryKey] as CategoryFormProperty)[key]
+                    .value
+                : (formProperties[key] as SimpleFormProperty).value
+            }
+            onChange={(e) => handleChange(e, categoryKey ? categoryKey : "")}
+          >
+            {options}
+          </select>
+        </td>
+      </tr>
+    );
+  };
+
+  const isCategoryFormProperty = (
+    x: CategoryFormProperty | SimpleFormProperty
+  ): x is CategoryFormProperty => {
+    if (!x) return false;
+    return x.value === undefined;
+  };
+
+  const isSimpleFormProperty = (
+    x: CategoryFormProperty | SimpleFormProperty
+  ): x is SimpleFormProperty => {
+    if (!x) return false;
+    return x.value !== undefined;
+  };
+
+  let tableRows = createTableRows();
 
   return (
-    
     <div className="d-flex justify-content-center">
-      {Panel(cmsData)}
-      
       <div className="w-75">
         <Accordion>
           <Card>
@@ -151,14 +235,13 @@ export default function FilterPanel(props: any) {
                 <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>
                   Filter Panel
                 </h4>
-                <Form
-                  className="w-50 d-flex justify-content-between"
-                  ref={fieldFilterForm}
-                >
+                <Form className="w-50 d-flex justify-content-between">
                   <div>
                     <Form.Control
                       type="text"
-                      name="filterString"
+                      name="propertyFilterString"
+                      value={propertyFilterString}
+                      onChange={handleChange}
                       placeholder="Filter for properties..."
                     />
                   </div>
@@ -167,13 +250,15 @@ export default function FilterPanel(props: any) {
                     {/* TODO: Looks bad on mobile */}
                     <Form.Check
                       type="checkbox"
-                      name="onlyModified"
+                      name="showModifiedOnly"
                       label="Show modified properties only"
+                      checked={showModifiedOnly}
+                      onChange={handleChange}
                     />
                   </div>
                 </Form>
                 <div className="d-flex justify-content-between">
-                  <Button variant="info" ref={resetPanelButton}>
+                  <Button variant="info" onClick={resetPanel}>
                     Clear
                   </Button>
                   <Accordion.Toggle
@@ -189,7 +274,7 @@ export default function FilterPanel(props: any) {
             </Card.Header>
             <Accordion.Collapse eventKey="0">
               <div style={{ maxHeight: "500px", overflow: "auto" }}>
-                <form id="filterForm" ref={filterForm}>
+                <form id="filterForm">
                   <Table striped bordered hover className="mb-0">
                     <tbody>{tableRows}</tbody>
                   </Table>
@@ -201,46 +286,9 @@ export default function FilterPanel(props: any) {
       </div>
     </div>
     /*<div className="d-flex justify-content-end my-2 mx-2">
-      <Button variant="secondary" className="mr-1" disabled>Maybe Filter-Export possibility?</Button>
-      <Button variant="danger" className="mr-1" disabled>Reset filter</Button>
-      <input className="btn btn-success" type="submit" value="Apply filter" />
-    </div>*/
+        <Button variant="secondary" className="mr-1" disabled>Maybe Filter-Export possibility?</Button>
+        <Button variant="danger" className="mr-1" disabled>Reset filter</Button>
+        <input className="btn btn-success" type="submit" value="Apply filter" />
+      </div>*/
   );
-  }
-
-  function Panel(cmsData: {cms: Cms[], fields: any, formProperties: { [index: string]: FormProperty }} ) {
-    const formik = useFormik({
-      initialValues: {
-        showOnlyModified: (cmsData.formProperties.showOnlyModified as BooleanFormProperty).value,
-        propertyFilter: (cmsData.formProperties.propertyFilter as ComplexFormProperty).value
-      },
-      onSubmit: foo => {
-        console.log("Bar");
-      },
-    });
-    return (
-      <Accordion>
-        <Card>
-          <Card.Header>
-            <div className="d-flex justify-content-between">
-              <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>
-                Filter Panel
-              </h4>
-            </div>
-            <form onSubmit={formik.handleChange}>
-              <input type="text" id="propertyFilter" name="propertyFilter" onChange={formik.handleChange} value={formik.values.propertyFilter as string} />
-              <label htmlFor="showOnlyModified">
-                <input type="checkbox" id="showOnlyModified" name="showOnlyModified" onChange={formik.handleChange} value={formik.values.showOnlyModified} />
-                Show only modified properties
-              </label>
-            </form>
-          </Card.Header>
-          <Accordion.Collapse eventKey="0">
-              <div style={{ maxHeight: "500px", overflow: "auto" }}>
-                <h2>Hier gibt es noch nichts zu sehen...</h2>
-              </div>
-            </Accordion.Collapse>
-        </Card>
-      </Accordion>
-    );
 }

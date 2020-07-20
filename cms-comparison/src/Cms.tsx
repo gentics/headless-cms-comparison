@@ -59,11 +59,11 @@ export interface FormProperty {
 
 // Category form property, has other properties as "children"
 export interface CategoryFormProperty extends FormProperty {
-  [index: string]: any; // FormProperty
+  [index: string]: any;
 }
 
 // Boolean form property
-export interface BooleanFormProperty extends FormProperty {
+export interface SimpleFormProperty extends FormProperty {
   value: ScoreValue;
 }
 

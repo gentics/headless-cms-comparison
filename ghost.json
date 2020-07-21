@@ -5,6 +5,10 @@
   "license": "MIT",
   "inception": null,
   "category": "Essential",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": "Nginx, Node.js, MySQL"
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "AMP (Accelerated Mobile Pages) support"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": null
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": "Nginx, Node.js, MySQL"
     },
     "supportedDatabases": {
       "name": "Supported Databases",

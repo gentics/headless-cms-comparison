@@ -5,6 +5,10 @@
   "license": "GPLv3",
   "inception": "02-2018",
   "category": "Professional/Enterprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": "PHP >= 7.1, MySQL >= 5.7"
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "Live preview while editing, advanced field types (e.g. similar to Gutenberg editor), advanced permission and validation definition, using expressions"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": "PHP >= 7.1, MySQL >= 5.7"
     },
     "supportedDatabases": {
       "name": "Supported Databases",

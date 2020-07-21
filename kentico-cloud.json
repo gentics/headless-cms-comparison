@@ -5,6 +5,10 @@
   "license": "Proprietary",
   "inception": "08-2015",
   "category": "Essential/Professional",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": null
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": null
     },
     "supportedDatabases": {
       "name": "Supported Databases",

@@ -5,6 +5,10 @@
   "license": "GPLv3",
   "inception": "01-2012",
   "category": "Essential/Professional",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": "Apache/NGINX, PHP, MYSQL"
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "custom status (Draft, Reveiw, Published)"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "Yes"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": "Apache/NGINX, PHP, MYSQL"
     },
     "supportedDatabases": {
       "name": "Supported Databases",

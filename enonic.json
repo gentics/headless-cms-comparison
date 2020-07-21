@@ -5,6 +5,10 @@
   "license": "GPLv3",
   "inception": "2015-03",
   "category": "Professional/Enterprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": "Apache/NGINX, PHP, MYSQL"
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "Customisable GraphQL or Rest API, Powerful image handling, Content preview, Hybrid CMS support"

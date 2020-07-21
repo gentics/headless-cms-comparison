@@ -5,6 +5,10 @@
   "license": "Proprietary",
   "inception": "05-2014",
   "category": "Professional",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": null
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "Git-like Versioning, SSO, Deployment, Replication, Publishing, Rules Engine, Content Type Builder"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": null
     },
     "supportedDatabases": {
       "name": "Supported Databases",

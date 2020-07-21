@@ -11,6 +11,7 @@ import {
   SimpleFormProperty,
   ComplexFormProperty,
   License,
+  SpecialFormProperty,
 } from "./Cms";
 import { stringify } from "querystring";
 
@@ -69,20 +70,45 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
     const elapsed = Date.now() - start;
     console.log(`Fetch took ${elapsed} ms`);
 
-    let cmsData = {
+    let cmsData: {
+      fields: any;
+      cms: Cms[];
+      formProperties: { basic: { [index: string]: FormProperty }, special: { [index: string]: SpecialFormProperty } };
+      filterSettings: {
+        showModifiedOnly: boolean;
+        propertyFilterString: string;
+      };
+    } = {
       fields: values[0],
       cms: values.slice(1).map((cms: Cms) => parseCms(cms)),
-      formProperties: {},
+      formProperties: { basic: {}, special: {}},
       filterSettings: {
         showModifiedOnly: false,
         propertyFilterString: "",
       },
     };
 
-    cmsData.formProperties = getFormProperties(
+    cmsData.formProperties.basic = getFormProperties(
       cmsData.cms,
       cmsData.fields.properties
     );
+
+    // Append special properties
+    cmsData.formProperties.special.category = {
+      name: "Allowed Categories",
+      description: "Which featureset is offered by the cms?",
+      value: enumToArray(Category),
+      possibleValues: enumToArray(Category) 
+    };
+
+
+    cmsData.formProperties.special.license = {
+      name: "Allowed Licenses",
+      description: "License of the system.",
+      value: enumToArray(License),
+      possibleValues: enumToArray(License) 
+    };
+
     console.log(cmsData);
     return cmsData;
   });
@@ -91,7 +117,7 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
 /**
  * - Parses licenses and categories from string in array form
  * - Looks at each property of a cms and replaces
- *   Yes's and No's with their equivalent boolean values
+ *   Yes's and No's with their corresponding boolean values
  */
 function parseCms(cms: any): Cms {
   // const start = Date.now();
@@ -232,6 +258,12 @@ function getSimplePropertyValues(
   }
   return possibleValues;
 }
+
+function enumToArray(e: any): any[] {
+  return Object.keys(e)
+    .filter((value) => isNaN(Number(value)) === true)
+    .map((key) => e[key]);
+};
 
 export default CmsService;
 

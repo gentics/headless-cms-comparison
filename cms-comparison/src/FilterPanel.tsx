@@ -12,115 +12,232 @@ import {
   ScoreValue,
   CategoryFormProperty,
   Category,
+  SpecialFormProperty,
+  License,
 } from "./Cms";
 
 export default function FilterPanel(props: any) {
   // TODO: Put Filter-Table-Generation in React.memo, is this smart tho? Table Rows need to rerender!
 
   const [formProperties, setFormProperties] = React.useState<{
-    [x: string]: FormProperty;
+    basic: { [x: string]: FormProperty };
+    special: { [x: string]: SpecialFormProperty };
   }>(props.cmsData.formProperties);
+
+  const [unchangedFormProperties] = React.useState<{
+    basic: { [x: string]: FormProperty };
+    special: { [x: string]: SpecialFormProperty };
+  }>(JSON.parse(JSON.stringify(props.cmsData.formProperties))); // TODO: This is a hack
 
   const [
     [showModifiedOnly, propertyFilterString],
     setFilterSettings,
   ] = React.useState<[boolean, string]>([false, ""]);
 
-  let emptyFormProperties: {
-    [x: string]: FormProperty;
-  };
-  React.useEffect(() => {
-    emptyFormProperties = Object.assign({}, props.cmsData.formProperties);
-    console.log(emptyFormProperties);
-  }, []);
-
   const resetPanel = () => {
-    setFormProperties(emptyFormProperties);
-    console.log(formProperties);
+    setFormProperties(unchangedFormProperties);
     setFilterSettings([false, ""]);
   };
 
-  const handleChange = (event: any, categoryKey?: string) => {
+  const handleChange = (event: any, categoryKey?: string, value?: string) => {
     console.log("ChangeHandler was called!");
+    // Clone object, otherwise react won't re-render
+    let newFormProperties = Object.assign({}, formProperties);
     if (event.target.name === "showModifiedOnly") {
       setFilterSettings([
         event.target.checked ? true : false,
         propertyFilterString,
       ]);
-      console.log([showModifiedOnly, propertyFilterString]);
+      // console.log([showModifiedOnly, propertyFilterString]);
     } else if (event.target.name === "propertyFilterString") {
       setFilterSettings([showModifiedOnly, event.target.value]);
-      console.log([showModifiedOnly, propertyFilterString]);
+      // console.log([showModifiedOnly, propertyFilterString]);
+    } else if (event.target.type === "checkbox" && value) {
+      const propertyName = event.target.name;
+      const valueArray: any[] = (formProperties.special[
+        propertyName
+      ] as SpecialFormProperty).value;
+      if (event.target.checked) {
+        // It is assumed that there are no checkboxes in categories
+        if (!valueArray.includes(value)) {
+          valueArray.push(value);
+        }
+      } else {
+        const valueIndex = valueArray.indexOf(value);
+        if (valueIndex !== -1) {
+          valueArray.splice(valueIndex, 1);
+        }
+      }
+      (newFormProperties.special[
+        propertyName
+      ] as SpecialFormProperty).value = valueArray;
+      setFormProperties(newFormProperties);
+      console.log(formProperties);
     } else {
-      let newFormProperties = Object.assign({}, formProperties); // Clone object, otherwise react won't re-render
       if (categoryKey) {
-        (newFormProperties[categoryKey] as CategoryFormProperty)[
+        (newFormProperties.basic[categoryKey] as CategoryFormProperty)[
           event.target.name
         ].value = event.target.value;
       } else {
-        (newFormProperties[event.target.name] as SimpleFormProperty).value =
-          event.target.value;
+        (newFormProperties.basic[
+          event.target.name
+        ] as SimpleFormProperty).value = event.target.value;
       }
-      console.log(
-        `Setting key ${event.target.name} (category: ${categoryKey}) to ${event.target.value}`
-      );
       setFormProperties(newFormProperties);
       console.log(formProperties);
     }
   };
 
-  const createTableRows = () => {
-    let propertyKeys = Object.keys(formProperties);
+  const arraysEqual = (a: any[], b: any[]): boolean => {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
 
-    // If showModifiedOnly boolean is set, filter!
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  };
+
+  const getFilteredProperties = (): {
+    basic: { [x: string]: FormProperty };
+    special: { [x: string]: SpecialFormProperty };
+  } => {
+    let result: {
+      basic: { [x: string]: FormProperty };
+      special: { [x: string]: SpecialFormProperty };
+    } = { basic: {}, special: {} };
+
+    if (!showModifiedOnly && propertyFilterString.length === 0) {
+      return formProperties;
+    }
+
     if (showModifiedOnly) {
-      propertyKeys = propertyKeys.filter((key: string) => {
-        const formProperty: FormProperty = formProperties[key];
-        if (isSimpleFormProperty(formProperty)) {
-          return formProperty.value !== ScoreValue.DONT_CARE;
+      let specialKeys = Object.keys(formProperties.special);
+
+      specialKeys = specialKeys.filter((key: string) => {
+        const property = formProperties.special[key];
+        const refProperty = unchangedFormProperties.special[key];
+        return !arraysEqual(property.value, refProperty.value);
+      });
+
+      specialKeys.forEach(
+        (key: string) => (result.special[key] = formProperties.special[key])
+      );
+
+      const basicKeys = Object.keys(formProperties.basic);
+
+      for (const key of basicKeys) {
+        const property = formProperties.basic[key];
+        if (isSimpleFormProperty(property)) {
+          const refProperty = unchangedFormProperties.basic[key];
+          if (property.value !== (refProperty as SimpleFormProperty).value) {
+            result.basic[key] = property;
+          }
+        } else if (isCategoryFormProperty(property)) {
+          const resProp: {
+            name: string;
+            description: string;
+            [x: string]: string;
+          } = {
+            name: formProperties.basic[key].name,
+            description: formProperties.basic[key].description,
+          };
+          const subKeys = Object.keys(property).filter(
+            (key) => key !== "name" && key !== "description"
+          );
+          for (const subKey of subKeys) {
+            const subProperty = (formProperties.basic[
+              key
+            ] as CategoryFormProperty)[subKey];
+            const refProperty = (unchangedFormProperties.basic[
+              key
+            ] as CategoryFormProperty)[subKey];
+            if (
+              subProperty.value !== (refProperty as SimpleFormProperty).value
+            ) {
+              resProp[subKey] = subProperty;
+            }
+          }
+          if (
+            Object.keys(resProp).filter(
+              (key) => key !== "name" && key !== "description"
+            ).length > 0
+          ) {
+            result.basic[key] = resProp;
+          }
+        }
+      }
+    }
+
+    let currentFormProperties: any;
+    if (showModifiedOnly) {
+      currentFormProperties = result;
+    } else {
+      currentFormProperties = formProperties;
+    }
+
+    if (propertyFilterString.length > 0) {
+      const specialKeys = Object.keys(currentFormProperties.special);
+      specialKeys.forEach((key: string) => {
+        const property: SpecialFormProperty =
+          currentFormProperties.special[key];
+        if (
+          !property.name
+            .toUpperCase()
+            .includes(propertyFilterString.toUpperCase())
+        ) {
+          if (showModifiedOnly) {
+            delete result.special[key];
+          }
+        } else {
+          result.special[key] = property;
+        }
+      });
+
+      const basicKeys = Object.keys(currentFormProperties.basic);
+      basicKeys.forEach((key: string) => {
+        const property: FormProperty = currentFormProperties.basic[key];
+        if (
+          !property.name
+            .toUpperCase()
+            .includes(propertyFilterString.toUpperCase())
+        ) {
+          if (showModifiedOnly) {
+            delete result.basic[key];
+          }
+        } else {
+          result.basic[key] = property;
         }
       });
     }
+    return result;
+  };
 
-    // If a filter string exists, filter!
-    if (propertyFilterString.length > 0) {
-      const filterString: string = propertyFilterString;
-      propertyKeys = propertyKeys.filter((key: string) =>
-        formProperties[key].name
-          .toUpperCase()
-          .includes(filterString.toUpperCase())
+  const createTableRows = () => {
+    let tableRows: JSX.Element[] = [];
+
+    const formProps = getFilteredProperties();
+
+    // Add essential rows
+    const specialKeys = Object.keys(formProps.special);
+
+    for (let key of specialKeys) {
+      tableRows.push(
+        createCheckboxRow(
+          key,
+          formProperties.special[key] as SpecialFormProperty
+        )
       );
     }
 
-    let tableRows: JSX.Element[] = [];
+    const basicKeys = Object.keys(formProps.basic);
 
-    // Add essential rows
-
-    let categoryCheckboxes: JSX.Element[] = [];
-
-    for (const cat in Category) {
-      categoryCheckboxes.push(<label><input type="checkbox" name="category" value={cat} />{' '}{cat}{' '}</label>);
-    } // TODO: Add onChange, etc. (continue here)
-
-    tableRows.push(
-      <tr>
-        <td>Category</td>
-        <td>{categoryCheckboxes}</td>
-      </tr>
-    );
-
-    for (const key of propertyKeys) {
-      const property: FormProperty =
-        formProperties[key];
+    for (let key of basicKeys) {
+      const property: FormProperty = formProps.basic[key];
 
       if (isCategoryFormProperty(property)) {
-        tableRows.push(
-          <tr>
-            <td colSpan={2}>
-              <h4>{property.name}</h4>
-            </td>
-          </tr>
-        );
+        tableRows.push(createCategoryRow(property));
 
         const subKeys = Object.keys(property).filter(
           (key) => key !== "name" && key !== "description"
@@ -144,6 +261,43 @@ export default function FilterPanel(props: any) {
     return tableRows;
   };
 
+  // It is assumed that checkbox rows are not sub-categories
+  const createCheckboxRow = (key: string, property: SpecialFormProperty) => {
+    let checkboxes: JSX.Element[] = [];
+    for (const value of property.possibleValues) {
+      checkboxes.push(
+        <label style={{ paddingRight: "2px" }}>
+          <input
+            type="checkbox"
+            name={key}
+            checked={(formProperties.special[
+              key
+            ] as SpecialFormProperty).value.includes(value)}
+            onChange={(e) => handleChange(e, undefined, value)}
+          />{" "}
+          {value}
+        </label>
+      );
+    }
+
+    return (
+      <tr>
+        <td>{property.name}</td>
+        <td>{checkboxes}</td>
+      </tr>
+    );
+  };
+
+  const createCategoryRow = (property: FormProperty): JSX.Element => {
+    return (
+      <tr>
+        <td colSpan={2}>
+          <h4>{property.name}</h4>
+        </td>
+      </tr>
+    );
+  };
+
   const createSimpleRow = (key: string, categoryKey?: string): JSX.Element => {
     let property: SimpleFormProperty = {
       name: "",
@@ -152,14 +306,14 @@ export default function FilterPanel(props: any) {
     };
 
     if (categoryKey) {
-      const categoryFormProperty = formProperties[categoryKey];
+      const categoryFormProperty = formProperties.basic[categoryKey];
       if (isCategoryFormProperty(categoryFormProperty)) {
         property = categoryFormProperty[key];
       } else {
         throw Error(`Key ${categoryKey} is not a category key!`);
       }
     } else {
-      const simpleFormProperty = formProperties[key];
+      const simpleFormProperty = formProperties.basic[key];
       if (isSimpleFormProperty(simpleFormProperty)) {
         property = simpleFormProperty;
       }
@@ -184,21 +338,20 @@ export default function FilterPanel(props: any) {
     }
 
     // Set style accordingly if it is a subRow
-    const style = categoryKey
-      ? { fontSize: `${0.8}em`, fontStyle: "italic" }
-      : {};
+    const style = categoryKey ? { fontStyle: "italic", fontWeight: 800 } : {};
 
     return (
       <tr>
         <td style={style}>{property.name}</td>
-        <td>
+        <td style={{ textAlign: "right" }}>
           <select
             name={key} // Get value from state!
             value={
               categoryKey
-                ? (formProperties[categoryKey] as CategoryFormProperty)[key]
-                    .value
-                : (formProperties[key] as SimpleFormProperty).value
+                ? (formProperties.basic[categoryKey] as CategoryFormProperty)[
+                    key
+                  ].value
+                : (formProperties.basic[key] as SimpleFormProperty).value
             }
             onChange={(e) => handleChange(e, categoryKey ? categoryKey : "")}
           >
@@ -243,6 +396,7 @@ export default function FilterPanel(props: any) {
                       value={propertyFilterString}
                       onChange={handleChange}
                       placeholder="Filter for properties..."
+                      style={{ width: "300px" }}
                     />
                   </div>
                   <div className="d-flex align-items-center ml-2">

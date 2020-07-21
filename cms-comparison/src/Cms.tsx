@@ -73,6 +73,11 @@ export interface ComplexFormProperty extends FormProperty {
   possibleValues: string[];
 }
 
+export interface SpecialFormProperty extends FormProperty {
+  value: any[]; // (Category[] | License[]);
+  possibleValues: any[];
+}
+
 // Tristate boolean for "scoring"
 export enum ScoreValue {
   DONT_CARE = 0,

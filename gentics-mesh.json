@@ -5,6 +5,10 @@
   "license": "Apache-2.0",
   "inception": "09-2014",
   "category": "Professional/Entreprise",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Webroot API for routing frameworks"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "No"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Webroot API for routing frameworks"
     }
   }
 }

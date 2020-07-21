@@ -5,6 +5,10 @@
   "license": "Proprietary",
   "inception": "06-2016",
   "category": "Essential/Professional/Enterprise",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "No"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
     }
   }
 }

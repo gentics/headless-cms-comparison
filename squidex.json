@@ -5,6 +5,10 @@
   "license": "MIT",
   "inception": "03-2017",
   "category": "Essential",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Real-time hosted backend, fully customizeable editor, powerful asset pipeline"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "Yes"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Real-time hosted backend, fully customizeable editor, powerful asset pipeline"
     }
   }
 }

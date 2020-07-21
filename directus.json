@@ -5,6 +5,10 @@
   "license": "GPLv3",
   "inception": "01-2012",
   "category": "Essential/Professional",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "custom status (Draft, Reveiw, Published)"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "Yes"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "custom status (Draft, Reveiw, Published)"
     }
   }
 }

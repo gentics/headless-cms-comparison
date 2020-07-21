@@ -5,6 +5,10 @@
   "license": "Proprietary",
   "inception": "07-2010",
   "category": "Essential/Professional",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Git-like Versioning, SSO, Deployment, Replication, Publishing, Rules Engine, Content Type Builder"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "Yes"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Git-like Versioning, SSO, Deployment, Replication, Publishing, Rules Engine, Content Type Builder"
     }
   }
 }

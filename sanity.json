@@ -5,6 +5,10 @@
   "license": "Proprietary",
   "inception": "05-2016",
   "category": "Essential/Professional/Enterprise",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Real-time hosted backend, fully customizeable editor, powerful asset pipeline"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "No"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Real-time hosted backend, fully customizeable editor, powerful asset pipeline"
     }
   }
 }

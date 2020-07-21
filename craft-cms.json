@@ -5,6 +5,10 @@
   "license": "Proprietary",
   "inception": "01-2011",
   "category": "Professional/Enterprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": "PHP, MySQL/PostgreSQL"
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "Headless Live Preview, Matrix fields"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "Yes"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": "PHP, MySQL/PostgreSQL"
     },
     "supportedDatabases": {
       "name": "Supported Databases",

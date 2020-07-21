@@ -29,6 +29,11 @@
     "description": "Which featureset is offered by the cms? String containing a subset of the following values seperated by slashes'/': Essential,Professional,Enterprise. E.g. xyz-CMS has professional and enterprise functionality: 'Professional/Enterprise'",
     "value": null
   },
+  "systemRequirements": {
+    "name": "System Requirements",
+    "description": "",
+    "value": null
+  },
   "specialFeatures": {
     "name": "Special Features",
     "description": "Noteworthy Features",
@@ -208,11 +213,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "description": "Is it possible to hook into the upload process to directly process uploaded assets (e.g. re-encode videos, shrink large images)?",
-      "value": null
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "description": "",
       "value": null
     },
     "supportedDatabases": {

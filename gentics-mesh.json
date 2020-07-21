@@ -5,6 +5,10 @@
   "license": "Apache-2.0",
   "inception": "09-2014",
   "category": "Professional/Entreprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": "Java"
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "Webroot API for routing frameworks"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": "Java"
     },
     "supportedDatabases": {
       "name": "Supported Databases",

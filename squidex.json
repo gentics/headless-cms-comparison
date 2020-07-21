@@ -5,6 +5,10 @@
   "license": "MIT",
   "inception": "03-2017",
   "category": "Essential",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": null
+  },
   "specialFeatures": {
     "name": "Special Features",
     "value": "Real-time hosted backend, fully customizeable editor, powerful asset pipeline"
@@ -145,10 +149,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": null
     },
     "supportedDatabases": {
       "name": "Supported Databases",

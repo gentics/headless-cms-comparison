@@ -4,15 +4,17 @@ import Table from "react-bootstrap/Table";
 import Accordion from "react-bootstrap/Accordion";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import { AiFillInfoCircle } from "react-icons/ai";
+
 import {
-  Cms,
   FormProperty,
   SimpleFormProperty,
-  Property,
-  ScoreValue,
   CategoryFormProperty,
-  Category,
   SpecialFormProperty,
+  ScoreValue,
+  Category,
   License,
 } from "./Cms";
 
@@ -40,52 +42,55 @@ export default function FilterPanel(props: any) {
   };
 
   const handleChange = (event: any, categoryKey?: string, value?: string) => {
-    console.log("ChangeHandler was called!");
     // Clone object, otherwise react won't re-render
     let newFormProperties = Object.assign({}, formProperties);
+
     if (event.target.name === "showModifiedOnly") {
       setFilterSettings([
         event.target.checked ? true : false,
         propertyFilterString,
       ]);
-      // console.log([showModifiedOnly, propertyFilterString]);
     } else if (event.target.name === "propertyFilterString") {
       setFilterSettings([showModifiedOnly, event.target.value]);
-      // console.log([showModifiedOnly, propertyFilterString]);
     } else if (event.target.type === "checkbox" && value) {
+      // Special property
       const propertyName = event.target.name;
       const valueArray: any[] = (formProperties.special[
         propertyName
       ] as SpecialFormProperty).value;
       if (event.target.checked) {
-        // It is assumed that there are no checkboxes in categories
+        // If not already in array, add value to array
         if (!valueArray.includes(value)) {
           valueArray.push(value);
         }
       } else {
+        // If in array, remove value from array
         const valueIndex = valueArray.indexOf(value);
         if (valueIndex !== -1) {
           valueArray.splice(valueIndex, 1);
         }
       }
+      // Update local copy of formProperties
       (newFormProperties.special[
         propertyName
       ] as SpecialFormProperty).value = valueArray;
-      setFormProperties(newFormProperties);
-      console.log(formProperties);
     } else {
+      // Property inside a category was updated
+      // Update local copy of formProperties
       if (categoryKey) {
         (newFormProperties.basic[categoryKey] as CategoryFormProperty)[
           event.target.name
         ].value = event.target.value;
       } else {
+        // Simple property was updated
+        // Update local copy of formProperties
         (newFormProperties.basic[
           event.target.name
         ] as SimpleFormProperty).value = event.target.value;
       }
-      setFormProperties(newFormProperties);
-      console.log(formProperties);
     }
+    // Update state
+    setFormProperties(newFormProperties);
   };
 
   const arraysEqual = (a: any[], b: any[]): boolean => {
@@ -282,7 +287,14 @@ export default function FilterPanel(props: any) {
 
     return (
       <tr>
-        <td>{property.name}</td>
+        <td>
+          <div className="d-flex justify-content-between">
+            <span className="ml-2">
+              {createInfoElement(property.description)}
+            </span>
+            <span className="mr-2">{property.name}</span>
+          </div>
+        </td>
         <td>{checkboxes}</td>
       </tr>
     );
@@ -292,7 +304,14 @@ export default function FilterPanel(props: any) {
     return (
       <tr>
         <td colSpan={2}>
-          <h4>{property.name}</h4>
+          <div className="d-flex justify-content-between">
+            <span className="ml-2">
+              {createInfoElement(property.description)}
+            </span>
+            <span className="mr-2">
+              <h4>{property.name}</h4>
+            </span>
+          </div>
         </td>
       </tr>
     );
@@ -342,7 +361,16 @@ export default function FilterPanel(props: any) {
 
     return (
       <tr>
-        <td style={style}>{property.name}</td>
+        <td>
+          <div className="d-flex justify-content-between">
+            <span className="ml-2">
+              {createInfoElement(property.description)}
+            </span>
+            <span className="mr-2" style={style}>
+              {property.name}
+            </span>
+          </div>
+        </td>
         <td style={{ textAlign: "right" }}>
           <select
             name={key} // Get value from state!
@@ -361,6 +389,20 @@ export default function FilterPanel(props: any) {
       </tr>
     );
   };
+
+  const renderTooltip = (props: any) => {
+    return <Tooltip id={`${props}_tooltip`}>{props}</Tooltip>;
+  };
+
+  const createInfoElement = (description: string): JSX.Element => (
+    <OverlayTrigger
+      placement="top"
+      delay={{ show: 100, hide: 200 }}
+      overlay={renderTooltip(description)}
+    >
+      <AiFillInfoCircle size={`${1.5}em`} />
+    </OverlayTrigger>
+  );
 
   const isCategoryFormProperty = (
     x: CategoryFormProperty | SimpleFormProperty

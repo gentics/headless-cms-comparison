@@ -29,6 +29,11 @@
     "description": "Which featureset is offered by the cms? String containing a subset of the following values seperated by slashes'/': Essential,Professional,Enterprise. E.g. xyz-CMS has professional and enterprise functionality: 'Professional/Enterprise'",
     "value": null
   },
+  "specialFeatures": {
+    "name": "Special Features",
+    "description": "Noteworthy Features",
+    "value": null
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -423,11 +428,6 @@
     "workflows": {
       "name": "Workflows",
       "description": "Does the system support editing workflows?",
-      "value": null
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "description": "Noteworthy Features",
       "value": null
     }
   }

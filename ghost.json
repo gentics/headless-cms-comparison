@@ -5,6 +5,10 @@
   "license": "MIT",
   "inception": null,
   "category": "Essential",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "AMP (Accelerated Mobile Pages) support"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": null
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "AMP (Accelerated Mobile Pages) support"
     }
   }
 }

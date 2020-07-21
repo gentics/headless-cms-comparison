@@ -5,6 +5,10 @@
   "license": "Proprietary",
   "inception": "05-2015",
   "category": "Essential",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": null
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "No"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": null
     }
   }
 }

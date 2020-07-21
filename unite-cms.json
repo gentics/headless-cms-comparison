@@ -5,6 +5,10 @@
   "license": "GPLv3",
   "inception": "02-2018",
   "category": "Professional/Enterprise",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Live preview while editing, advanced field types (e.g. similar to Gutenberg editor), advanced permission and validation definition, using expressions"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "Yes"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Live preview while editing, advanced field types (e.g. similar to Gutenberg editor), advanced permission and validation definition, using expressions"
     }
   }
 }

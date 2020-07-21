@@ -5,6 +5,10 @@
   "license": "MIT",
   "inception": "08-2015",
   "category": "Essential/Professional",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Instant Live Preview"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "No"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Instant Live Preview"
     }
   }
 }

@@ -5,6 +5,10 @@
   "license": "BSD 3-Clause",
   "inception": "12-2016",
   "category": "Essential",
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -315,10 +319,6 @@
     "workflows": {
       "name": "Workflows",
       "value": "No"
-    },
-    "specialFeatures": {
-      "name": "Special Features",
-      "value": "Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
     }
   }
 }

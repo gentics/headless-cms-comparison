@@ -1,12 +1,12 @@
 import {
   Cms,
-  Property,
-  SimpleProperty,
-  CategoryProperty,
+  CmsProperty,
+  BasicCmsProperty,
+  CategoryCmsProperty,
   Category,
   ScoreValue,
   FormProperty,
-  DescriptionProperty,
+  DescriptionCmsProperty,
   CategoryFormProperty,
   SimpleFormProperty,
   ComplexFormProperty,
@@ -119,7 +119,7 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
  * - Looks at each property of a cms and replaces
  *   Yes's and No's with their corresponding boolean values
  */
-function parseCms(cms: any): Cms {
+function parseCms(cms: any): Cms { // TODO: Include a try catch block for unparsable cms
   // const start = Date.now();
 
   // Parse licenses
@@ -130,11 +130,15 @@ function parseCms(cms: any): Cms {
   const categories: Category[] = cms.category.split("/");
   cms.category = categories;
 
+  cms.systemRequirements = cms.systemRequirements;
+
+  cms.specialFeatures = cms.specialFeatures;
+
   // Parse properties by replacing boolean words with actual booleans
   const propertyKeys: string[] = Object.keys(cms.properties);
   propertyKeys.forEach((propertyKey: string) => {
     // Is property a simple property?
-    const property: Property = cms.properties[propertyKey];
+    const property: CmsProperty = cms.properties[propertyKey];
     if (isSimpleProperty(property)) {
       // Yes? Replace Yes's with true and No's with false
       const value = property.value;
@@ -144,7 +148,7 @@ function parseCms(cms: any): Cms {
       // No? Look into the sub-properties and do the same replacing as above.
       const subPropertyKeys = Object.keys(property);
       subPropertyKeys.forEach((subPropertyKey: string) => {
-        const subProperty: Property = property[subPropertyKey];
+        const subProperty: CmsProperty = property[subPropertyKey];
         if (isSimpleProperty(subProperty)) {
           const value = subProperty.value;
           subProperty.value =
@@ -158,17 +162,17 @@ function parseCms(cms: any): Cms {
 }
 
 function isSimpleProperty(
-  x: SimpleProperty | CategoryProperty
-): x is SimpleProperty {
+  x: BasicCmsProperty | CategoryCmsProperty
+): x is BasicCmsProperty {
   if (!x) return false;
-  return (x as SimpleProperty).value !== undefined;
+  return (x as BasicCmsProperty).value !== undefined;
 }
 
 function isCategoryProperty(
-  x: SimpleProperty | CategoryProperty
-): x is CategoryProperty {
+  x: BasicCmsProperty | CategoryCmsProperty
+): x is CategoryCmsProperty {
   if (!x) return false;
-  return (x as CategoryProperty).value === undefined;
+  return (x as CategoryCmsProperty).value === undefined;
 }
 /**
  * Iterates over all fields and collects all possible values from all CMS
@@ -177,7 +181,7 @@ function isCategoryProperty(
  */
 function getFormProperties(
   cms: Cms[],
-  fields: { [x: string]: Property }
+  fields: { [x: string]: CmsProperty }
 ): { [index: string]: FormProperty } {
   const formProperties: { [index: string]: FormProperty } = {};
   const propertyKeys: string[] = Object.keys(fields);
@@ -192,14 +196,14 @@ function getFormProperties(
         // Is boolean field, omit possibleValues-array (type FormProperty)
         formProperties[key] = {
           name: currentProperty.name,
-          description: (currentProperty as DescriptionProperty).description,
+          description: (currentProperty as DescriptionCmsProperty).description,
           value: ScoreValue.DONT_CARE,
         } as SimpleFormProperty;
       } else {
         // Is complex field, type ComplexFormProperty
         formProperties[key] = {
           name: currentProperty.name,
-          description: (currentProperty as DescriptionProperty).description,
+          description: (currentProperty as DescriptionCmsProperty).description,
           value: null,
           possibleValues: possibleValues,
         } as ComplexFormProperty;
@@ -208,7 +212,7 @@ function getFormProperties(
       const subPropertyKeys = Object.keys(currentProperty);
       let categoryFormProperty: CategoryFormProperty = {
         name: currentProperty.name,
-        description: (currentProperty as DescriptionProperty).description,
+        description: (currentProperty as DescriptionCmsProperty).description,
       };
       for (let subKey of subPropertyKeys) {
         const currentSubProperty = currentProperty[subKey];
@@ -217,14 +221,14 @@ function getFormProperties(
           if (possibleValues.length === 0) {
             categoryFormProperty[subKey] = {
               name: currentSubProperty.name,
-              description: (currentSubProperty as DescriptionProperty)
+              description: (currentSubProperty as DescriptionCmsProperty)
                 .description,
               value: ScoreValue.DONT_CARE,
             } as SimpleFormProperty;
           } else {
             categoryFormProperty[subKey] = {
               name: currentSubProperty.name,
-              description: (currentSubProperty as DescriptionProperty)
+              description: (currentSubProperty as DescriptionCmsProperty)
                 .description,
               value: null,
               possibleValues: possibleValues,

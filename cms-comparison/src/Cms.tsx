@@ -22,8 +22,10 @@ export interface Cms {
   license: License[];
   inception: Date;
   category: Category[];
+  systemRequirements: string | null;
+  specialFeatures: string | null;
   properties: {
-    [x: string]: Property // Category | FieldObject
+    [x: string]: CmsProperty // Category | FieldObject
   };
 }
 
@@ -31,20 +33,20 @@ export interface Cms {
 // INTERFACES FOR CMS PROPERTIES //
 ///////////////////////////////////
 
-export interface Property {
+export interface CmsProperty {
   name: string;
   description?: string;
 }
 
-export interface DescriptionProperty extends Property {
+export interface DescriptionCmsProperty extends CmsProperty {
   description: string;
 }
 
-export interface SimpleProperty extends Property {
-  value: string | boolean;
+export interface BasicCmsProperty extends CmsProperty {
+  value: string | boolean; // TODO: Should be only boolean
 }
 
-export interface CategoryProperty extends Property {
+export interface CategoryCmsProperty extends CmsProperty {
   [index: string]: any;
 }
 
@@ -67,7 +69,7 @@ export interface SimpleFormProperty extends FormProperty {
   value: ScoreValue;
 }
 
-// Complex form property for properties with arbitrary values
+// OBSOLETE: Complex form property for properties with arbitrary values
 export interface ComplexFormProperty extends FormProperty {
   value: ScoreValue | string | null;
   possibleValues: string[];
@@ -80,7 +82,19 @@ export interface SpecialFormProperty extends FormProperty {
 
 // Tristate boolean for "scoring"
 export enum ScoreValue {
-  DONT_CARE = 0,
-  NICE_TO_HAVE = 1,
-  REQUIRED = 2
+  DONT_CARE = "Don't Care",
+  NICE_TO_HAVE = "Nice-to-Have",
+  REQUIRED = "Required"
+}
+
+export interface FilterResult {
+  cms: Cms;
+  has: { basic: { [x: string]: FormProperty }, special: { [x: string]: FormProperty } };
+  hasNot: { basic: { [x: string]: FormProperty }, special: { [x: string]: FormProperty } };
+  satisfactory: boolean;
+}
+
+export interface FormProperties {
+  basic: { [x: string]: FormProperty };
+  special: { [x: string]: SpecialFormProperty } ;
 }

@@ -10,27 +10,24 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import deepcopy from "ts-deepcopy";
 
 import {
-  FormProperty,
-  SimpleFormProperty,
-  CategoryFormProperty,
-  SpecialFormProperty,
   ScoreValue,
-  Category,
-  License,
   Cms,
-  CmsProperty,
-  BasicCmsProperty,
+  BooleanCmsProperty,
   FilterResult,
-  FormProperties,
+  FilterPropertySet,
+  BasicFilterProperty,
+  CategoryFilterProperty,
+  ScoreFilterProperty,
+  SpecialFilterProperty,
 } from "./Cms";
 
 export default function FilterPanel(props: any) {
-  const [formProperties, setFormProperties] = React.useState<FormProperties>(
-    props.cmsData.formProperties
+  const [filter, setFilter] = React.useState<FilterPropertySet>(
+    props.cmsData.filterProperties
   );
 
-  const [unchangedFormProperties] = React.useState<FormProperties>(
-    deepcopy<FormProperties>(props.cmsData.formProperties)
+  const [initialFilter] = React.useState<FilterPropertySet>(
+    deepcopy<FilterPropertySet>(props.cmsData.filterProperties)
   );
 
   const [
@@ -39,22 +36,17 @@ export default function FilterPanel(props: any) {
   ] = React.useState<[boolean, string]>([false, ""]);
 
   const resetPanel = () => {
-    setFormProperties(
-      deepcopy<{
-        basic: { [x: string]: FormProperty };
-        special: { [x: string]: SpecialFormProperty };
-      }>(unchangedFormProperties)
-    );
+    setFilter(deepcopy<FilterPropertySet>(initialFilter));
     setFilterSettings([false, ""]);
   };
 
   React.useEffect(() => {
     console.log("Formproperties changed!");
-  }, [formProperties]);
+  }, [filter]);
 
   const handleChange = (event: any, categoryKey?: string, value?: string) => {
     // Clone object, otherwise react won't re-render
-    let newFormProperties = Object.assign({}, formProperties);
+    let newFilter = Object.assign({}, filter);
 
     if (event.target.name === "showModifiedOnly") {
       setFilterSettings([
@@ -65,51 +57,51 @@ export default function FilterPanel(props: any) {
       setFilterSettings([showModifiedOnly, event.target.value]);
     } else if (event.target.type === "checkbox" && value) {
       // Special property
-      const propertyName = event.target.name;
-      console.log(propertyName);
-      const valueArray: any[] = (formProperties.special[
-        propertyName
-      ] as SpecialFormProperty).value;
+      const propName = event.target.name;
+      console.log(propName);
+      const valArray: any[] = filter.special[
+        propName
+      ].value;
       if (event.target.checked) {
         // If not already in array, add value to array
-        if (!valueArray.includes(value)) {
-          valueArray.push(value);
+        if (!valArray.includes(value)) {
+          valArray.push(value);
         }
       } else {
         // If in array, remove value from array
-        const valueIndex = valueArray.indexOf(value);
+        const valueIndex = valArray.indexOf(value);
         if (valueIndex !== -1) {
-          valueArray.splice(valueIndex, 1);
+          valArray.splice(valueIndex, 1);
         }
       }
       // Update local copy of formProperties
-      (newFormProperties.special[
-        propertyName
-      ] as SpecialFormProperty).value = valueArray;
+      newFilter.special[
+        propName
+      ].value = valArray;
     } else {
       // Property inside a category was updated
       // Update local copy of formProperties
       if (categoryKey) {
-        (newFormProperties.basic[categoryKey] as CategoryFormProperty)[
+        (newFilter.basic[categoryKey] as CategoryFilterProperty)[
           event.target.name
         ].value = event.target.value;
       } else {
-        // Simple property was updated
+        // Score property was updated
         // Update local copy of formProperties
-        (newFormProperties.basic[
+        (newFilter.basic[
           event.target.name
-        ] as SimpleFormProperty).value = event.target.value;
+        ] as ScoreFilterProperty).value = event.target.value;
       }
     }
     // Update state
-    setFormProperties(newFormProperties);
+    setFilter(newFilter);
     // Perform filtering TODO: Act on these results e.g. send them up
-    filterCms(formProperties, props.cmsData.cms);
+    filterCms(filter, props.cmsData.cms);
   };
 
   const tableRows = createTableRows(
-    formProperties,
-    unchangedFormProperties,
+    filter,
+    initialFilter,
     showModifiedOnly,
     propertyFilterString,
     handleChange
@@ -130,84 +122,85 @@ export default function FilterPanel(props: any) {
  * Filters the cms acoording to @param formProperties.
  * Returns all cms, satisfactory boolean is set accordingly.
  */
-function filterCms(formProperties: FormProperties, cms: Cms[]): FilterResult[] {
-  const start = Date.now();
-  const basicKeys = Object.keys(formProperties.basic);
-  const specialKeys = Object.keys(formProperties.special);
+function filterCms(
+  filterPropSet: FilterPropertySet,
+  cms: Cms[]
+): FilterResult[] {
   let filterResults: FilterResult[] = [];
+  
+  const basicPropKeys = Object.keys(filterPropSet.basic);
+  const specialPropKeys = Object.keys(filterPropSet.special);
 
   for (let i = 0; i < cms.length; i++) {
     const curCms: any = cms[i];
 
-    let has: FormProperties = { basic: {}, special: {} };
-    let hasNot: FormProperties = { basic: {}, special: {} };
+    let has: FilterPropertySet = { basic: {}, special: {} };
+    let hasNot: FilterPropertySet = { basic: {}, special: {} };
     let satisfactory: boolean = true;
 
-    specialKeys.forEach((key: string) => {
-      const property = formProperties.special[key];
-      const values: any[] = property.value;
-      if (values.length > 0) {
-        if (values.filter((value) => curCms[key].includes(value)).length > 0) {
-          has.special[key] = property;
+    specialPropKeys.forEach((key: string) => {
+      const curProp = filterPropSet.special[key];
+      const reqValues: any[] = curProp.value;
+      if (reqValues.length > 0) {
+        if (
+          getArrayIntersection(reqValues, curCms[key]).length > 0
+        ) {
+          has.special[key] = curProp;
         } else {
-          hasNot.special[key] = property;
+          hasNot.special[key] = curProp;
           satisfactory = false;
         }
       } else {
-        hasNot.special[key] = property;
+        hasNot.special[key] = curProp;
         satisfactory = false;
       }
     });
 
-    basicKeys.forEach((key: string) => {
-      const property: FormProperty = formProperties.basic[key];
-      if (isSimpleFormProperty(property)) {
-        if (property.value != ScoreValue.DONT_CARE) {
+    basicPropKeys.forEach((key: string) => {
+      const curProp = filterPropSet.basic[key];
+      if (isScoreFilterProp(curProp)) {
+        if (curProp.value != ScoreValue.DONT_CARE) {
           const [hasProperty, isSatisfactory] = cmsHasProperty(
-            property,
+            curProp,
             curCms.properties[key]
           );
-          if (hasProperty) {
-            has.basic[key] = property;
-          } else {
-            hasNot.basic[key] = property;
-          }
+          hasProperty
+            ? (has.basic[key] = curProp)
+            : (hasNot.basic[key] = curProp);
+
           if (satisfactory) satisfactory = isSatisfactory;
         }
-      } else if (isCategoryFormProperty(property)) {
-        const subKeys = Object.keys(property).filter(
-          (key: string) => key !== "name" && key !== "description"
-        );
-        const hasCategoryProperty: CategoryFormProperty = {
-          name: property.name,
-          description: property.description,
+      } else {
+        const curSubPropKeys = getSubPropKeys(curProp);
+        const hasCategoryProp: CategoryFilterProperty = {
+          name: curProp.name,
+          description: curProp.description,
         };
-        const hasNotCategoryProperty: CategoryFormProperty = {
-          name: property.name,
-          description: property.description,
+        const hasNotCategoryProp: CategoryFilterProperty = {
+          name: curProp.name,
+          description: curProp.description,
         };
 
-        subKeys.forEach((subKey: string) => {
-          const subProperty: SimpleFormProperty = property[subKey];
-          if (subProperty.value !== ScoreValue.DONT_CARE) {
+        curSubPropKeys.forEach((subKey: string) => {
+          const subProp: ScoreFilterProperty = curProp[subKey];
+          if (subProp.value != ScoreValue.DONT_CARE) {
             const [hasProperty, isSatisfactory] = cmsHasProperty(
-              subProperty,
+              subProp,
               curCms.properties[key][subKey]
             );
-            if (hasProperty) {
-              hasCategoryProperty[key] = subProperty;
-            } else {
-              hasNotCategoryProperty[key] = subProperty;
-            }
+            hasProperty 
+              ? (hasCategoryProp[key] = subProp)
+              : (hasNotCategoryProp[key] = subProp);
+            
             if (satisfactory) satisfactory = isSatisfactory;
           }
         });
 
-        if (categoryFormPropertyIsEmpty(hasCategoryProperty))
-          has.basic[key] = hasCategoryProperty;
+        if (getSubPropKeys(hasCategoryProp).length > 0)
+          has.basic[key] = hasCategoryProp;
 
-        if (categoryFormPropertyIsEmpty(hasNotCategoryProperty))
-          hasNot.basic[key] = hasNotCategoryProperty;
+        if (getSubPropKeys(hasNotCategoryProp).length > 0)
+          hasNot.basic[key] = hasNotCategoryProp;
       }
     });
 
@@ -231,90 +224,77 @@ function filterCms(formProperties: FormProperties, cms: Cms[]): FilterResult[] {
  * @returns [hasProperty, isSatisfactory]
  */
 function cmsHasProperty(
-  formProperty: SimpleFormProperty,
-  cmsProperty: BasicCmsProperty
+  scoreFilterProp: ScoreFilterProperty,
+  cmsProperty: BooleanCmsProperty
 ): [boolean, boolean] {
   if (cmsProperty && cmsProperty.value) {
     return [true, true];
   } else {
-    if (formProperty.value == ScoreValue.REQUIRED) {
+    if (scoreFilterProp.value == ScoreValue.REQUIRED) {
       return [false, false];
     }
     return [false, true];
   }
 }
 
-function categoryFormPropertyIsEmpty(property: CategoryFormProperty): boolean {
-  return (
-    Object.keys(property).filter(
-      (key: string) => key !== "name" && key !== "description"
-    ).length > 0
-  );
+function getArrayIntersection(a: string[], b: string[]): string[] {
+  return a.filter((value) => b.includes(value));
 }
 
-function isCategoryFormProperty(
-  x: CategoryFormProperty | SimpleFormProperty
-): x is CategoryFormProperty {
-  if (!x) return false;
-  return x.value === undefined;
-}
-
-function isSimpleFormProperty(
-  x: CategoryFormProperty | SimpleFormProperty
-): x is SimpleFormProperty {
+function isScoreFilterProp(x: BasicFilterProperty): x is ScoreFilterProperty {
   if (!x) return false;
   return x.value !== undefined;
 }
 
 function createTableRows(
-  formProperties: FormProperties,
-  unchangedFormProperties: FormProperties,
+  propSet: FilterPropertySet,
+  initialPropSet: FilterPropertySet,
   showModifiedOnly: boolean,
   propertyFilterString: string,
   changeHandler: any
 ) {
   let tableRows: JSX.Element[] = [];
 
-  const formProps: FormProperties = getFilteredProperties(
-    formProperties,
-    unchangedFormProperties,
+  const filteredPropSet: FilterPropertySet = getFilteredProperties(
+    propSet,
+    initialPropSet,
     showModifiedOnly,
     propertyFilterString
   );
 
   // Add special rows
-  const specialKeys = Object.keys(formProps.special);
+  const specialKeys = Object.keys(filteredPropSet.special);
 
   for (let key of specialKeys) {
     tableRows.push(
       createCheckboxRow(
         key,
-        formProperties,
-        formProperties.special[key] as SpecialFormProperty,
+        propSet,
+        propSet.special[key],
         changeHandler
       )
     );
   }
 
-  const basicKeys = Object.keys(formProps.basic);
+  const basicKeys = Object.keys(filteredPropSet.basic);
 
   for (let key of basicKeys) {
-    const property: FormProperty = formProps.basic[key];
+    const curProp: BasicFilterProperty = filteredPropSet.basic[key];
 
-    if (isSimpleFormProperty(property)) {
-      tableRows.push(createSimpleRow(formProps, key, changeHandler));
+    if (isScoreFilterProp(curProp)) {
+      tableRows.push(createSimpleRow(filteredPropSet, key, changeHandler));
     } else {
       tableRows.push(
         <CategoryRow
-          title={formProps.basic[key].name}
-          description={formProps.basic[key].description}
+          title={curProp.name}
+          description={curProp.description}
         />
       );
 
-      const subKeys = getSubPropKeys(property);
+      const subKeys = getSubPropKeys(curProp);
 
       for (const subKey of subKeys) {
-        tableRows.push(createSimpleRow(formProps, subKey, changeHandler, key));
+        tableRows.push(createSimpleRow(filteredPropSet, subKey, changeHandler, key));
       }
     }
   }
@@ -325,11 +305,10 @@ function createTableRows(
   return tableRows;
 }
 
-// It is assumed that checkbox rows are not sub-categories
 function createCheckboxRow(
   key: string,
-  formProperties: FormProperties,
-  property: SpecialFormProperty,
+  propSet: FilterPropertySet,
+  property: SpecialFilterProperty,
   changeHandler: (
     event: any,
     categoryKey?: string | undefined,
@@ -342,10 +321,10 @@ function createCheckboxRow(
       <Checkbox
         propertyKey={key}
         label={value}
-        checked={(formProperties.special[
+        checked={propSet.special[
           key
-        ] as SpecialFormProperty).value.includes(value)}
-        changeHandler={(e: any) => changeHandler(e, undefined, value)}
+        ].value.includes(value)}
+        changeHandler={(e: any) => changeHandler(e, undefined, value)} // TODO: Check this
       />
     );
   }
@@ -360,7 +339,7 @@ function createCheckboxRow(
 }
 
 function createSimpleRow(
-  formProperties: FormProperties,
+  propSet: FilterPropertySet,
   basicKey: string,
   changeHandler: (
     event: any,
@@ -369,15 +348,15 @@ function createSimpleRow(
   ) => void,
   categoryKey?: string
 ): JSX.Element {
-  let property: SimpleFormProperty;
+  let property: ScoreFilterProperty;
 
   try {
     if (categoryKey) {
-      property = (formProperties.basic[categoryKey] as CategoryFormProperty)[
+      property = (propSet.basic[categoryKey] as CategoryFilterProperty)[
         basicKey
       ];
     } else {
-      property = formProperties.basic[basicKey] as SimpleFormProperty;
+      property = propSet.basic[basicKey] as ScoreFilterProperty;
     }
   } catch (e) {
     throw new Error(
@@ -397,9 +376,9 @@ function createSimpleRow(
   const style = categoryKey ? { fontStyle: "italic", fontWeight: 800 } : {};
 
   const rowValue = categoryKey
-    ? (formProperties.basic[categoryKey] as CategoryFormProperty)[basicKey]
+    ? (propSet.basic[categoryKey] as CategoryFilterProperty)[basicKey]
         .value
-    : (formProperties.basic[basicKey] as SimpleFormProperty).value;
+    : (propSet.basic[basicKey] as ScoreFilterProperty).value;
 
   const handler = categoryKey
     ? (e: any) => changeHandler(e, categoryKey)
@@ -419,149 +398,118 @@ function createSimpleRow(
 }
 
 function getFilteredProperties(
-  formProperties: FormProperties,
-  unchangedFormProperties: FormProperties,
+  propSet: FilterPropertySet,
+  initialPropSet: FilterPropertySet,
   showModifiedOnly: boolean,
   propertyFilterString: string
-): FormProperties {
-  let result: FormProperties = { basic: {}, special: {} };
-
+): FilterPropertySet {
   if (!showModifiedOnly && propertyFilterString.length === 0) {
-    return formProperties;
+    // No filtering required, return whole propSet
+    return propSet;
   }
 
-  if (showModifiedOnly) {
-    let specialKeys = Object.keys(formProperties.special);
+  let workPropSet: FilterPropertySet = deepcopy(propSet);
 
-    specialKeys = specialKeys.filter((key: string) => {
-      const property = formProperties.special[key];
-      const refProperty = unchangedFormProperties.special[key];
-      return !arraysAreEqual(property.value, refProperty.value);
+  if (showModifiedOnly) {
+    let specialPropKeys = Object.keys(workPropSet.special);
+
+    // Delete all non-modified keys
+    specialPropKeys.forEach((key: string) => {
+      const curProp = propSet.special[key];
+      const refProp = initialPropSet.special[key];
+      if (arraysAreEqual(curProp.value, refProp.value)) {
+        delete workPropSet.special[key]
+      }
     });
 
-    specialKeys.forEach(
-      (key: string) => (result.special[key] = formProperties.special[key])
-    );
+    const basicPropKeys = Object.keys(propSet.basic);
 
-    const basicKeys = Object.keys(formProperties.basic);
-
-    for (const key of basicKeys) {
-      const property = formProperties.basic[key];
-      if (isSimpleFormProperty(property)) {
-        const refProperty = unchangedFormProperties.basic[key];
-        if (property.value !== (refProperty as SimpleFormProperty).value) {
-          result.basic[key] = property;
+    for (const key of basicPropKeys) {
+      const curProp = propSet.basic[key];
+      if (isScoreFilterProp(curProp)) {
+        const refProp = initialPropSet.basic[key] as ScoreFilterProperty;
+        if (curProp.value === refProp.value) {
+          delete workPropSet.basic[key];
         }
-      } else if (isCategoryFormProperty(property)) {
-        let newCatProp: CategoryFormProperty = {
-          name: formProperties.basic[key].name,
-          description: formProperties.basic[key].description,
-        };
+      } else {
+        const curSubPropKeys = getSubPropKeys(curProp);
 
-        const subKeys = getSubPropKeys(property);
+        for (const subKey of curSubPropKeys) {
+          const subProp = (propSet.basic[
+            key
+          ] as CategoryFilterProperty)[subKey];
 
-        for (const subKey of subKeys) {
-          const subProperty = (formProperties.basic[
+          const refProp = (initialPropSet.basic[
             key
-          ] as CategoryFormProperty)[subKey];
-          const refProperty = (unchangedFormProperties.basic[
-            key
-          ] as CategoryFormProperty)[subKey];
-          if (subProperty.value !== (refProperty as SimpleFormProperty).value) {
-            newCatProp[subKey] = subProperty;
+          ] as CategoryFilterProperty)[subKey];
+
+          if (subProp.value === refProp.value) {
+            delete (workPropSet.basic[key] as CategoryFilterProperty)[subKey];
           }
         }
-        if (getSubPropKeys(newCatProp).length > 0) {
-          result.basic[key] = newCatProp;
+        if (getSubPropKeys(workPropSet.basic[key]).length > 0) {
+          delete workPropSet.basic[key];
         }
       }
     }
   }
 
-  let currentFormProperties: any;
-  if (showModifiedOnly) {
-    currentFormProperties = result;
-  } else {
-    currentFormProperties = formProperties;
-  }
-
   if (propertyFilterString.length > 0) {
-    const specialKeys = Object.keys(currentFormProperties.special);
-    specialKeys.forEach((key: string) => {
-      const property: SpecialFormProperty = currentFormProperties.special[key];
+    const specialPropKeys = Object.keys(workPropSet.special);
+    
+    specialPropKeys.forEach((key: string) => {
+      const property = workPropSet.special[key];
       if (
         !property.name
           .toUpperCase()
           .includes(propertyFilterString.toUpperCase())
-      ) {
-        if (showModifiedOnly) {
-          delete result.special[key];
-        }
-      } else {
-        result.special[key] = property;
+      ) { 
+        delete workPropSet.special[key];
       }
     });
 
-    const basicKeys = Object.keys(currentFormProperties.basic);
-    basicKeys.forEach((key: string) => {
-      const property: FormProperty = currentFormProperties.basic[key];
-      if (isSimpleFormProperty(property)) {
+    const basicPropKeys = Object.keys(workPropSet.basic);
+    basicPropKeys.forEach((key: string) => {
+      const prop = workPropSet.basic[key];
+      if (isScoreFilterProp(prop)) {
         if (
-          !property.name
+          !prop.name
             .toUpperCase()
             .includes(propertyFilterString.toUpperCase())
-        ) {
-          if (showModifiedOnly) {
-            // TODO: Unclear to everyone but me what is happening here, fix!
-            delete result.basic[key];
-          }
-        } else {
-          result.basic[key] = property;
+        ) {  
+          delete workPropSet.basic[key];
         }
       } else {
         if (
-          property.name
+          !prop.name
             .toUpperCase()
             .includes(propertyFilterString.toUpperCase())
         ) {
-          // If category itself matches the search string...
-          result.basic[key] = property;
-        } else {
-          let newCatProp: CategoryFormProperty = {
-            name: property.name,
-            description: property.description,
-          };
-          const subKeys = getSubPropKeys(property);
-          subKeys.forEach((subKey: string) => {
-            const subProperty: SimpleFormProperty = (property as CategoryFormProperty)[
-              subKey
-            ];
+          // If category itself does not match the search string, filter the subProps
+          workPropSet.basic[key] = prop;
+          const subPropKeys = getSubPropKeys(prop);
+          subPropKeys.forEach((subKey) => {
+            const subProp = (prop as CategoryFilterProperty)[subKey];
             if (
-              !subProperty.name
+              !subProp.name
                 .toUpperCase()
                 .includes(propertyFilterString.toUpperCase())
             ) {
-              if (showModifiedOnly) {
-                // TODO: Unclear to everyone but me what is happening here, fix!
-                delete (result.basic[key] as CategoryFormProperty)[subKey];
-              }
-            } else {
-              newCatProp[subKey] = subProperty;
+              delete (workPropSet.basic[key] as CategoryFilterProperty)[subKey];
             }
           });
-
-          if (getSubPropKeys(newCatProp).length > 0) {
-            result.basic[key] = newCatProp;
+          if (getSubPropKeys(workPropSet.basic[key]).length === 0) {
+            delete workPropSet.basic[key];
           }
         }
       }
     });
   }
-  return result;
+  return workPropSet;
 }
 
-function getSubPropKeys(property: FormProperty): string[] {
-  return Object.keys(property).filter(
+function getSubPropKeys(prop: CategoryFilterProperty): string[] {
+  return Object.keys(prop).filter(
     (key) => key !== "name" && key !== "description"
   );
 }

@@ -1,19 +1,17 @@
 import {
   Cms,
   CmsProperty,
-  BasicCmsProperty,
-  CategoryCmsProperty,
+  BooleanCmsProperty,
   Category,
   ScoreValue,
-  FormProperty,
-  DescriptionCmsProperty,
-  CategoryFormProperty,
-  SimpleFormProperty,
-  ComplexFormProperty,
   License,
-  SpecialFormProperty,
+  FilterPropertySet,
+  CategoryFilterProperty,
+  FieldProperty,
+  ScoreFieldProperty,
+  BasicFilterProperty,
+  CategoryCmsProperty,
 } from "./Cms";
-import { stringify } from "querystring";
 
 const CMS_REPO_BASE_URL =
   "https://raw.githubusercontent.com/gentics/headless-cms-comparison/refactor/";
@@ -73,7 +71,7 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
     let cmsData: {
       fields: any;
       cms: Cms[];
-      formProperties: { basic: { [index: string]: FormProperty }, special: { [index: string]: SpecialFormProperty } };
+      filterProperties: FilterPropertySet;
       filterSettings: {
         showModifiedOnly: boolean;
         propertyFilterString: string;
@@ -81,32 +79,32 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
     } = {
       fields: values[0],
       cms: values.slice(1).map((cms: Cms) => parseCms(cms)),
-      formProperties: { basic: {}, special: {}},
+      filterProperties: { basic: {}, special: {} },
       filterSettings: {
         showModifiedOnly: false,
         propertyFilterString: "",
       },
     };
 
-    cmsData.formProperties.basic = getFormProperties(
+    cmsData.filterProperties.basic = getBasicFilterProps(
       cmsData.cms,
       cmsData.fields.properties
     );
 
     // Append special properties
-    cmsData.formProperties.special.category = {
+
+    cmsData.filterProperties.special.category = {
       name: "Allowed Categories",
       description: "Which featureset is offered by the cms?",
-      value: enumToArray(Category),
-      possibleValues: enumToArray(Category) 
+      value: Object.values(Category),
+      possibleValues: Object.values(Category),
     };
 
-
-    cmsData.formProperties.special.license = {
+    cmsData.filterProperties.special.license = {
       name: "Allowed Licenses",
       description: "License of the system.",
-      value: enumToArray(License),
-      possibleValues: enumToArray(License) 
+      value: Object.values(License),
+      possibleValues: Object.values(License),
     };
 
     console.log(cmsData);
@@ -119,298 +117,122 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
  * - Looks at each property of a cms and replaces
  *   Yes's and No's with their corresponding boolean values
  */
-function parseCms(cms: any): Cms { // TODO: Include a try catch block for unparsable cms
-  // const start = Date.now();
+function parseCms(cms: any): Cms {
 
-  // Parse licenses
-  const licenses: License[] = cms.license.split("/");
-  cms.license = licenses;
-
-  // Parse categories
-  const categories: Category[] = cms.category.split("/");
-  cms.category = categories;
-
-  cms.systemRequirements = cms.systemRequirements;
-
-  cms.specialFeatures = cms.specialFeatures;
+  // Special parsing for licenses and categories
+  try {
+    // Parse licenses
+    const licenses: License[] = cms.license.split("/");
+    if (!licenses) throw new Error(`CMS ${cms.name} has no license!`);
+    // Check if all given license values match an enum value
+    if (
+      Object.values(License).filter((value) => licenses.includes(value))
+        .length !== licenses.length
+    ) {
+      throw new Error(`CMS ${cms.name} contains invalid licenses!`);
+    }
+    cms.license = licenses;
+    // Parse categories
+    const categories: Category[] = cms.category.split("/");
+    if (!categories) throw new Error(`CMS ${cms.name} has no category!`);
+    // Check if all given category values match an enum value
+    if (
+      Object.values(Category).filter((value) => categories.includes(value))
+        .length !== categories.length
+    ) {
+      console.error(categories);
+      throw new Error(`CMS ${cms.name} contains invalid categories!`);
+    }
+    cms.category = categories;
+  } catch (e) {
+    throw e;
+    /*throw Error(
+      `An error occured while parsing licenses and categories of cms ${cms.name}! Fields might not exist...`
+    );*/
+  }
 
   // Parse properties by replacing boolean words with actual booleans
-  const propertyKeys: string[] = Object.keys(cms.properties);
-  propertyKeys.forEach((propertyKey: string) => {
-    // Is property a simple property?
-    const property: CmsProperty = cms.properties[propertyKey];
-    if (isSimpleProperty(property)) {
-      // Yes? Replace Yes's with true and No's with false
-      const value = property.value;
-      property.value = value === "Yes" ? true : value === "No" ? false : value;
-      cms.properties[propertyKey] = property;
-    } else if (isCategoryProperty(property)) {
-      // No? Look into the sub-properties and do the same replacing as above.
-      const subPropertyKeys = Object.keys(property);
-      subPropertyKeys.forEach((subPropertyKey: string) => {
-        const subProperty: CmsProperty = property[subPropertyKey];
-        if (isSimpleProperty(subProperty)) {
-          const value = subProperty.value;
-          subProperty.value =
-            value === "Yes" ? true : value === "No" ? false : value;
-          cms.properties[propertyKey] = subProperty;
-        }
+
+  const propKeys: string[] = Object.keys(cms.properties);
+
+  propKeys.forEach((propertyKey: string) => {
+    const curProp: CmsProperty = cms.properties[propertyKey];
+    if (isBooleanCmsProperty(curProp)) {
+      curProp.value = curProp.value === "Yes" ? true : false;
+      cms.properties[propertyKey] = curProp;
+    } else { 
+      const curSubPropKeys = getSubPropKeys(curProp);
+      curSubPropKeys.forEach((subPropKey: string) => {
+        const subProp = curProp[subPropKey] as BooleanCmsProperty;
+        subProp.value = subProp.value === "Yes" ? true : false;
+        cms.properties[propertyKey][subPropKey] = subProp;
       });
     }
   });
   return cms;
 }
 
-function isSimpleProperty(
-  x: BasicCmsProperty | CategoryCmsProperty
-): x is BasicCmsProperty {
+function isBooleanCmsProperty(x: CmsProperty): x is BooleanCmsProperty {
   if (!x) return false;
-  return (x as BasicCmsProperty).value !== undefined;
+  return (x as BooleanCmsProperty).value !== undefined;
 }
 
-function isCategoryProperty(
-  x: BasicCmsProperty | CategoryCmsProperty
-): x is CategoryCmsProperty {
-  if (!x) return false;
-  return (x as CategoryCmsProperty).value === undefined;
+function getSubPropKeys(prop: CategoryCmsProperty): string[] {
+  return Object.keys(prop).filter(
+    (key) => key !== "name" && key !== "description"
+  );
 }
+
 /**
  * Iterates over all fields and collects all possible values from all CMS
  * @returns an object containing all properties with values
  * set to 0 or null, depending on their types
  */
-function getFormProperties(
+function getBasicFilterProps(
   cms: Cms[],
-  fields: { [x: string]: CmsProperty }
-): { [index: string]: FormProperty } {
-  const formProperties: { [index: string]: FormProperty } = {};
-  const propertyKeys: string[] = Object.keys(fields);
+  fields: { [x: string]: FieldProperty }
+): { [index: string]: BasicFilterProperty } {
+  const basicFilterProps: { [x: string]: BasicFilterProperty } = {};
+  const propKeys: string[] = Object.keys(fields);
 
-  propertyKeys.forEach((key: string) => {
-    const currentProperty = fields[key];
+  propKeys.forEach((key: string) => {
+    const curFieldProp = fields[key];
 
-    if (isSimpleProperty(currentProperty)) {
-      const possibleValues = getSimplePropertyValues(cms, key);
-
-      if (possibleValues.length === 0) {
-        // Is boolean field, omit possibleValues-array (type FormProperty)
-        formProperties[key] = {
-          name: currentProperty.name,
-          description: (currentProperty as DescriptionCmsProperty).description,
-          value: ScoreValue.DONT_CARE,
-        } as SimpleFormProperty;
-      } else {
-        // Is complex field, type ComplexFormProperty
-        formProperties[key] = {
-          name: currentProperty.name,
-          description: (currentProperty as DescriptionCmsProperty).description,
-          value: null,
-          possibleValues: possibleValues,
-        } as ComplexFormProperty;
-      }
-    } else if (isCategoryProperty(currentProperty)) {
-      const subPropertyKeys = Object.keys(currentProperty);
-      let categoryFormProperty: CategoryFormProperty = {
-        name: currentProperty.name,
-        description: (currentProperty as DescriptionCmsProperty).description,
+    if (isScoreFieldProperty(curFieldProp)) {
+      // Is score field property
+      basicFilterProps[key] = {
+        name: curFieldProp.name,
+        description: curFieldProp.description,
+        value: ScoreValue.DONT_CARE,
       };
-      for (let subKey of subPropertyKeys) {
-        const currentSubProperty = currentProperty[subKey];
-        if (isSimpleProperty(currentSubProperty)) {
-          const possibleValues = getSimplePropertyValues(cms, subKey);
-          if (possibleValues.length === 0) {
-            categoryFormProperty[subKey] = {
-              name: currentSubProperty.name,
-              description: (currentSubProperty as DescriptionCmsProperty)
-                .description,
-              value: ScoreValue.DONT_CARE,
-            } as SimpleFormProperty;
-          } else {
-            categoryFormProperty[subKey] = {
-              name: currentSubProperty.name,
-              description: (currentSubProperty as DescriptionCmsProperty)
-                .description,
-              value: null,
-              possibleValues: possibleValues,
-            } as ComplexFormProperty;
-          }
-        }
+    } else {
+      // Is category field property
+      const subPropKeys = getSubPropKeys(curFieldProp);
+
+      let catFilterProp: CategoryFilterProperty = {
+        name: curFieldProp.name,
+        description: curFieldProp.description,
+      };
+
+      for (let subKey of subPropKeys) {
+        const curSubFieldProp = curFieldProp[subKey] as ScoreFieldProperty;
+
+        catFilterProp[subKey] = {
+          name: curSubFieldProp.name,
+          description: curSubFieldProp.description,
+          value: ScoreValue.DONT_CARE,
+        };
       }
-      formProperties[key] = categoryFormProperty;
+
+      basicFilterProps[key] = catFilterProp;
     }
   });
-  return formProperties;
+  return basicFilterProps;
 }
 
-function getSimplePropertyValues(
-  cms: Cms[],
-  propertyKey: string
-): (string | boolean)[] {
-  let possibleValues: (string | boolean)[] = [];
-  for (let curCms of cms) {
-    const currentCmsProperty = curCms.properties[propertyKey];
-    if (isSimpleProperty(currentCmsProperty)) {
-      const currentValue: string | boolean = currentCmsProperty.value;
-      if (typeof currentValue === "boolean") {
-        return [];
-      } else {
-        if (!possibleValues.includes(currentValue)) {
-          possibleValues.push(currentValue);
-        }
-      }
-    }
-  }
-  return possibleValues;
+function isScoreFieldProperty(x: FieldProperty): x is ScoreFieldProperty {
+  if (!x) return false;
+  return (x as ScoreFieldProperty).value !== undefined;
 }
-
-function enumToArray(e: any): any[] {
-  return Object.keys(e)
-    .filter((value) => isNaN(Number(value)) === true)
-    .map((key) => e[key]);
-};
 
 export default CmsService;
-
-/////////////////////////////////////////////////////////////////
-// BECAUSE OF A MAJOR REFACTOR, THE FOLLOWING CODE IS OBSOLETE //
-/////////////////////////////////////////////////////////////////
-
-/**
- * Replaces special chars which interfere with devextreme datagrid with safe chars
- */
-
-// This function was needed to transform the old JSON format into the new one.
-// This method has fulfilled it's purpose and is safe to delete.
-
-/*function reformatCms(fields: Array<any>, cms: any): Cms {
-  const cmsEntries: [string, string][] = Object.entries(cms);
-  let cmsFields: [string, any][] = Object.entries(
-    fields[fields.length - 1].description
-  );
-  const properties: {
-    [key: string]: {
-      name: string;
-      [x: string]:
-        | { name: string; description?: string; value: FieldType }
-        | FieldType;
-    };
-  } = {};
-
-  cmsFields.forEach(
-    ([propertyName, propertyObject]: [
-      string,
-      {
-        name: string;
-        [x: string]:
-          | { name: string; description?: string; value: FieldType }
-          | FieldType;
-      }
-    ]) => {
-      delete propertyObject.description;
-      const propertyDisplayName: string = propertyObject.name;
-      const propertyIsCategory: boolean = !propertyObject.hasOwnProperty(
-        "value"
-      );
-
-      if (propertyIsCategory) {
-        delete propertyObject.description;
-
-        const propName = propertyObject.name;
-        delete propertyObject.name; // Temp remove name!
-        let propertySubPropertyNames = Object.keys(propertyObject);
-        let propertySubProperties = Object.values(propertyObject);
-        propertyObject.name = propName; // Add name back!
-        propertySubProperties.forEach((property: any, index: number) => {
-          delete property.description;
-          if (cms[property.name]) {
-            const value = cms[property.name];
-            property.value = (value === "NA" || value === "?" || value === "-") ? null : value;
-            propertyObject[propertySubPropertyNames[index]] = property;
-          } else if (cms[`${propertyDisplayName} ${property.name}`]) {
-            const value = cms[`${propertyDisplayName} ${property.name}`];
-            property.value = (value === "NA" || value === "?" || value === "-") ? null : value;
-            propertyObject[propertySubPropertyNames[index]] = property;
-          } else {
-            // Conduct deep search
-            const propIndex = cmsEntries.findIndex(
-              ([name, _]: [string, string]) =>
-                name.toUpperCase().includes(property.name.toUpperCase())
-            );
-            if (propIndex !== -1) {
-              const value = cms[cmsEntries[propIndex][0]];
-              property.value = (value === "NA" || value === "?" || value === "-") ? null : value;
-              propertyObject[propertySubPropertyNames[index]] = property;
-            }
-          }
-        });
-      } else {
-        if (cms[propertyDisplayName]) {
-          const value = cms[propertyDisplayName];
-          propertyObject.value = (value === "NA" || value === "?" || value === "-") ? null : value;
-        }
-      }
-      properties[propertyName] = propertyObject;
-    }
-  );
-
-  const categories: string[] = cms["Category"].split(" - ");
-  const hasEssential = categories.some(
-    (str) => str.toUpperCase() === "ESSENTIAL"
-  );
-  const hasProfessional = categories.some(
-    (str) => str.toUpperCase() === "PROFESSIONAL"
-  );
-  const hasEnterprise = categories.some(
-    (str) => str.toUpperCase() === "ENTERPRISE"
-  );
-
-  let preparedCms: Cms = {
-    lastUpdated: cms.Timestamp.slice(0, 10),
-    name: cms.Name,
-    version: cms.Version,
-    license: getLicense(cms.License),
-    inception: cms.Inception,
-    category: {
-      essential: hasEssential,
-      professional: hasProfessional,
-      enterprise: hasEnterprise,
-    },
-    properties: properties,
-  };
-
-  console.log(preparedCms);
-  console.log(JSON.stringify(preparedCms, undefined, 2));
-  return preparedCms;
-}
-
-function getLicense(licenseString: string): License[] {
-  let result: License[] = [];
-
-  if (licenseString.includes("BSD")) {
-    result.push(License.BSD_3);
-  }
-  if (licenseString.includes("Apache")) {
-    result.push(License.Apache_2);
-  }
-  if (licenseString.includes("GPL")) {
-    result.push(License.GPLv3);
-  }
-  if (licenseString.includes("Freemium")) {
-    result.push(License.Freemium);
-  }
-  if (licenseString.includes("Commercial")) {
-    result.push(License.Commercial);
-  }
-  if (licenseString.includes("Proprietary")) {
-    result.push(License.Proprietary);
-  }
-  if (licenseString.includes("MIT")) {
-    result.push(License.MIT);
-  }
-
-  if (result.length === 0) {
-    console.log(`No license found in ${licenseString}.`);
-    return [License.Other];
-  }
-  return result;
-}*/

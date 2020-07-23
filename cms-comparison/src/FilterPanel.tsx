@@ -25,7 +25,9 @@ import {
 } from "./Cms";
 
 export default function FilterPanel(props: any) {
-  const [formProperties, setFormProperties] = React.useState<FormProperties>(props.cmsData.formProperties);
+  const [formProperties, setFormProperties] = React.useState<FormProperties>(
+    props.cmsData.formProperties
+  );
 
   const [unchangedFormProperties] = React.useState<FormProperties>(
     deepcopy<FormProperties>(props.cmsData.formProperties)
@@ -46,7 +48,9 @@ export default function FilterPanel(props: any) {
     setFilterSettings([false, ""]);
   };
 
-  React.useEffect(() => { console.log("Formproperties changed!")}, [formProperties]);
+  React.useEffect(() => {
+    console.log("Formproperties changed!");
+  }, [formProperties]);
 
   const handleChange = (event: any, categoryKey?: string, value?: string) => {
     // Clone object, otherwise react won't re-render
@@ -92,8 +96,9 @@ export default function FilterPanel(props: any) {
       } else {
         // Simple property was updated
         // Update local copy of formProperties
-        (newFormProperties.basic[event.target.name] as SimpleFormProperty).value =
-          event.target.value;
+        (newFormProperties.basic[
+          event.target.name
+        ] as SimpleFormProperty).value = event.target.value;
       }
     }
     // Update state
@@ -336,7 +341,7 @@ function createCheckboxRow(
     checkboxes.push(
       <Checkbox
         propertyKey={key}
-        value={value}
+        label={value}
         checked={(formProperties.special[
           key
         ] as SpecialFormProperty).value.includes(value)}
@@ -385,9 +390,7 @@ function createSimpleRow(
   let options: JSX.Element[] = [];
 
   for (let scoreValue of Object.values(ScoreValue)) {
-    options.push(
-      <option value={scoreValue}>{scoreValue}</option>
-    );
+    options.push(<option value={scoreValue}>{scoreValue}</option>);
   }
 
   // Set style accordingly if it is a subRow
@@ -508,14 +511,19 @@ function getFilteredProperties(
             .toUpperCase()
             .includes(propertyFilterString.toUpperCase())
         ) {
-          if (showModifiedOnly) { // TODO: Unclear to everyone but me what is happening here, fix!
+          if (showModifiedOnly) {
+            // TODO: Unclear to everyone but me what is happening here, fix!
             delete result.basic[key];
           }
         } else {
           result.basic[key] = property;
         }
       } else {
-        if (property.name.toUpperCase().includes(propertyFilterString.toUpperCase())) {
+        if (
+          property.name
+            .toUpperCase()
+            .includes(propertyFilterString.toUpperCase())
+        ) {
           // If category itself matches the search string...
           result.basic[key] = property;
         } else {
@@ -525,20 +533,23 @@ function getFilteredProperties(
           };
           const subKeys = getSubPropKeys(property);
           subKeys.forEach((subKey: string) => {
-            const subProperty: SimpleFormProperty = (property as CategoryFormProperty)[subKey];
+            const subProperty: SimpleFormProperty = (property as CategoryFormProperty)[
+              subKey
+            ];
             if (
               !subProperty.name
                 .toUpperCase()
                 .includes(propertyFilterString.toUpperCase())
             ) {
-              if (showModifiedOnly) { // TODO: Unclear to everyone but me what is happening here, fix!
+              if (showModifiedOnly) {
+                // TODO: Unclear to everyone but me what is happening here, fix!
                 delete (result.basic[key] as CategoryFormProperty)[subKey];
               }
             } else {
               newCatProp[subKey] = subProperty;
             }
           });
-  
+
           if (getSubPropKeys(newCatProp).length > 0) {
             result.basic[key] = newCatProp;
           }
@@ -570,13 +581,15 @@ function arraysAreEqual(a: any[], b: any[]): boolean {
 ////////////// METHODS FOR HTML-ELEMENTS //////////////
 ///////////////////////////////////////////////////////
 
-function renderTooltip(props: any) {
-  return (
-    <Tooltip id={`${props.description}_tooltip`}>{props.description}</Tooltip> // TODO: Tooltip is broken
-  );
-}
-
-function SimpleRow(props: any) {
+function SimpleRow(props: {
+  propertyKey: string;
+  title: string;
+  description: string;
+  style: any;
+  value: string;
+  options: JSX.Element[];
+  changeHandler: any;
+}) {
   return (
     <tr>
       <td>
@@ -602,7 +615,7 @@ function SimpleRow(props: any) {
   );
 }
 
-function CategoryRow(props: any) {
+function CategoryRow(props: { title: string; description: string }) {
   return (
     <tr>
       <td colSpan={2}>
@@ -619,7 +632,11 @@ function CategoryRow(props: any) {
   );
 }
 
-function CheckboxRow(props: any) {
+function CheckboxRow(props: {
+  title: string;
+  description: string;
+  checkboxes: JSX.Element[];
+}) {
   return (
     <tr>
       <td>
@@ -635,7 +652,12 @@ function CheckboxRow(props: any) {
   );
 }
 
-function Checkbox(props: any) {
+function Checkbox(props: {
+  propertyKey: string;
+  label: string;
+  checked: boolean;
+  changeHandler: any;
+}) {
   return (
     <label style={{ paddingRight: "2px" }}>
       <input
@@ -644,12 +666,12 @@ function Checkbox(props: any) {
         checked={props.checked}
         onChange={props.changeHandler}
       />{" "}
-      {props.value}
+      {props.label}
     </label>
   );
 }
 
-function DescriptionElement(props: any) {
+function DescriptionElement(props: { description: string }) {
   if (props.description) {
     return (
       <OverlayTrigger
@@ -665,7 +687,11 @@ function DescriptionElement(props: any) {
   }
 }
 
-function NoResultsRow(props: any) {
+function renderTooltip(description: string) {
+  return <Tooltip id={`Tooltip_${description}`}>{description}</Tooltip>;
+}
+
+function NoResultsRow() {
   return (
     <tr>
       <td>😐 No properties found...</td>
@@ -673,7 +699,13 @@ function NoResultsRow(props: any) {
   );
 }
 
-function Panel(props: any) {
+function Panel(props: {
+  propertyFilterString: string;
+  showModifiedOnly: boolean;
+  tableRows: JSX.Element[];
+  resetPanel: () => void;
+  changeHandler: any;
+}) {
   return (
     <div className="d-flex justify-content-center">
       <div className="w-75">
@@ -734,10 +766,5 @@ function Panel(props: any) {
         </Accordion>
       </div>
     </div>
-    /*<div className="d-flex justify-content-end my-2 mx-2">
-        <Button variant="secondary" className="mr-1" disabled>Maybe Filter-Export possibility?</Button>
-        <Button variant="danger" className="mr-1" disabled>Reset filter</Button>
-        <input className="btn btn-success" type="submit" value="Apply filter" />
-      </div>*/
   );
 }

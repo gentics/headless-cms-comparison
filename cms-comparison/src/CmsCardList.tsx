@@ -11,10 +11,11 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
 import { AiFillStar } from "react-icons/ai";
+import { FilterResult } from "./Cms";
 
 export default function CardList() {
   const [cmsData, setCmsData] = React.useState<any>();
-  const [filterData, setFilterData] = React.useState<any>(null);
+  const [results, setResults] = React.useState<any>(null);
   const [fetchError, setFetchError] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -30,37 +31,24 @@ export default function CardList() {
 
   React.useEffect(() => {
     console.log("Filter updated!");
-    console.log(filterData);
-  }, [filterData]);
+    console.log(results);
+  }, [results]);
 
-  const setFilter = function (newFilterData: Array<any>) {
-    setFilterData(newFilterData);
-    /*
-    if (!filterData) {
-      setFilterData(newFilterData);
-    } else {
-      newFilterData.niceToHave.forEach(fieldName => {
-        if (!filterData.niceToHave.includes(fieldName)) {
-
-        }
-      })
-    }*/ // TODO: Continue here
-  };
-
-  const getFilter = function (): Array<any> {
-    return filterData;
+  const setFilterResults = function (filterResults: FilterResult[]) {
+    setResults(filterResults);
   };
 
   if (cmsData) {
-    const cards = constructCards(cmsData, filterData);
     return (
       <div>
-        <FilterPanel
-          cmsData={cmsData}
-          setFilter={setFilter}
-          getFilter={getFilter}
-        />
-        <div className="d-flex flex-wrap justify-content-center">{cards}</div>
+        <FilterPanel cmsData={cmsData} setFilterResults={setFilterResults} />
+        {results ? (
+          <div className="d-flex flex-wrap justify-content-center">
+            {constructCards(results)}
+          </div>
+        ) : (
+          <span></span>
+        )}
       </div>
     );
   } else if (fetchError) {
@@ -74,169 +62,74 @@ export default function CardList() {
   }
 }
 
-function constructCards(cmsData: any, filterData: Array<any>): Array<any> {
-  let filter: any = filterData;
-  if (filter) {
-    console.log(filter);
-    const requiredCms: any[] = [];
-    cmsData.cms.forEach((cms: any) => {
-      const matchingProperties: string[][] = [];
-      const cmsIsValid = filter.required.every((property: Array<any>) => {
-        const name = property[0]; // String
-        // return true, if a specific cms property does contain at least one specified value
-        const matchingProperty = property[1].find((value: string) => {
-          return cms[name].includes(value);
-        });
-        if (!matchingProperty) {
-          return false;
-        } else {
-          matchingProperties.push([name, matchingProperty]);
-          return true;
-        }
-      });
-      if (cmsIsValid) {
-        const resObj = Object.create(null);
-        resObj["cms"] = cms;
-        resObj["required"] = matchingProperties;
-        requiredCms.push(resObj);
-      }
-    });
 
-    filter = requiredCms.map((tupel: any) => {
-      // TODO: rename "matching"
-      const niceToHave: string[][] = [];
-      filter["niceToHave"].forEach((property: string) => {
-        niceToHave.push([
-          property,
-          tupel.cms[property].includes("Yes") ? "Yes" : "No",
-        ]);
-      });
-      tupel["niceToHave"] = niceToHave;
-      return tupel; // Now tripel
-    });
-  } else {
-    filter = cmsData.cms.map((cms: any) => {
-      const resObj = Object.create(null);
-      resObj["cms"] = cms;
-      resObj["required"] = [];
-      resObj["niceToHave"] = [];
-      return resObj;
-    });
-  }
-
-  console.log(filter);
-
-  if (filter.length === 0) {
-    return [
-      <div className={"my-2 mx-2 w-75"}>
-        <Card>
-          <Card.Body>
-            <Card.Title>😐 No CMS matches your requirements...</Card.Title>
-            <Card.Text>
-              De-select some of the specified requirements and try again!
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      </div>,
-    ];
-  } else {
-    return filter.map((tripel: any) => {
-      const requiredProgress =
-        tripel.required.length > 0 || tripel.niceToHave.length > 0
-          ? (tripel.required.length /
-              (tripel.required.length + tripel.niceToHave.length)) *
-            100
-          : 0;
-
-      const niceToHaveProgress =
-        tripel.niceToHave.length > 0
-          ? (tripel.niceToHave.filter((property: Array<any>) => {
-              return property[1] === "Yes";
-            }).length /
-              (tripel.required.length + tripel.niceToHave.length)) *
-            100
-          : 0;
-
-      const niceToHaveShare =
-        tripel.niceToHave.length > 0
-          ? (tripel.niceToHave.filter((property: Array<any>) => {
-              return property[1] === "Yes";
-            }).length /
-              tripel.niceToHave.length) *
-            100
-          : 0;
-
-      const requiredText =
-        tripel.required.length > 0 ? (
-          <li>
-            <AiFillCheckCircle /> Matches all specified requirements
-          </li>
-        ) : (
-          <li></li>
-        );
-
-      const niceToHaveText =
-        tripel.niceToHave.length > 0 ? (
-          <li>
-            {niceToHaveShare > 0 ? (
-              niceToHaveShare === 100 ? (
-                <AiFillStar />
-              ) : (
-                <AiFillLike />
-              )
-            ) : (
-              <AiFillDislike />
-            )}{" "}
-            Has{" "}
-            {niceToHaveShare > 0 ? niceToHaveShare.toFixed(0) + "% " : "none "}
-            of the specified Nice-To-Have's.
-          </li>
-        ) : (
-          <li></li>
-        );
-
-      const progressBars =
-        tripel.required.length > 0 || tripel.niceToHave.length > 0 ? (
-          <ProgressBar className="mb-2">
-            <ProgressBar
-              key={1}
-              animated
-              variant="info"
-              now={requiredProgress}
-            />
-            <ProgressBar
-              key={2}
-              animated
-              variant="warning"
-              now={niceToHaveProgress}
-            />
-          </ProgressBar>
-        ) : (
-          <p></p>
-        );
-
-      return (
-        <div className={"my-2 mx-2"} key={tripel.cms.Name}>
-          <Card style={{ width: "18rem" }} className={"cmsCard"}>
-            <Card.Body style={{ textAlign: "left" }}>
-              <Card.Title>{tripel.cms.Name}</Card.Title>
-              <Card.Subtitle className="mb-2 text-muted">
-                Version {tripel.cms.Version}
-              </Card.Subtitle>
-              <Card.Text>
-                <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-                  {requiredText}
-                  {niceToHaveText}
-                </ul>
-              </Card.Text>
-              {progressBars}
-              <div className="d-flex justify-content-start">
-                <Button variant="info">Details</Button>
-              </div>
-            </Card.Body>
-          </Card>
-        </div>
+function constructCards(filterResults: FilterResult[]): JSX.Element[] {
+  if (filterResults.filter(result => result.satisfactory).length > 0) {
+    let cards: JSX.Element[] = [];
+    // Sort after satisfactory boolean
+    filterResults.sort(function (x: FilterResult, y: FilterResult) {
+      return x.satisfactory === y.satisfactory ? 0 : x.satisfactory ? -1 : 1;
+    }); // TODO: Move sorting to filterService
+    filterResults.forEach((result) => {
+      cards.push(
+        <CmsCard
+          name={result.cms.name}
+          version={result.cms.version}
+          satisfactory={result.satisfactory}
+        />
       );
     });
+    return cards;
+  } else {
+    return [<NoResultsCard />];
   }
+}
+
+function CmsCard(props: {
+  name: string;
+  version: string;
+  satisfactory: boolean;
+}) {
+  return (
+    <div className={"my-2 mx-2"} key={props.name}>
+      <Card
+        style={{ width: "18rem" }}
+        className={"cmsCard"}
+        border={props.satisfactory ? "info" : undefined}
+        bg={props.satisfactory ? undefined : "light"}
+      >
+        <Card.Body style={{ textAlign: "left" }}>
+          <Card.Title>{props.name}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">
+            Version {props.version}
+          </Card.Subtitle>
+          <Card.Text>
+            {/*<ul style={{ listStyle: "none", paddingLeft: 0 }}>
+              {requiredText}
+              {niceToHaveText}
+            </ul>*/}
+          </Card.Text>
+          {/*progressBars*/}
+          <div className="d-flex justify-content-start">
+            <Button variant="info" disabled={!props.satisfactory}>Details</Button>
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+}
+
+function NoResultsCard() {
+  return (
+    <div className={"my-2 mx-2 w-75"}>
+      <Card border="dark">
+        <Card.Body>
+          <Card.Title>😐 No CMS matches your requirements...</Card.Title>
+          <Card.Text>
+            Deselect some of the specified requirements and try again!
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </div>
+  );
 }

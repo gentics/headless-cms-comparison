@@ -34,11 +34,6 @@ function App() {
             <Nav.Item>
               <Nav.Link eventKey="link-1">Card View</Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="disabled" disabled>
-                Disabled
-              </Nav.Link>
-            </Nav.Item>
           </Nav>
         </Col>
         <Col>

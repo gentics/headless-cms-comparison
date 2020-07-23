@@ -102,17 +102,12 @@ export default function FilterPanel(props: {
     updateCardList(newFilter);
   };
 
-  const tableRows = createTableRows(
-    filter,
-    initialFilter,
-    showModifiedOnly,
-    propertyFilterString,
-    handleChange
-  );
+  
 
   return (
     <Panel
-      tableRows={tableRows}
+      filter={filter}
+      initialFilter={initialFilter}
       propertyFilterString={propertyFilterString}
       showModifiedOnly={showModifiedOnly}
       resetPanel={resetPanel}
@@ -397,12 +392,23 @@ function NoResultsRow() {
 }
 
 function Panel(props: {
+  filter: FilterPropertySet,
+  initialFilter: FilterPropertySet,
   propertyFilterString: string;
   showModifiedOnly: boolean;
-  tableRows: JSX.Element[];
   resetPanel: () => void;
   changeHandler: any;
 }) {
+
+
+  const tableRows = createTableRows(
+    props.filter,
+    props.initialFilter,
+    props.showModifiedOnly,
+    props.propertyFilterString,
+    props.changeHandler
+  );
+
   return (
     <div className="d-flex justify-content-center">
       <div className="w-75">
@@ -454,7 +460,7 @@ function Panel(props: {
               <div style={{ maxHeight: "500px", overflow: "auto" }}>
                 <form id="filterForm">
                   <Table striped bordered hover className="mb-0">
-                    <tbody>{props.tableRows}</tbody>
+                    <tbody>{tableRows}</tbody>
                   </Table>
                 </form>
               </div>

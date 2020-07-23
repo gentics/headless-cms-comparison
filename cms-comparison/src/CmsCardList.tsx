@@ -103,16 +103,6 @@ function CmsCard(props: {
           <Card.Subtitle className="mb-2 text-muted">
             Version {props.version}
           </Card.Subtitle>
-          <Card.Text>
-            {/*<ul style={{ listStyle: "none", paddingLeft: 0 }}>
-              {requiredText}
-              {niceToHaveText}
-            </ul>*/}
-          </Card.Text>
-          {/*progressBars*/}
-          <div className="d-flex justify-content-start">
-            <Button variant="info" disabled={!props.satisfactory}>Details</Button>
-          </div>
         </Card.Body>
       </Card>
     </div>

@@ -11,7 +11,10 @@ import {
   ScoreFieldProperty,
   BasicFilterProperty,
   CategoryCmsProperty,
+  AppState,
 } from "./Cms";
+import deepcopy from "ts-deepcopy";
+import FilterService from "./FilterService";
 
 const CMS_REPO_BASE_URL =
   "https://raw.githubusercontent.com/gentics/headless-cms-comparison/refactor/";
@@ -47,7 +50,7 @@ const CmsService = {
  */
 function fetchCmsData(cmsList: string[]): Promise<any> {
   let promises: Promise<any>[] = [];
-
+  const start = Date.now();
   cmsList.forEach((cms: string) => {
     promises.push(
       fetch(CMS_REPO_BASE_URL + cms + ".json")
@@ -63,52 +66,51 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
     );
   });
 
-  const start = Date.now();
   return Promise.all(promises).then((values) => {
-    const elapsed = Date.now() - start;
-    console.log(`Fetch took ${elapsed} ms`);
-
-    let cmsData: {
-      fields: any;
-      cms: Cms[];
-      filterProperties: FilterPropertySet;
-      filterSettings: {
-        showModifiedOnly: boolean;
-        propertyFilterString: string;
-      };
-    } = {
-      fields: values[0],
-      cms: values.slice(1).map((cms: Cms) => parseCms(cms)),
-      filterProperties: { basic: {}, special: {} },
-      filterSettings: {
-        showModifiedOnly: false,
-        propertyFilterString: "",
-      },
-    };
-
-    cmsData.filterProperties.basic = getBasicFilterProps(
-      cmsData.cms,
-      cmsData.fields.properties
-    );
+    const fields = values[0];
+    const rawCms: Cms[] = values.slice(1);
+    cmsList = cmsList.sort().filter(x => x.toLowerCase() !== "fields");
+    rawCms.sort((a,b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : ((b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 0));
+    const cms: { [x: string]: Cms } = {};
+    for (let i = 0; i < rawCms.length; i++) {
+      cms[cmsList[i]] = parseCms(rawCms[i]);
+    }
+    const filterProperties: FilterPropertySet = { basic: {}, special: {} };
+    filterProperties.basic = getBasicFilterProps(fields.properties);
 
     // Append special properties
 
-    cmsData.filterProperties.special.category = {
+    filterProperties.special.category = {
       name: "Allowed Categories",
       description: "Which featureset is offered by the cms?",
       value: Object.values(Category),
       possibleValues: Object.values(Category),
     };
 
-    cmsData.filterProperties.special.license = {
+    filterProperties.special.license = {
       name: "Allowed Licenses",
       description: "License of the system.",
       value: Object.values(License),
       possibleValues: Object.values(License),
     };
 
-    console.log(cmsData);
-    return cmsData;
+    const unchangedFilterProperties = deepcopy<FilterPropertySet>(
+      filterProperties
+    );
+
+    const appState: AppState = {
+      fields: fields,
+      cms: cms,
+      filterProperties: filterProperties,
+      unchangedFilterProperties: unchangedFilterProperties,
+      showModifiedOnly: false,
+      propertyFilterString: "",
+      filterResults: FilterService.getUnfilteredCms(cms),
+    };
+
+    const elapsed = Date.now() - start;
+    console.log(`Fetch took ${elapsed} ms`);
+    return appState;
   });
 }
 
@@ -118,7 +120,6 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
  *   Yes's and No's with their corresponding boolean values
  */
 function parseCms(cms: any): Cms {
-
   // Special parsing for licenses and categories
   try {
     // Parse licenses
@@ -160,7 +161,7 @@ function parseCms(cms: any): Cms {
     if (isBooleanCmsProperty(curProp)) {
       curProp.value = curProp.value === "Yes" ? true : false;
       cms.properties[propertyKey] = curProp;
-    } else { 
+    } else {
       const curSubPropKeys = getSubPropKeys(curProp);
       curSubPropKeys.forEach((subPropKey: string) => {
         const subProp = curProp[subPropKey] as BooleanCmsProperty;
@@ -188,10 +189,9 @@ function getSubPropKeys(prop: CategoryCmsProperty): string[] {
  * @returns an object containing all properties with values
  * set to 0 or null, depending on their types
  */
-function getBasicFilterProps(
-  cms: Cms[],
-  fields: { [x: string]: FieldProperty }
-): { [index: string]: BasicFilterProperty } {
+function getBasicFilterProps(fields: {
+  [x: string]: FieldProperty;
+}): { [index: string]: BasicFilterProperty } {
   const basicFilterProps: { [x: string]: BasicFilterProperty } = {};
   const propKeys: string[] = Object.keys(fields);
 

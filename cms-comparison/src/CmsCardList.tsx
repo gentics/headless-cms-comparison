@@ -1,70 +1,48 @@
 import * as React from "react";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import ProgressBar from "react-bootstrap/ProgressBar";
 import Alert from "react-bootstrap/Alert";
 import CmsService from "./CmsService";
 import FilterPanel from "./FilterPanel";
 
-// Icons
-import { AiFillCheckCircle } from "react-icons/ai";
-import { AiFillLike } from "react-icons/ai";
-import { AiFillDislike } from "react-icons/ai";
-import { AiFillStar } from "react-icons/ai";
-import { FilterResult } from "./Cms";
+import { FilterResult, AppState } from "./Cms";
 
 export default function CardList() {
-  const [cmsData, setCmsData] = React.useState<any>();
-  const [results, setResults] = React.useState<any>(null);
-  const [fetchError, setFetchError] = React.useState<any>(null);
+  const [appState, setAppState] = React.useState<AppState>();
 
   React.useEffect(() => {
     console.log("Fetching...");
-    CmsService.getCmsData()
-      .then(setCmsData)
-      .catch((e) => {
-        console.log("Error detected!");
-        console.log(e);
-        setFetchError(e);
-      });
+    CmsService.getCmsData().then((appState) => {
+      setAppState(appState);
+    });
   }, []);
 
-  React.useEffect(() => {
-    console.log("Filter updated!");
-    console.log(results);
-  }, [results]);
-
-  const setFilterResults = function (filterResults: FilterResult[]) {
-    setResults(filterResults);
+  const updateCardList = function (appState: AppState) {
+    setAppState(appState);
   };
 
-  if (cmsData) {
+  if (appState) {
     return (
       <div>
-        <FilterPanel cmsData={cmsData} setFilterResults={setFilterResults} />
-        {results ? (
+        <FilterPanel appState={appState} updateCardList={updateCardList} />
+        {appState.filterResults ? (
           <div className="d-flex flex-wrap justify-content-center">
-            {constructCards(results)}
+            <Cards appState={appState} />
           </div>
         ) : (
           <span></span>
         )}
       </div>
     );
-  } else if (fetchError) {
-    return (
-      <Alert variant="danger">
-        An error occurred while fetching: {fetchError.message}
-      </Alert>
-    );
   } else {
-    return <ProgressBar animated now={100} />;
+    return <Alert variant="info">Fetching CMS-Data...</Alert>;
   }
 }
 
+function Cards(props: { appState: AppState }) {
+  const filterResults = props.appState.filterResults;
+  const cms = props.appState.cms;
 
-function constructCards(filterResults: FilterResult[]): JSX.Element[] {
-  if (filterResults.filter(result => result.satisfactory).length > 0) {
+  if (filterResults.filter((result) => result.satisfactory).length > 0) {
     let cards: JSX.Element[] = [];
     // Sort after satisfactory boolean
     filterResults.sort(function (x: FilterResult, y: FilterResult) {
@@ -73,15 +51,16 @@ function constructCards(filterResults: FilterResult[]): JSX.Element[] {
     filterResults.forEach((result) => {
       cards.push(
         <CmsCard
-          name={result.cms.name}
-          version={result.cms.version}
+          key={result.cmsKey}
+          name={cms[result.cmsKey].name}
+          version={cms[result.cmsKey].version}
           satisfactory={result.satisfactory}
         />
       );
     });
-    return cards;
+    return <>{cards}</>;
   } else {
-    return [<NoResultsCard />];
+    return <NoResultsCard />;
   }
 }
 
@@ -112,9 +91,9 @@ function CmsCard(props: {
 function NoResultsCard() {
   return (
     <div className={"my-2 mx-2 w-75"}>
-      <Card border="dark">
+      <Card  bg="light" border="dark">
         <Card.Body>
-          <Card.Title>😐 No CMS matches your requirements...</Card.Title>
+          <Card.Title><span role="img" aria-label="Not amused">😐</span> No CMS matches your requirements...</Card.Title>
           <Card.Text>
             Deselect some of the specified requirements and try again!
           </Card.Text>

@@ -29,6 +29,16 @@ export interface Cms {
   };
 }
 
+export interface AppState {
+  fields: any, // TODO: Type
+  cms: { [x: string]: Cms },
+  filterProperties: FilterPropertySet,
+  unchangedFilterProperties: FilterPropertySet
+  showModifiedOnly: boolean,
+  propertyFilterString: string,
+  filterResults: FilterResult[],
+}
+
 // Tristate boolean for "scoring"
 export enum ScoreValue {
   DONT_CARE = "Don't Care",
@@ -37,7 +47,7 @@ export enum ScoreValue {
 }
 
 export interface FilterResult {
-  cms: Cms;
+  cmsKey: string;
   has: FilterPropertySet;
   hasNot: FilterPropertySet;
   satisfactory: boolean;
@@ -60,7 +70,7 @@ export interface ScoreFieldProperty extends Property {
 
 export interface CategoryFieldProperty extends Property {
   description: string;
-  [index: string]: any; // Contains only BasicFieldProperties
+  [index: string]: any; // Contains only ScoreFieldProperties
 }
 
 ///////////////////////

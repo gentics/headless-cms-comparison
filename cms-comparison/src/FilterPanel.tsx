@@ -16,102 +16,84 @@ import {
   CategoryFilterProperty,
   ScoreFilterProperty,
   SpecialFilterProperty,
-  FilterResult,
+  AppState,
 } from "./Cms";
 
 import FilterService from "./FilterService";
 
 export default function FilterPanel(props: {
-  cmsData: any;
-  setFilterResults: (filterResults: FilterResult[]) => void;
+  appState: AppState;
+  updateCardList: (updatedAppState: AppState) => void;
 }) {
-  const [filter, setFilter] = React.useState<FilterPropertySet>(
-    props.cmsData.filterProperties
-  );
-
-  const [initialFilter] = React.useState<FilterPropertySet>(
-    deepcopy<FilterPropertySet>(props.cmsData.filterProperties)
-  );
-
-  // When initialized, set filter results of cardList
-  React.useEffect(() => {
-    updateCardList(filter);
-  }, []);
-
-  const [
-    [showModifiedOnly, propertyFilterString],
-    setFilterSettings,
-  ] = React.useState<[boolean, string]>([false, ""]);
-
-  const resetPanel = () => {
-    setFilter(deepcopy<FilterPropertySet>(initialFilter));
-    setFilterSettings([false, ""]);
-    updateCardList(initialFilter);
+  const clearPanel = (e: any, appState: AppState) => {
+    const updatedAppState = deepcopy<AppState>(appState);
+    updatedAppState.filterProperties = appState.unchangedFilterProperties;
+    updatedAppState.showModifiedOnly = false;
+    updatedAppState.propertyFilterString = "";
+    updatedAppState.filterResults = FilterService.getUnfilteredCms(appState.cms);
+    props.updateCardList(updatedAppState);
   };
 
-  const updateCardList = (filter: FilterPropertySet) => {
-    props.setFilterResults(FilterService.filterCms(filter, props.cmsData.cms));
-  }
-
-  const handleChange = (event: any, categoryKey?: string, value?: string) => {
+  const handleChange = (
+    event: any,
+    appState: AppState,
+    topKey?: string,
+    subKey?: string,
+    checkboxValue?: string
+  ) => {
     // Clone object, otherwise react won't re-render
-    let newFilter = Object.assign({}, filter);
+    const updatedAppState = Object.assign({}, appState);
 
-    if (event.target.name === "showModifiedOnly") {
-      setFilterSettings([
-        event.target.checked ? true : false,
-        propertyFilterString,
-      ]);
-    } else if (event.target.name === "propertyFilterString") {
-      setFilterSettings([showModifiedOnly, event.target.value]);
-    } else if (event.target.type === "checkbox" && value) {
-      // Special property
-      const propName = event.target.name;
-      console.log(propName);
-      const valArray: any[] = filter.special[propName].value;
-      if (event.target.checked) {
-        // If not already in array, add value to array
-        if (!valArray.includes(value)) {
-          valArray.push(value);
-        }
+    if (topKey) {
+      if (subKey) {
+        (updatedAppState.filterProperties.basic[
+          topKey
+        ] as CategoryFilterProperty)[subKey].value = event.target.value;
       } else {
-        // If in array, remove value from array
-        const valueIndex = valArray.indexOf(value);
-        if (valueIndex !== -1) {
-          valArray.splice(valueIndex, 1);
-        }
+        (updatedAppState.filterProperties.basic[
+          topKey
+        ] as ScoreFilterProperty).value = event.target.value;
       }
-      // Update local copy of formProperties
-      newFilter.special[propName].value = valArray;
     } else {
-      // Property inside a category was updated
-      // Update local copy of formProperties
-      if (categoryKey) {
-        (newFilter.basic[categoryKey] as CategoryFilterProperty)[
-          event.target.name
-        ].value = event.target.value;
+      if (event.target.name === "showModifiedOnly") {
+        updatedAppState.showModifiedOnly = event.target.checked;
+      } else if (event.target.name === "propertyFilterString") {
+        updatedAppState.propertyFilterString = event.target.value;
+      } else if (checkboxValue) {
+        const propertyName = event.target.name;
+        const valueArray: any[] =
+          updatedAppState.filterProperties.special[propertyName].value;
+        if (event.target.checked) {
+          if (!valueArray.includes(checkboxValue)) {
+            valueArray.push(checkboxValue);
+          }
+        } else {
+          const valueIndex = valueArray.indexOf(checkboxValue);
+          if (valueIndex !== -1) {
+            valueArray.splice(valueIndex, 1);
+          }
+        }
+        updatedAppState.filterProperties.special[
+          propertyName
+        ].value = valueArray;
       } else {
-        // Score property was updated
-        // Update local copy of formProperties
-        (newFilter.basic[event.target.name] as ScoreFilterProperty).value =
-          event.target.value;
+        throw new Error(
+          `Call by ${event.target.name} is illegal. handleChange() has nothing to handle!`
+        );
       }
     }
-    // Update state
-    setFilter(newFilter);
-    updateCardList(newFilter);
+    updatedAppState.filterResults = FilterService.filterCms(
+      updatedAppState.filterProperties,
+      updatedAppState.cms
+    );
+    props.updateCardList(updatedAppState);
   };
-
-  
 
   return (
     <Panel
-      filter={filter}
-      initialFilter={initialFilter}
-      propertyFilterString={propertyFilterString}
-      showModifiedOnly={showModifiedOnly}
-      resetPanel={resetPanel}
+      appState={props.appState}
       changeHandler={handleChange}
+      clearPanel={clearPanel}
     />
   );
 }
@@ -119,148 +101,6 @@ export default function FilterPanel(props: {
 function isScoreFilterProp(x: BasicFilterProperty): x is ScoreFilterProperty {
   if (!x) return false;
   return x.value !== undefined;
-}
-
-function createTableRows(
-  propSet: FilterPropertySet,
-  initialPropSet: FilterPropertySet,
-  showModifiedOnly: boolean,
-  propertyFilterString: string,
-  changeHandler: any
-) {
-  let tableRows: JSX.Element[] = [];
-
-  const filteredPropSet: FilterPropertySet = FilterService.getFilteredProperties(
-    propSet,
-    initialPropSet,
-    showModifiedOnly,
-    propertyFilterString
-  );
-
-  // Add special rows
-  const specialKeys = Object.keys(filteredPropSet.special);
-
-  for (let key of specialKeys) {
-    tableRows.push(
-      createCheckboxRow(key, propSet, propSet.special[key], changeHandler)
-    );
-  }
-
-  const basicKeys = Object.keys(filteredPropSet.basic);
-
-  for (let key of basicKeys) {
-    const curProp: BasicFilterProperty = filteredPropSet.basic[key];
-
-    if (isScoreFilterProp(curProp)) {
-      tableRows.push(createSimpleRow(filteredPropSet, key, changeHandler));
-    } else {
-      tableRows.push(
-        <CategoryRow title={curProp.name} description={curProp.description} />
-      );
-
-      const subKeys = getSubPropKeys(curProp);
-
-      for (const subKey of subKeys) {
-        tableRows.push(
-          createSimpleRow(filteredPropSet, subKey, changeHandler, key)
-        );
-      }
-    }
-  }
-
-  if (tableRows.length === 0) {
-    tableRows.push(<NoResultsRow />);
-  }
-  return tableRows;
-}
-
-function createCheckboxRow(
-  key: string,
-  propSet: FilterPropertySet,
-  property: SpecialFilterProperty,
-  changeHandler: (
-    event: any,
-    categoryKey?: string | undefined,
-    value?: string | undefined
-  ) => void
-): JSX.Element {
-  let checkboxes: JSX.Element[] = [];
-  for (const value of property.possibleValues) {
-    checkboxes.push(
-      <Checkbox
-        propertyKey={key}
-        label={value}
-        checked={propSet.special[key].value.includes(value)}
-        changeHandler={(e: any) => changeHandler(e, undefined, value)} // TODO: Check this
-      />
-    );
-  }
-
-  return (
-    <CheckboxRow
-      title={property.name}
-      description={property.description}
-      checkboxes={checkboxes}
-    />
-  );
-}
-
-function createSimpleRow(
-  propSet: FilterPropertySet,
-  basicKey: string,
-  changeHandler: (
-    event: any,
-    categoryKey?: string | undefined,
-    value?: string | undefined
-  ) => void,
-  categoryKey?: string
-): JSX.Element {
-  let property: ScoreFilterProperty;
-
-  try {
-    if (categoryKey) {
-      property = (propSet.basic[categoryKey] as CategoryFilterProperty)[
-        basicKey
-      ];
-    } else {
-      property = propSet.basic[basicKey] as ScoreFilterProperty;
-    }
-  } catch (e) {
-    throw new Error(
-      `The property ${basicKey} ${
-        categoryKey ? "with category " + categoryKey : ""
-      } does not exist!`
-    );
-  }
-
-  let options: JSX.Element[] = [];
-
-  for (let scoreValue of Object.values(ScoreValue)) {
-    options.push(<option value={scoreValue}>{scoreValue}</option>);
-  }
-
-  // Set style accordingly if it is a subRow
-  const style = categoryKey ? { fontStyle: "italic", fontWeight: 800 } : {};
-
-  const rowValue = categoryKey
-    ? (propSet.basic[categoryKey] as CategoryFilterProperty)[basicKey].value
-    : (propSet.basic[basicKey] as ScoreFilterProperty).value;
-
-  const handler = categoryKey
-    ? (e: any) => changeHandler(e, categoryKey)
-    : (e: any) => changeHandler(e);
-
-  return (
-    <SimpleRow
-      title={property.name}
-      value={rowValue}
-      description={property.description}
-      propertyKey={basicKey}
-      changeHandler={handler}
-      style={style}
-      options={options}
-    />
-  );
 }
 
 function getSubPropKeys(prop: CategoryFilterProperty): string[] {
@@ -273,73 +113,178 @@ function getSubPropKeys(prop: CategoryFilterProperty): string[] {
 ////////////// METHODS FOR HTML-ELEMENTS //////////////
 ///////////////////////////////////////////////////////
 
-function SimpleRow(props: {
-  propertyKey: string;
-  title: string;
-  description: string;
-  style: any;
-  value: string;
-  options: JSX.Element[];
-  changeHandler: any;
+function Panel(props: {
+  appState: AppState;
+  changeHandler: (
+    event: any,
+    appState: AppState,
+    topKey?: string,
+    subKey?: string,
+    checkboxValue?: string
+  ) => void;
+  clearPanel: (e: any, appState: AppState) => void;
 }) {
+  const { clearPanel, ...other } = props;
   return (
-    <tr>
-      <td>
-        <div className="d-flex justify-content-between">
-          <span className="ml-2">
-            <DescriptionElement description={props.description} />
-          </span>
-          <span className="mr-2" style={props.style}>
-            {props.title}
-          </span>
-        </div>
-      </td>
-      <td style={{ textAlign: "right" }}>
-        <select
-          name={props.propertyKey}
-          value={props.value} // Get value from state!
-          onChange={props.changeHandler}
-        >
-          {props.options}
-        </select>
-      </td>
-    </tr>
+    <div className="d-flex justify-content-center">
+      <div className="w-75">
+        <Accordion>
+          <Card>
+            <Card.Header>
+              <div className="d-flex justify-content-between">
+                <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>
+                  Filter Panel
+                </h4>
+                <Form className="w-50 d-flex justify-content-between">
+                  <div>
+                    <Form.Control
+                      type="text"
+                      name="propertyFilterString"
+                      value={props.appState.propertyFilterString}
+                      onChange={(e: any) =>
+                        props.changeHandler(e, props.appState)
+                      }
+                      placeholder="Filter for properties..."
+                      style={{ width: "300px" }}
+                    />
+                  </div>
+                  <div className="d-flex align-items-center ml-2">
+                    {" "}
+                    <Form.Check
+                      type="checkbox"
+                      name="showModifiedOnly"
+                      label="Show modified properties only"
+                      checked={props.appState.showModifiedOnly}
+                      onChange={(e: any) =>
+                        props.changeHandler(e, props.appState)
+                      }
+                    />
+                  </div>
+                </Form>
+                <div className="d-flex justify-content-between">
+                  <Button
+                    variant="info"
+                    onClick={(e: any) => clearPanel(e, props.appState)}
+                  >
+                    Clear
+                  </Button>
+                  <Accordion.Toggle
+                    as={Button}
+                    variant="secondary"
+                    eventKey="0"
+                    className="ml-2"
+                  >
+                    Toggle
+                  </Accordion.Toggle>
+                </div>
+              </div>
+            </Card.Header>
+            <Accordion.Collapse eventKey="0">
+              <PropertyTable {...other} />
+            </Accordion.Collapse>
+          </Card>
+        </Accordion>
+      </div>
+    </div>
   );
 }
 
-function CategoryRow(props: { title: string; description: string }) {
+function PropertyTable(props: { appState: AppState; changeHandler: any }) {
+  let tableRows: JSX.Element[] = [];
+
+  const filteredPropertySet: FilterPropertySet = FilterService.getFilteredProperties(
+    props.appState
+  );
+
+  const specialKeys = Object.keys(filteredPropertySet.special);
+  for (let key of specialKeys) {
+    tableRows.push(<CheckboxRow key={key} propertyKey={key} {...props} />);
+  }
+
+  const basicKeys = Object.keys(filteredPropertySet.basic);
+  for (let key of basicKeys) {
+    const currentProperty: BasicFilterProperty = filteredPropertySet.basic[key];
+
+    if (isScoreFilterProp(currentProperty)) {
+      tableRows.push(<ScoreRow key={key} {...props} topKey={key} />);
+    } else {
+      tableRows.push(
+        <CategoryRow
+          key={`${key}`}
+          title={currentProperty.name}
+          description={currentProperty.description}
+        />
+      );
+
+      const subKeys = getSubPropKeys(currentProperty);
+
+      for (const subKey of subKeys) {
+        tableRows.push(<ScoreRow key={`${key}_${subKey}`} {...props} topKey={key} subKey={subKey} />);
+      }
+    }
+  }
+
+  if (tableRows.length === 0) {
+    tableRows.push(<NoResultsRow />);
+  }
+
   return (
-    <tr>
-      <td colSpan={2}>
-        <div className="d-flex justify-content-between">
-          <span className="ml-2">
-            <DescriptionElement description={props.description} />
-          </span>
-          <span className="mr-2">
-            <h4>{props.title}</h4>
-          </span>
-        </div>
-      </td>
-    </tr>
+    <div style={{ maxHeight: "500px", overflow: "auto" }}>
+      <form id="filterForm">
+        <Table striped bordered hover className="mb-0">
+          <tbody>{tableRows}</tbody>
+        </Table>
+      </form>
+    </div>
   );
 }
 
 function CheckboxRow(props: {
-  title: string;
-  description: string;
-  checkboxes: JSX.Element[];
-}) {
+  appState: AppState;
+  changeHandler: (
+    event: any,
+    appState: AppState,
+    topKey?: string,
+    subKey?: string,
+    checkboxValue?: string
+  ) => void;
+  propertyKey: string;
+}): JSX.Element {
+  const property: SpecialFilterProperty =
+    props.appState.filterProperties.special[props.propertyKey];
+
+  let checkboxes: JSX.Element[] = [];
+  for (const possibleValue of property.possibleValues) {
+    checkboxes.push(
+      <Checkbox
+        key={`${props.propertyKey}_${possibleValue}`}
+        propertyKey={props.propertyKey}
+        label={possibleValue}
+        checked={property.value.includes(possibleValue)}
+        changeHandler={(e: any) =>
+          props.changeHandler(
+            e,
+            props.appState,
+            undefined,
+            undefined,
+            possibleValue
+          )
+        }
+      />
+    );
+  }
+
   return (
     <tr>
       <td>
         <div className="d-flex justify-content-between">
           <span className="ml-2">
-            <DescriptionElement description={props.description} />
+            <DescriptionElement description={property.description} />
           </span>
-          <span className="mr-2">{props.title}</span>
+          <span className="mr-2">{property.name}</span>
         </div>
       </td>
-      <td>{props.checkboxes}</td>
+      <td>{checkboxes}</td>
     </tr>
   );
 }
@@ -363,6 +308,97 @@ function Checkbox(props: {
   );
 }
 
+function CategoryRow(props: { title: string; description: string }) {
+  return (
+    <tr>
+      <td colSpan={2}>
+        <div className="d-flex justify-content-between">
+          <span className="ml-2">
+            <DescriptionElement description={props.description} />
+          </span>
+          <span className="mr-2">
+            <h4>{props.title}</h4>
+          </span>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function ScoreRow(props: {
+  appState: AppState;
+  changeHandler: (
+    event: any,
+    appState: AppState,
+    topKey?: string,
+    subKey?: string,
+    checkboxValue?: string
+  ) => void;
+  topKey: string;
+  subKey?: string;
+}): JSX.Element {
+  const topKey = props.topKey;
+  const subKey = props.subKey;
+  const filterProperties = props.appState.filterProperties;
+
+  let property: BasicFilterProperty;
+  let style: any;
+  let changeHandler: any;
+
+  if (subKey) {
+    property = (filterProperties.basic[topKey] as CategoryFilterProperty)[
+      subKey
+    ];
+    style = { fontStyle: "italic", fontWeight: 800 };
+    changeHandler = (e: any) =>
+      props.changeHandler(e, props.appState, topKey, subKey);
+  } else {
+    property = filterProperties.basic[topKey] as ScoreFilterProperty;
+    style = {};
+    changeHandler = (e: any) => props.changeHandler(e, props.appState, topKey);
+  }
+
+  const selectedValue = property.value;
+
+  let options: JSX.Element[] = [];
+
+  for (let scoreValue of Object.values(ScoreValue)) {
+    options.push(<option key={subKey ? `${topKey}_${subKey}_${scoreValue}` : `${topKey}_${scoreValue}`} value={scoreValue}>{scoreValue}</option>);
+  }
+
+  return (
+    <tr>
+      <td>
+        <div className="d-flex justify-content-between">
+          <span className="ml-2">
+            <DescriptionElement description={property.description} />
+          </span>
+          <span className="mr-2" style={style}>
+            {property.name}
+          </span>
+        </div>
+      </td>
+      <td style={{ textAlign: "right" }}>
+        <select
+          name={subKey ? subKey : topKey}
+          value={selectedValue}
+          onChange={changeHandler}
+        >
+          {options}
+        </select>
+      </td>
+    </tr>
+  );
+}
+
+function NoResultsRow() {
+  return (
+    <tr>
+      <td><span role="img" aria-label="Not amused">😐</span> No properties found...</td>
+    </tr>
+  );
+}
+
 function DescriptionElement(props: { description: string }) {
   if (props.description) {
     return (
@@ -381,93 +417,4 @@ function DescriptionElement(props: { description: string }) {
 
 function renderTooltip(description: string) {
   return <Tooltip id={`Tooltip_${description}`}>{description}</Tooltip>;
-}
-
-function NoResultsRow() {
-  return (
-    <tr>
-      <td>😐 No properties found...</td>
-    </tr>
-  );
-}
-
-function Panel(props: {
-  filter: FilterPropertySet,
-  initialFilter: FilterPropertySet,
-  propertyFilterString: string;
-  showModifiedOnly: boolean;
-  resetPanel: () => void;
-  changeHandler: any;
-}) {
-
-
-  const tableRows = createTableRows(
-    props.filter,
-    props.initialFilter,
-    props.showModifiedOnly,
-    props.propertyFilterString,
-    props.changeHandler
-  );
-
-  return (
-    <div className="d-flex justify-content-center">
-      <div className="w-75">
-        <Accordion>
-          <Card>
-            <Card.Header>
-              <div className="d-flex justify-content-between">
-                <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>
-                  Filter Panel
-                </h4>
-                <Form className="w-50 d-flex justify-content-between">
-                  <div>
-                    <Form.Control
-                      type="text"
-                      name="propertyFilterString"
-                      value={props.propertyFilterString}
-                      onChange={props.changeHandler}
-                      placeholder="Filter for properties..."
-                      style={{ width: "300px" }}
-                    />
-                  </div>
-                  <div className="d-flex align-items-center ml-2">
-                    {" "}
-                    <Form.Check
-                      type="checkbox"
-                      name="showModifiedOnly"
-                      label="Show modified properties only"
-                      checked={props.showModifiedOnly}
-                      onChange={props.changeHandler}
-                    />
-                  </div>
-                </Form>
-                <div className="d-flex justify-content-between">
-                  <Button variant="info" onClick={props.resetPanel}>
-                    Clear
-                  </Button>
-                  <Accordion.Toggle
-                    as={Button}
-                    variant="secondary"
-                    eventKey="0"
-                    className="ml-2"
-                  >
-                    Toggle
-                  </Accordion.Toggle>
-                </div>
-              </div>
-            </Card.Header>
-            <Accordion.Collapse eventKey="0">
-              <div style={{ maxHeight: "500px", overflow: "auto" }}>
-                <form id="filterForm">
-                  <Table striped bordered hover className="mb-0">
-                    <tbody>{tableRows}</tbody>
-                  </Table>
-                </form>
-              </div>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
-      </div>
-    </div>
-  );
 }

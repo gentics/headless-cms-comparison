@@ -368,12 +368,17 @@
     "contentRelations": {
       "name": "Content Relations",
       "description": "How can individual contents be linked to each other?",
-      "value": null
-    },
-    "nestingOfFields": {
-      "name": "Nesting of Fields",
-      "description": "Is it possible to nest a field within a different field in order to create complex field types? (e.g. vcard type which consists of name field and address field)",
-      "value": null
+
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "description": "n:1-Relations",
+        "value": null
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "description": "n:m, etc.",
+        "value": null
+      }
     },
     "gdprStatement": {
       "name": "GDPR Statement",

@@ -271,11 +271,15 @@
     },
     "contentRelations": {
       "name": "Content Relations",
-      "value": "Yes"
-    },
-    "nestingOfFields": {
-      "name": "Nesting of Fields",
-      "value": "Yes"
+
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "value": "Yes"
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "value": "Yes"
+      }
     },
     "gdprStatement": {
       "name": "GDPR Statement",

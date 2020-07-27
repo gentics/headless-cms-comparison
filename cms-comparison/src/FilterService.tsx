@@ -8,6 +8,7 @@ import {
   BooleanCmsProperty,
   BasicFilterProperty,
   AppState,
+  CmsProperty,
 } from "./Cms";
 import deepcopy from "ts-deepcopy";
 
@@ -22,8 +23,8 @@ const FilterService = {
   ): FilterResult[] => {
     let filterResults: FilterResult[] = [];
 
-    const basicPropKeys = Object.keys(filterPropertySet.basic);
-    const specialPropKeys = Object.keys(filterPropertySet.special);
+    const basicPropertyKeys = Object.keys(filterPropertySet.basic);
+    const specialPropertyKeys = Object.keys(filterPropertySet.special);
 
     const cmsKeys = Object.keys(cms);
 
@@ -31,10 +32,16 @@ const FilterService = {
       const curCms: any = cms[cmsKey]; // Needs to be any otherwise I cannot access properties of curCms
 
       let has: FilterPropertySet = { basic: {}, special: {} };
+
+      let requiredPropertyCount = 0;
+      let hasRequiredPropertyCount = 0;
+      let niceToHavePropertyCount = 0;
+      let hasNiceToHavePropertyCount = 0;
+
       let hasNot: FilterPropertySet = { basic: {}, special: {} };
       let satisfactory: boolean = true;
 
-      specialPropKeys.forEach((propertyKey: string) => {
+      specialPropertyKeys.forEach((propertyKey: string) => {
         const currentProperty = filterPropertySet.special[propertyKey];
         const requiredValues: any[] = currentProperty.value;
         if (requiredValues.length > 0) {
@@ -42,6 +49,7 @@ const FilterService = {
             curCms[propertyKey] !== undefined &&
             getArrayIntersection(requiredValues, curCms[propertyKey]).length > 0
           ) {
+            // hasRequiredPropertyCount++;
             has.special[propertyKey] = currentProperty;
           } else {
             hasNot.special[propertyKey] = currentProperty;
@@ -50,43 +58,73 @@ const FilterService = {
         }
       });
 
-      basicPropKeys.forEach((propertyKey: string) => {
-        const currentProperty = filterPropertySet.basic[propertyKey];
-        if (isScoreFilterProperty(currentProperty)) {
-          if (currentProperty.value !== ScoreValue.DONT_CARE) {
-            const [hasProperty, isSatisfactory] = cmsHasProperty(
-              currentProperty,
-              curCms.properties[propertyKey]
-            );
-            hasProperty
-              ? (has.basic[propertyKey] = currentProperty)
-              : (hasNot.basic[propertyKey] = currentProperty);
+      basicPropertyKeys.forEach((propertyKey: string) => {
+        const currentFilterProperty = filterPropertySet.basic[propertyKey];
+        const currentCmsProperty: CmsProperty = curCms.properties[propertyKey];
 
-            if (satisfactory) satisfactory = isSatisfactory;
+        if (isScoreFilterProperty(currentFilterProperty)) {
+          if (currentFilterProperty.value !== ScoreValue.DONT_CARE) {
+            const isRequiredProperty =
+              currentFilterProperty.value === ScoreValue.REQUIRED;
+
+            isRequiredProperty
+              ? requiredPropertyCount++
+              : niceToHavePropertyCount++;
+
+            const hasProperty = cmsHasProperty(
+              currentCmsProperty as BooleanCmsProperty
+            );
+
+            if (hasProperty) {
+              has.basic[propertyKey] = currentFilterProperty;
+              isRequiredProperty
+                ? hasRequiredPropertyCount++
+                : hasNiceToHavePropertyCount++;
+            } else {
+              hasNot.basic[propertyKey] = currentFilterProperty;
+              if (isRequiredProperty) satisfactory = false;
+            }
           }
         } else {
-          const curSubPropKeys = getSubPropertyKeys(currentProperty);
+          const currentSubPropertyKeys = getSubPropertyKeys(
+            currentFilterProperty
+          );
+
           const hasCategoryProperty: CategoryFilterProperty = {
-            name: currentProperty.name,
-            description: currentProperty.description,
+            name: currentFilterProperty.name,
+            description: currentFilterProperty.description,
           };
           const hasNotCategoryProperty: CategoryFilterProperty = {
-            name: currentProperty.name,
-            description: currentProperty.description,
+            name: currentFilterProperty.name,
+            description: currentFilterProperty.description,
           };
 
-          curSubPropKeys.forEach((subKey: string) => {
-            const subProperty: ScoreFilterProperty = currentProperty[subKey];
-            if (subProperty.value !== ScoreValue.DONT_CARE) {
-              const [hasProperty, isSatisfactory] = cmsHasProperty(
-                subProperty,
-                curCms.properties[propertyKey][subKey]
-              );
-              hasProperty
-                ? (hasCategoryProperty[propertyKey] = subProperty)
-                : (hasNotCategoryProperty[propertyKey] = subProperty);
+          currentSubPropertyKeys.forEach((subKey: string) => {
+            const currentSubFilterProperty: ScoreFilterProperty =
+              currentFilterProperty[subKey];
+            const currentSubCmsProperty: CmsProperty =
+              curCms.properties[propertyKey][subKey];
+            if (currentSubFilterProperty.value !== ScoreValue.DONT_CARE) {
+              const isRequiredProperty =
+                currentSubFilterProperty.value === ScoreValue.REQUIRED;
 
-              if (satisfactory) satisfactory = isSatisfactory;
+              isRequiredProperty
+                ? requiredPropertyCount++
+                : niceToHavePropertyCount++;
+
+              const hasProperty = cmsHasProperty(
+                currentSubCmsProperty as BooleanCmsProperty
+              );
+
+              if (hasProperty) {
+                hasCategoryProperty[propertyKey] = currentSubFilterProperty;
+                isRequiredProperty
+                  ? hasRequiredPropertyCount++
+                  : hasNiceToHavePropertyCount++;
+              } else {
+                hasNotCategoryProperty[propertyKey] = currentSubFilterProperty;
+                if (isRequiredProperty) satisfactory = false;
+              }
             }
           });
 
@@ -101,21 +139,32 @@ const FilterService = {
       filterResults.push({
         cmsKey: cmsKey,
         has: has,
+        hasRequiredShare:
+          requiredPropertyCount > 0
+            ? hasRequiredPropertyCount / requiredPropertyCount
+            : 0,
+        hasNiceToHaveShare: niceToHavePropertyCount
+          ? hasNiceToHavePropertyCount / niceToHavePropertyCount
+          : 0,
         hasNot: hasNot,
         satisfactory: satisfactory,
       });
     }
 
+    filterResults = sortFilterResults(filterResults);
+
     console.table(filterResults);
     return filterResults;
   },
 
-  getUnfilteredCms: (cms: { [x: string]: Cms }) => {
+  getUnfilteredCms: (cms: { [x: string]: Cms }): FilterResult[] => {
     const cmsKeys = Object.keys(cms);
     return cmsKeys.map((cmsKey) => {
       return {
         cmsKey: cmsKey,
         has: { basic: {}, special: {} },
+        hasRequiredShare: 0,
+        hasNiceToHaveShare: 0,
         hasNot: { basic: {}, special: {} },
         satisfactory: true,
       };
@@ -174,12 +223,15 @@ const FilterService = {
             ] as CategoryFilterProperty)[subKey];
 
             if (subProperty.value === refProp.value) {
-              delete (workPropertySet.basic[currentPropertyKey] as CategoryFilterProperty)[
-                subKey
-              ];
+              delete (workPropertySet.basic[
+                currentPropertyKey
+              ] as CategoryFilterProperty)[subKey];
             }
           }
-          if (getSubPropertyKeys(workPropertySet.basic[currentPropertyKey]).length === 0) {
+          if (
+            getSubPropertyKeys(workPropertySet.basic[currentPropertyKey])
+              .length === 0
+          ) {
             delete workPropertySet.basic[currentPropertyKey];
           }
         }
@@ -221,22 +273,27 @@ const FilterService = {
           ) {
             // If category itself does not match the search string, filter the subProperties in the category
             workPropertySet.basic[currentPropertyKey] = currentProperty;
-            const subPropertyKeys = getSubPropertyKeys(currentProperty)
+            const subPropertyKeys = getSubPropertyKeys(currentProperty);
 
             for (const currentSubPropertyKey of subPropertyKeys) {
-              const currentSubProperty = (currentProperty as CategoryFilterProperty)[currentSubPropertyKey];
+              const currentSubProperty = (currentProperty as CategoryFilterProperty)[
+                currentSubPropertyKey
+              ];
               if (
                 !currentSubProperty.name
                   .toUpperCase()
                   .includes(propertyFilterString.toUpperCase())
               ) {
-                delete (workPropertySet.basic[currentPropertyKey] as CategoryFilterProperty)[
-                  currentSubPropertyKey
-                ];
+                delete (workPropertySet.basic[
+                  currentPropertyKey
+                ] as CategoryFilterProperty)[currentSubPropertyKey];
               }
             }
-            
-            if (getSubPropertyKeys(workPropertySet.basic[currentPropertyKey]).length === 0) {
+
+            if (
+              getSubPropertyKeys(workPropertySet.basic[currentPropertyKey])
+                .length === 0
+            ) {
               delete workPropertySet.basic[currentPropertyKey];
             }
           }
@@ -248,6 +305,19 @@ const FilterService = {
   },
 };
 
+function sortFilterResults(filterResults: FilterResult[]): FilterResult[] {
+  filterResults.sort(function (x: FilterResult, y: FilterResult) {
+    if (x.hasRequiredShare < y.hasRequiredShare) return 1;
+    if (x.hasRequiredShare > y.hasRequiredShare) return -1;
+    if (x.hasNiceToHaveShare < y.hasNiceToHaveShare) return 1;
+    if (x.hasNiceToHaveShare > y.hasNiceToHaveShare) return -1;
+    if (x.cmsKey > y.cmsKey) return 1;
+    if (x.cmsKey < y.cmsKey) return -1;
+    return 0;
+  });
+  return filterResults;
+}
+
 /**
  * Checks if a CMS has a certain property.
  * If the property is not available, it is additionally
@@ -255,17 +325,14 @@ const FilterService = {
  * if so the satisfactory boolean is set to false.
  * @returns [hasProperty, isSatisfactory]
  */
-function cmsHasProperty(
-  scoreFilterProperty: ScoreFilterProperty,
-  cmsProperty: BooleanCmsProperty
-): [boolean, boolean] {
+function cmsHasProperty(cmsProperty: BooleanCmsProperty): boolean {
   if (cmsProperty && cmsProperty.value) {
-    return [true, true];
-  } else {
-    if (scoreFilterProperty.value === ScoreValue.REQUIRED) {
-      return [false, false];
+    if (typeof cmsProperty.value === "boolean") {
+      return cmsProperty.value;
     }
-    return [false, true];
+    return true;
+  } else {
+    return false;
   }
 }
 

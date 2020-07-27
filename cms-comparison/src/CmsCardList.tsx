@@ -44,10 +44,6 @@ function Cards(props: { appState: AppState }) {
 
   if (filterResults.filter((result) => result.satisfactory).length > 0) {
     let cards: JSX.Element[] = [];
-    // Sort after satisfactory boolean
-    filterResults.sort(function (x: FilterResult, y: FilterResult) {
-      return x.satisfactory === y.satisfactory ? 0 : x.satisfactory ? -1 : 1;
-    }); // TODO: Move sorting to filterService
     filterResults.forEach((result) => {
       cards.push(
         <CmsCard

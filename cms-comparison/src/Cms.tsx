@@ -49,6 +49,8 @@ export enum ScoreValue {
 export interface FilterResult {
   cmsKey: string;
   has: FilterPropertySet;
+  hasRequiredShare: number,
+  hasNiceToHaveShare: number,
   hasNot: FilterPropertySet;
   satisfactory: boolean;
 }

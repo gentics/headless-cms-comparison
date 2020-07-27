@@ -142,10 +142,10 @@ const FilterService = {
         hasRequiredShare:
           requiredPropertyCount > 0
             ? hasRequiredPropertyCount / requiredPropertyCount
-            : 0,
+            : -1,
         hasNiceToHaveShare: niceToHavePropertyCount
           ? hasNiceToHavePropertyCount / niceToHavePropertyCount
-          : 0,
+          : -1,
         hasNot: hasNot,
         satisfactory: satisfactory,
       });
@@ -163,8 +163,8 @@ const FilterService = {
       return {
         cmsKey: cmsKey,
         has: { basic: {}, special: {} },
-        hasRequiredShare: 0,
-        hasNiceToHaveShare: 0,
+        hasRequiredShare: -1,
+        hasNiceToHaveShare: -1,
         hasNot: { basic: {}, special: {} },
         satisfactory: true,
       };

@@ -17,13 +17,13 @@ const FilterService = {
    * Returns all cms, satisfactory boolean is set accordingly.
    */
   filterCms: (
-    filterPropSet: FilterPropertySet,
+    filterPropertySet: FilterPropertySet,
     cms: { [x: string]: Cms }
   ): FilterResult[] => {
     let filterResults: FilterResult[] = [];
 
-    const basicPropKeys = Object.keys(filterPropSet.basic);
-    const specialPropKeys = Object.keys(filterPropSet.special);
+    const basicPropKeys = Object.keys(filterPropertySet.basic);
+    const specialPropKeys = Object.keys(filterPropertySet.special);
 
     const cmsKeys = Object.keys(cms);
 
@@ -35,66 +35,66 @@ const FilterService = {
       let satisfactory: boolean = true;
 
       specialPropKeys.forEach((propertyKey: string) => {
-        const curProp = filterPropSet.special[propertyKey];
-        const reqValues: any[] = curProp.value;
-        if (reqValues.length > 0) {
-          if (getArrayIntersection(reqValues, curCms[propertyKey]).length > 0) {
-            has.special[propertyKey] = curProp;
+        const currentProperty = filterPropertySet.special[propertyKey];
+        const requiredValues: any[] = currentProperty.value;
+        if (requiredValues.length > 0) {
+          if (
+            curCms[propertyKey] !== undefined &&
+            getArrayIntersection(requiredValues, curCms[propertyKey]).length > 0
+          ) {
+            has.special[propertyKey] = currentProperty;
           } else {
-            hasNot.special[propertyKey] = curProp;
+            hasNot.special[propertyKey] = currentProperty;
             satisfactory = false;
           }
-        } else {
-          hasNot.special[propertyKey] = curProp;
-          satisfactory = false;
         }
       });
 
       basicPropKeys.forEach((propertyKey: string) => {
-        const curProp = filterPropSet.basic[propertyKey];
-        if (isScoreFilterProp(curProp)) {
-          if (curProp.value !== ScoreValue.DONT_CARE) {
+        const currentProperty = filterPropertySet.basic[propertyKey];
+        if (isScoreFilterProperty(currentProperty)) {
+          if (currentProperty.value !== ScoreValue.DONT_CARE) {
             const [hasProperty, isSatisfactory] = cmsHasProperty(
-              curProp,
+              currentProperty,
               curCms.properties[propertyKey]
             );
             hasProperty
-              ? (has.basic[propertyKey] = curProp)
-              : (hasNot.basic[propertyKey] = curProp);
+              ? (has.basic[propertyKey] = currentProperty)
+              : (hasNot.basic[propertyKey] = currentProperty);
 
             if (satisfactory) satisfactory = isSatisfactory;
           }
         } else {
-          const curSubPropKeys = getSubPropKeys(curProp);
-          const hasCategoryProp: CategoryFilterProperty = {
-            name: curProp.name,
-            description: curProp.description,
+          const curSubPropKeys = getSubPropertyKeys(currentProperty);
+          const hasCategoryProperty: CategoryFilterProperty = {
+            name: currentProperty.name,
+            description: currentProperty.description,
           };
-          const hasNotCategoryProp: CategoryFilterProperty = {
-            name: curProp.name,
-            description: curProp.description,
+          const hasNotCategoryProperty: CategoryFilterProperty = {
+            name: currentProperty.name,
+            description: currentProperty.description,
           };
 
           curSubPropKeys.forEach((subKey: string) => {
-            const subProp: ScoreFilterProperty = curProp[subKey];
-            if (subProp.value !== ScoreValue.DONT_CARE) {
+            const subProperty: ScoreFilterProperty = currentProperty[subKey];
+            if (subProperty.value !== ScoreValue.DONT_CARE) {
               const [hasProperty, isSatisfactory] = cmsHasProperty(
-                subProp,
+                subProperty,
                 curCms.properties[propertyKey][subKey]
               );
               hasProperty
-                ? (hasCategoryProp[propertyKey] = subProp)
-                : (hasNotCategoryProp[propertyKey] = subProp);
+                ? (hasCategoryProperty[propertyKey] = subProperty)
+                : (hasNotCategoryProperty[propertyKey] = subProperty);
 
               if (satisfactory) satisfactory = isSatisfactory;
             }
           });
 
-          if (getSubPropKeys(hasCategoryProp).length > 0)
-            has.basic[propertyKey] = hasCategoryProp;
+          if (getSubPropertyKeys(hasCategoryProperty).length > 0)
+            has.basic[propertyKey] = hasCategoryProperty;
 
-          if (getSubPropKeys(hasNotCategoryProp).length > 0)
-            hasNot.basic[propertyKey] = hasNotCategoryProp;
+          if (getSubPropertyKeys(hasNotCategoryProperty).length > 0)
+            hasNot.basic[propertyKey] = hasNotCategoryProperty;
         }
       });
 
@@ -122,124 +122,129 @@ const FilterService = {
     });
   },
 
-  getFilteredProperties: (cmsData: AppState): FilterPropertySet => {
-    // TODO: Refactor "props" -> misleading names
+  getFilteredProperties: (appState: AppState): FilterPropertySet => {
     if (
-      !cmsData.showModifiedOnly &&
-      cmsData.propertyFilterString.length === 0
+      !appState.showModifiedOnly &&
+      appState.propertyFilterString.length === 0
     ) {
       // No filtering required, return whole propertySet
-      return cmsData.filterProperties;
+      return appState.filterProperties;
     }
 
-    const filterProperties: FilterPropertySet = cmsData.filterProperties;
+    const filterProperties: FilterPropertySet = appState.filterProperties;
     const unchangedFilterProperties: FilterPropertySet =
-      cmsData.unchangedFilterProperties;
+      appState.unchangedFilterProperties;
 
-    let workPropSet: FilterPropertySet = deepcopy(cmsData.filterProperties);
+    let workPropertySet: FilterPropertySet = deepcopy(
+      appState.filterProperties
+    );
 
-    if (cmsData.showModifiedOnly) {
-      let specialPropKeys = Object.keys(workPropSet.special);
+    if (appState.showModifiedOnly) {
+      let specialPropertyKeys = Object.keys(workPropertySet.special);
 
-      // Delete all non-modified keys
-      specialPropKeys.forEach((key: string) => {
-        const curProp = filterProperties.special[key];
-        const refProp = unchangedFilterProperties.special[key];
-        if (arraysAreEqual(curProp.value, refProp.value)) {
-          delete workPropSet.special[key];
+      specialPropertyKeys.forEach((key: string) => {
+        const currentProperty = filterProperties.special[key];
+        const referenceProperty = unchangedFilterProperties.special[key];
+        if (arraysAreEqual(currentProperty.value, referenceProperty.value)) {
+          delete workPropertySet.special[key];
         }
       });
 
-      const basicPropKeys = Object.keys(filterProperties.basic);
+      const basicPropertyKeys = Object.keys(filterProperties.basic);
 
-      for (const key of basicPropKeys) {
-        const curProp = filterProperties.basic[key];
-        if (isScoreFilterProp(curProp)) {
-          const refProp = unchangedFilterProperties.basic[
-            key
+      for (const currentPropertyKey of basicPropertyKeys) {
+        const currentProperty = filterProperties.basic[currentPropertyKey];
+        if (isScoreFilterProperty(currentProperty)) {
+          const referenceProperty = unchangedFilterProperties.basic[
+            currentPropertyKey
           ] as ScoreFilterProperty;
-          if (curProp.value === refProp.value) {
-            delete workPropSet.basic[key];
+          if (currentProperty.value === referenceProperty.value) {
+            delete workPropertySet.basic[currentPropertyKey];
           }
         } else {
-          const curSubPropKeys = getSubPropKeys(curProp);
+          const currentSubPropertyKeys = getSubPropertyKeys(currentProperty);
 
-          for (const subKey of curSubPropKeys) {
-            const subProp = (filterProperties.basic[
-              key
+          for (const subKey of currentSubPropertyKeys) {
+            const subProperty = (filterProperties.basic[
+              currentPropertyKey
             ] as CategoryFilterProperty)[subKey];
 
             const refProp = (unchangedFilterProperties.basic[
-              key
+              currentPropertyKey
             ] as CategoryFilterProperty)[subKey];
 
-            if (subProp.value === refProp.value) {
-              delete (workPropSet.basic[key] as CategoryFilterProperty)[subKey];
+            if (subProperty.value === refProp.value) {
+              delete (workPropertySet.basic[currentPropertyKey] as CategoryFilterProperty)[
+                subKey
+              ];
             }
           }
-          if (getSubPropKeys(workPropSet.basic[key]).length === 0) {
-            delete workPropSet.basic[key];
+          if (getSubPropertyKeys(workPropertySet.basic[currentPropertyKey]).length === 0) {
+            delete workPropertySet.basic[currentPropertyKey];
           }
         }
       }
     }
 
-    const propertyFilterString = cmsData.propertyFilterString;
+    const propertyFilterString = appState.propertyFilterString;
 
     if (propertyFilterString.length > 0) {
-      const specialPropKeys = Object.keys(workPropSet.special);
+      const specialPropertyKeys = Object.keys(workPropertySet.special);
 
-      specialPropKeys.forEach((key: string) => {
-        const property = workPropSet.special[key];
+      specialPropertyKeys.forEach((key: string) => {
+        const property = workPropertySet.special[key];
         if (
           !property.name
             .toUpperCase()
             .includes(propertyFilterString.toUpperCase())
         ) {
-          delete workPropSet.special[key];
+          delete workPropertySet.special[key];
         }
       });
 
-      const basicPropKeys = Object.keys(workPropSet.basic);
-      basicPropKeys.forEach((key: string) => {
-        const prop = workPropSet.basic[key];
-        if (isScoreFilterProp(prop)) {
+      const basicPropertyKeys = Object.keys(workPropertySet.basic);
+      for (const currentPropertyKey of basicPropertyKeys) {
+        const currentProperty = workPropertySet.basic[currentPropertyKey];
+        if (isScoreFilterProperty(currentProperty)) {
           if (
-            !prop.name
+            !currentProperty.name
               .toUpperCase()
               .includes(propertyFilterString.toUpperCase())
           ) {
-            delete workPropSet.basic[key];
+            delete workPropertySet.basic[currentPropertyKey];
           }
         } else {
           if (
-            !prop.name
+            !currentProperty.name
               .toUpperCase()
               .includes(propertyFilterString.toUpperCase())
           ) {
-            // If category itself does not match the search string, filter the subProps
-            workPropSet.basic[key] = prop;
-            const subPropKeys = getSubPropKeys(prop);
-            subPropKeys.forEach((subKey) => {
-              const subProp = (prop as CategoryFilterProperty)[subKey];
+            // If category itself does not match the search string, filter the subProperties in the category
+            workPropertySet.basic[currentPropertyKey] = currentProperty;
+            const subPropertyKeys = getSubPropertyKeys(currentProperty)
+
+            for (const currentSubPropertyKey of subPropertyKeys) {
+              const currentSubProperty = (currentProperty as CategoryFilterProperty)[currentSubPropertyKey];
               if (
-                !subProp.name
+                !currentSubProperty.name
                   .toUpperCase()
                   .includes(propertyFilterString.toUpperCase())
               ) {
-                delete (workPropSet.basic[key] as CategoryFilterProperty)[
-                  subKey
+                delete (workPropertySet.basic[currentPropertyKey] as CategoryFilterProperty)[
+                  currentSubPropertyKey
                 ];
               }
-            });
-            if (getSubPropKeys(workPropSet.basic[key]).length === 0) {
-              delete workPropSet.basic[key];
+            }
+            
+            if (getSubPropertyKeys(workPropertySet.basic[currentPropertyKey]).length === 0) {
+              delete workPropertySet.basic[currentPropertyKey];
             }
           }
         }
-      });
+      }
     }
-    return workPropSet;
+
+    return workPropertySet;
   },
 };
 
@@ -251,13 +256,13 @@ const FilterService = {
  * @returns [hasProperty, isSatisfactory]
  */
 function cmsHasProperty(
-  scoreFilterProp: ScoreFilterProperty,
+  scoreFilterProperty: ScoreFilterProperty,
   cmsProperty: BooleanCmsProperty
 ): [boolean, boolean] {
   if (cmsProperty && cmsProperty.value) {
     return [true, true];
   } else {
-    if (scoreFilterProp.value === ScoreValue.REQUIRED) {
+    if (scoreFilterProperty.value === ScoreValue.REQUIRED) {
       return [false, false];
     }
     return [false, true];
@@ -279,12 +284,14 @@ function arraysAreEqual(a: any[], b: any[]): boolean {
   return true;
 }
 
-function isScoreFilterProp(x: BasicFilterProperty): x is ScoreFilterProperty {
+function isScoreFilterProperty(
+  x: BasicFilterProperty
+): x is ScoreFilterProperty {
   if (!x) return false;
   return x.value !== undefined;
 }
 
-function getSubPropKeys(prop: CategoryFilterProperty): string[] {
+function getSubPropertyKeys(prop: CategoryFilterProperty): string[] {
   return Object.keys(prop).filter(
     (key) => key !== "name" && key !== "description"
   );

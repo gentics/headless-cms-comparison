@@ -76,7 +76,7 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
       cms[cmsList[i]] = parseCms(rawCms[i]);
     }
     const filterProperties: FilterPropertySet = { basic: {}, special: {} };
-    filterProperties.basic = getBasicFilterProps(fields.properties);
+    filterProperties.basic = getBasicFilterProperties(fields.properties);
 
     // Append special properties
 
@@ -189,7 +189,7 @@ function getSubPropKeys(prop: CategoryCmsProperty): string[] {
  * @returns an object containing all properties with values
  * set to 0 or null, depending on their types
  */
-function getBasicFilterProps(fields: {
+function getBasicFilterProperties(fields: {
   [x: string]: FieldProperty;
 }): { [index: string]: BasicFilterProperty } {
   const basicFilterProps: { [x: string]: BasicFilterProperty } = {};

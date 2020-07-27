@@ -98,12 +98,12 @@ export default function FilterPanel(props: {
   );
 }
 
-function isScoreFilterProp(x: BasicFilterProperty): x is ScoreFilterProperty {
+function isScoreFilterProperty(x: BasicFilterProperty): x is ScoreFilterProperty {
   if (!x) return false;
   return x.value !== undefined;
 }
 
-function getSubPropKeys(prop: CategoryFilterProperty): string[] {
+function getSubPropertyKeys(prop: CategoryFilterProperty): string[] {
   return Object.keys(prop).filter(
     (key) => key !== "name" && key !== "description"
   );
@@ -205,7 +205,7 @@ function PropertyTable(props: { appState: AppState; changeHandler: any }) {
   for (let key of basicKeys) {
     const currentProperty: BasicFilterProperty = filteredPropertySet.basic[key];
 
-    if (isScoreFilterProp(currentProperty)) {
+    if (isScoreFilterProperty(currentProperty)) {
       tableRows.push(<ScoreRow key={key} {...props} topKey={key} />);
     } else {
       tableRows.push(
@@ -216,7 +216,7 @@ function PropertyTable(props: { appState: AppState; changeHandler: any }) {
         />
       );
 
-      const subKeys = getSubPropKeys(currentProperty);
+      const subKeys = getSubPropertyKeys(currentProperty);
 
       for (const subKey of subKeys) {
         tableRows.push(<ScoreRow key={`${key}_${subKey}`} {...props} topKey={key} subKey={subKey} />);

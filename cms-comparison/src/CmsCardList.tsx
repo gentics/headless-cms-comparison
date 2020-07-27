@@ -11,11 +11,17 @@ import {
   FiSmile,
   FiMeh,
 } from "react-icons/fi";
-import { FilterResult, AppState } from "./Cms";
+import { FilterResult, AppState, Cms } from "./Cms";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import { AiFillSketchSquare } from "react-icons/ai";
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 export default function CardList() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -58,9 +64,9 @@ function Cards(props: { appState: AppState }) {
     filterResults.forEach((result) => {
       cards.push(
         <CmsCard
-          key={result.cmsKey}
-          name={cms[result.cmsKey].name}
+          cmsKey={result.cmsKey}
           filterResult={result}
+          appState={props.appState}
         />
       );
     });
@@ -71,25 +77,27 @@ function Cards(props: { appState: AppState }) {
 }
 
 function CmsCard(props: {
-  key: string;
-  name: string;
+  cmsKey: string;
   filterResult: FilterResult;
+  appState: AppState;
 }) {
   return (
-    <div className={"my-2 mx-2"} key={props.name}>
-      <Card
-        style={{ width: "18rem" }}
-        className={"cmsCard"}
-        border={props.filterResult.satisfactory ? "info" : undefined}
-        bg={props.filterResult.satisfactory ? undefined : "light"}
-      >
-        <Card.Body style={{ textAlign: "left" }}>
-          <Card.Title>{props.name}</Card.Title>
-          <Card.Text>
-            <CmsCardText filterResult={props.filterResult} />
-          </Card.Text>
-        </Card.Body>
-      </Card>
+    <div className={"my-2 mx-2"} key={props.appState.cms[props.cmsKey].name}>
+      <Link to={{pathname: "/detail", state: {...props}}} className="cmsCardLink">
+        <Card
+          style={{ width: "18rem" }}
+          className={"cmsCard"}
+          border={props.filterResult.satisfactory ? "info" : undefined}
+          bg={props.filterResult.satisfactory ? undefined : "light"}
+        >
+          <Card.Body style={{ textAlign: "left" }}>
+            <Card.Title>{props.appState.cms[props.cmsKey].name}</Card.Title>
+            <Card.Text>
+              <CmsCardText filterResult={props.filterResult} />
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Link>
     </div>
   );
 }
@@ -125,19 +133,22 @@ function CmsCardText(props: { filterResult: FilterResult }) {
     cardListElements.push(
       <li>
         <OverlayTrigger
-        placement="bottom"
-        delay={{ show: 100, hide: 200 }}
-        overlay={renderNiceToHaveProgressBarTooltip(props.filterResult.cmsKey, props.filterResult.hasNiceToHaveShare)}
-      >
-        <div className="d-inline-flex w-100">
-          <FiAward style={{marginRight: "0.5em"}}/>
-          <ProgressBar
-            style={{ width: "100%" }}
-            animated
-            now={props.filterResult.hasNiceToHaveShare * 100}
-            variant="info"
-          />
-        </div>
+          placement="bottom"
+          delay={{ show: 100, hide: 200 }}
+          overlay={renderNiceToHaveProgressBarTooltip(
+            props.filterResult.cmsKey,
+            props.filterResult.hasNiceToHaveShare
+          )}
+        >
+          <div className="d-inline-flex w-100">
+            <FiAward style={{ marginRight: "0.5em" }} />
+            <ProgressBar
+              style={{ width: "100%" }}
+              animated
+              now={props.filterResult.hasNiceToHaveShare * 100}
+              variant="info"
+            />
+          </div>
         </OverlayTrigger>
       </li>
     );
@@ -153,15 +164,15 @@ function CmsCardText(props: { filterResult: FilterResult }) {
 function renderNiceToHaveProgressBarTooltip(cmsKey: string, share: number) {
   let barText: string;
   if (share === 1) {
-    barText = "Has all nice-to-have properties"
+    barText = "Has all nice-to-have properties";
   } else if (share > 0) {
-    barText = "Has " + (share*100).toFixed(0) + "% of nice-to-have properties"
+    barText =
+      "Has " + (share * 100).toFixed(0) + "% of nice-to-have properties";
   } else {
-    barText = "Has no nice-to-have properties"
+    barText = "Has no nice-to-have properties";
   }
   return <Tooltip id={`Tooltip_ProgressBar_${cmsKey}`}>{barText}</Tooltip>;
 }
-
 
 function NoResultsCard() {
   return (

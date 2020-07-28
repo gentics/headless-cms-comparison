@@ -44,17 +44,15 @@ const FilterService = {
       specialPropertyKeys.forEach((propertyKey: string) => {
         const currentProperty = filterPropertySet.special[propertyKey];
         const requiredValues: any[] = currentProperty.value;
-        if (requiredValues.length > 0) {
-          if (
-            curCms[propertyKey] !== undefined &&
-            getArrayIntersection(requiredValues, curCms[propertyKey]).length > 0
-          ) {
-            // hasRequiredPropertyCount++;
-            has.special[propertyKey] = currentProperty;
-          } else {
-            hasNot.special[propertyKey] = currentProperty;
-            satisfactory = false;
-          }
+        if (
+          curCms[propertyKey] !== undefined &&
+          getArrayIntersection(requiredValues, curCms[propertyKey]).length > 0
+        ) {
+          // hasRequiredPropertyCount++;
+          has.special[propertyKey] = currentProperty;
+        } else {
+          hasNot.special[propertyKey] = currentProperty;
+          satisfactory = false;
         }
       });
 
@@ -99,11 +97,11 @@ const FilterService = {
             description: currentFilterProperty.description,
           };
 
-          currentSubPropertyKeys.forEach((subKey: string) => {
+          currentSubPropertyKeys.forEach((subPropertyKey: string) => {
             const currentSubFilterProperty: ScoreFilterProperty =
-              currentFilterProperty[subKey];
+              currentFilterProperty[subPropertyKey];
             const currentSubCmsProperty: CmsProperty =
-              curCms.properties[propertyKey][subKey];
+              curCms.properties[propertyKey][subPropertyKey];
             if (currentSubFilterProperty.value !== ScoreValue.DONT_CARE) {
               const isRequiredProperty =
                 currentSubFilterProperty.value === ScoreValue.REQUIRED;
@@ -117,12 +115,12 @@ const FilterService = {
               );
 
               if (hasProperty) {
-                hasCategoryProperty[propertyKey] = currentSubFilterProperty;
+                hasCategoryProperty[subPropertyKey] = currentSubFilterProperty;
                 isRequiredProperty
                   ? hasRequiredPropertyCount++
                   : hasNiceToHavePropertyCount++;
               } else {
-                hasNotCategoryProperty[propertyKey] = currentSubFilterProperty;
+                hasNotCategoryProperty[subPropertyKey] = currentSubFilterProperty;
                 if (isRequiredProperty) satisfactory = false;
               }
             }
@@ -307,10 +305,19 @@ const FilterService = {
 
 function sortFilterResults(filterResults: FilterResult[]): FilterResult[] {
   filterResults.sort(function (x: FilterResult, y: FilterResult) {
+    if (x.satisfactory !== y.satisfactory) {
+      if (x.satisfactory) {
+        return -1;
+      } else {
+        return 1;
+      }
+    }
     if (x.hasRequiredShare < y.hasRequiredShare) return 1;
     if (x.hasRequiredShare > y.hasRequiredShare) return -1;
-    if (x.hasNiceToHaveShare < y.hasNiceToHaveShare) return 1;
-    if (x.hasNiceToHaveShare > y.hasNiceToHaveShare) return -1;
+    if (x.satisfactory && y.satisfactory) {
+      if (x.hasNiceToHaveShare < y.hasNiceToHaveShare) return 1;
+      if (x.hasNiceToHaveShare > y.hasNiceToHaveShare) return -1;
+    }
     if (x.cmsKey > y.cmsKey) return 1;
     if (x.cmsKey < y.cmsKey) return -1;
     return 0;
@@ -319,11 +326,7 @@ function sortFilterResults(filterResults: FilterResult[]): FilterResult[] {
 }
 
 /**
- * Checks if a CMS has a certain property.
- * If the property is not available, it is additionally
- * checked wether this property was tagged as REQUIRED,
- * if so the satisfactory boolean is set to false.
- * @returns [hasProperty, isSatisfactory]
+ * Checks if a CMS has a certain property
  */
 function cmsHasProperty(cmsProperty: BooleanCmsProperty): boolean {
   if (cmsProperty && cmsProperty.value) {

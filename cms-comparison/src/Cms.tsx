@@ -30,7 +30,9 @@ export interface Cms {
 }
 
 export interface AppState {
-  fields: any, // TODO: Type
+  fields: {
+    [x: string]: any
+  },
   cms: { [x: string]: Cms },
   filterProperties: FilterPropertySet,
   unchangedFilterProperties: FilterPropertySet
@@ -100,7 +102,7 @@ export interface SpecialFilterProperty extends Property {
 }
 
 export interface FilterPropertySet {
-  basic: { [x: string]: BasicFilterProperty }; // Can contain Category or Basic
+  basic: { [x: string]: BasicFilterProperty }; // Can contain Category or Score
   special: { [x: string]: SpecialFilterProperty };
 }
 

@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
 import CmsService from "./CmsService";
 import FilterPanel from "./FilterPanel";
+import { GrLicense } from "react-icons/gr";
 
 import {
   FiSlash,
@@ -10,27 +11,26 @@ import {
   FiAward,
   FiSmile,
   FiMeh,
+  FiBox,
 } from "react-icons/fi";
 import { FilterResult, AppState, Cms } from "./Cms";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-export default function CardList() {
+export default function CardList(props: any) {
   const [appState, setAppState] = React.useState<AppState>();
 
   React.useEffect(() => {
-    console.log("Fetching...");
-    CmsService.getCmsData().then((appState) => {
-      setAppState(appState);
-    });
+    if (props.location.state) {
+      setAppState(props.location.state);
+    } else {
+      CmsService.getCmsData().then((appState) => {
+        setAppState(appState);
+      });
+    }
   }, []);
 
   const updateCardList = function (appState: AppState) {
@@ -83,9 +83,12 @@ function CmsCard(props: {
 }) {
   return (
     <div className={"my-2 mx-2"} key={props.appState.cms[props.cmsKey].name}>
-      <Link to={{pathname: "/detail", state: {...props}}} className="cmsCardLink">
+      <Link
+        to={{ pathname: "/detail", state: { ...props } }}
+        className="cmsCardLink"
+      >
         <Card
-          style={{ width: "18rem" }}
+          style={{ width: "20rem" }}
           className={"cmsCard"}
           border={props.filterResult.satisfactory ? "info" : undefined}
           bg={props.filterResult.satisfactory ? undefined : "light"}
@@ -93,7 +96,7 @@ function CmsCard(props: {
           <Card.Body style={{ textAlign: "left" }}>
             <Card.Title>{props.appState.cms[props.cmsKey].name}</Card.Title>
             <Card.Text>
-              <CmsCardText filterResult={props.filterResult} />
+              <CmsCardText {...props} />
             </Card.Text>
           </Card.Body>
         </Card>
@@ -102,8 +105,26 @@ function CmsCard(props: {
   );
 }
 
-function CmsCardText(props: { filterResult: FilterResult }) {
+function CmsCardText(props: {
+  cmsKey: string;
+  filterResult: FilterResult;
+  appState: AppState;
+}) {
   let cardListElements: JSX.Element[] = [];
+
+  cardListElements.push(
+    <li>
+      <GrLicense />{" "}
+      {props.appState.cms[props.filterResult.cmsKey].license.toString()}
+    </li>
+  );
+
+  cardListElements.push(
+    <li>
+      <FiBox />{" "}
+      {props.appState.cms[props.filterResult.cmsKey].category.toString()}
+    </li>
+  );
 
   if (props.filterResult.hasRequiredShare !== -1) {
     if (props.filterResult.hasRequiredShare === 1) {
@@ -115,7 +136,7 @@ function CmsCardText(props: { filterResult: FilterResult }) {
     } else if (props.filterResult.hasRequiredShare > 0) {
       cardListElements.push(
         <li>
-          <FiMeh /> Fulfills only{" "}
+          <FiSlash /> Fulfills only{" "}
           {(props.filterResult.hasRequiredShare * 100).toFixed(0)}% of the
           essential requirements
         </li>
@@ -123,13 +144,16 @@ function CmsCardText(props: { filterResult: FilterResult }) {
     } else {
       cardListElements.push(
         <li>
-          <FiSlash /> Fulfils none of the essential requirements
+          <FiSlash /> Fulfills none of the essential requirements
         </li>
       );
     }
   }
 
-  if (props.filterResult.hasNiceToHaveShare !== -1) {
+  if (
+    props.filterResult.satisfactory &&
+    props.filterResult.hasNiceToHaveShare !== -1
+  ) {
     cardListElements.push(
       <li>
         <OverlayTrigger

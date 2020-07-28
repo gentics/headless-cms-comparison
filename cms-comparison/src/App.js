@@ -1,5 +1,3 @@
-import "devextreme/dist/css/dx.common.css";
-import "devextreme/dist/css/dx.light.css";
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -23,9 +21,9 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
+        {/*<header className="App-header">
           <h1>Welcome to the headless CMS Comparison Website!</h1>
-        </header>
+        </header>*/}
 
         <Container fluid className="mt-3">
           <Row>

@@ -6,106 +6,95 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import { AiFillInfoCircle } from "react-icons/ai";
-import deepcopy from "ts-deepcopy";
+import { AiFillInfoCircle } from "react-icons/ai"
 
 import {
   ScoreValue,
-  FilterPropertySet,
-  BasicFilterProperty,
-  CategoryFilterProperty,
-  ScoreFilterProperty,
-  SpecialFilterProperty,
-  AppState,
+  PanelSettings,
+  FilterFieldSet,
+  SpecialField,
+  ScoreField,
+  CategoryField,
 } from "./Cms";
 
-import FilterService from "./FilterService";
+import CmsService from "./CmsService";
 
 export default function FilterPanel(props: {
-  appState: AppState;
-  updateCardList: (updatedAppState: AppState) => void;
+  filterFields: FilterFieldSet;
+  resetFilterFields: () => void;
+  updateFilterFields: (updatedFilterFields: FilterFieldSet) => void;
 }) {
-  const clearPanel = (e: any, appState: AppState) => {
-    const updatedAppState = deepcopy<AppState>(appState);
-    updatedAppState.filterProperties = appState.unchangedFilterProperties;
-    updatedAppState.showModifiedOnly = false;
-    updatedAppState.propertyFilterString = "";
-    updatedAppState.filterResults = FilterService.getUnfilteredCms(appState.cms);
-    props.updateCardList(updatedAppState);
+  const [panelSettings, setPanelSettings] = React.useState<PanelSettings>({
+    showModifiedOnly: false,
+    fieldFilterString: "",
+  });
+
+  const resetPanel = () => {
+    setPanelSettings({ showModifiedOnly: false, fieldFilterString: "" });
+    props.resetFilterFields();
   };
 
-  const handleChange = (
-    event: any,
-    appState: AppState,
-    topKey?: string,
-    subKey?: string,
-    checkboxValue?: string
-  ) => {
-    // Clone object, otherwise react won't re-render
-    const updatedAppState = Object.assign({}, appState);
+  const handlePanelSettingsChange = (event: any) => {
+    if (event.target.name === "showModifiedOnly") {
+      setPanelSettings({
+        showModifiedOnly: event.target.checked,
+        fieldFilterString: panelSettings.fieldFilterString,
+      });
+    } else {
+      setPanelSettings({
+        showModifiedOnly: panelSettings.showModifiedOnly,
+        fieldFilterString: event.target.value,
+      });
+    }
+  };
 
-    if (topKey) {
-      if (subKey) {
-        (updatedAppState.filterProperties.basic[
-          topKey
-        ] as CategoryFilterProperty)[subKey].value = event.target.value;
-      } else {
-        (updatedAppState.filterProperties.basic[
-          topKey
-        ] as ScoreFilterProperty).value = event.target.value;
+  const handleSpecialFieldChange = (event: any) => {
+    const updatedFilterFields = Object.assign({}, props.filterFields);
+    const fieldKey = event.target.name;
+    const valueArray = updatedFilterFields.special[fieldKey].values;
+    const value = event.target.value;
+
+    if (event.target.checked) {
+      if (!valueArray.includes(value)) {
+        valueArray.push(value);
       }
     } else {
-      if (event.target.name === "showModifiedOnly") {
-        updatedAppState.showModifiedOnly = event.target.checked;
-      } else if (event.target.name === "propertyFilterString") {
-        updatedAppState.propertyFilterString = event.target.value;
-      } else if (checkboxValue) {
-        const propertyName = event.target.name;
-        const valueArray: any[] =
-          updatedAppState.filterProperties.special[propertyName].value;
-        if (event.target.checked) {
-          if (!valueArray.includes(checkboxValue)) {
-            valueArray.push(checkboxValue);
-          }
-        } else {
-          const valueIndex = valueArray.indexOf(checkboxValue);
-          if (valueIndex !== -1) {
-            valueArray.splice(valueIndex, 1);
-          }
-        }
-        updatedAppState.filterProperties.special[
-          propertyName
-        ].value = valueArray;
-      } else {
-        throw new Error(
-          `Call by ${event.target.name} is illegal. handleChange() has nothing to handle!`
-        );
+      const valueIndex = valueArray.indexOf(value);
+      if (valueIndex !== -1) {
+        valueArray.splice(valueIndex, 1);
       }
     }
-    updatedAppState.filterResults = FilterService.filterCms(
-      updatedAppState.filterProperties,
-      updatedAppState.cms
-    );
-    props.updateCardList(updatedAppState);
+    // TODO: Check if necessary, is actually only a reference, isn't it?
+    updatedFilterFields.special[fieldKey].values = valueArray;
+  };
+
+  const handleBasicFieldChange = (
+    event: any,
+    fieldKey: string,
+    categoryKey?: string
+  ) => {
+    // Clone object, otherwise react won't re-render
+    const updatedFilterFields = Object.assign({}, props.filterFields);
+
+    if (categoryKey) {
+      (updatedFilterFields.basic[categoryKey] as CategoryField)[fieldKey] =
+        event.target.value;
+    } else {
+      updatedFilterFields.basic[fieldKey] = event.target.value;
+    }
+
+    props.updateFilterFields(updatedFilterFields);
   };
 
   return (
     <Panel
-      appState={props.appState}
-      changeHandler={handleChange}
-      clearPanel={clearPanel}
+      filterFields={props.filterFields}
+      panelSettings={panelSettings}
+      panelSettingsChangeHandler={handlePanelSettingsChange}
+      specialFieldChangeHandler={handleSpecialFieldChange}
+      basicFieldChangeHandler={handleBasicFieldChange}
+      resetPanel={resetPanel}
     />
-  );
-}
-
-function isScoreFilterProperty(x: BasicFilterProperty): x is ScoreFilterProperty {
-  if (!x) return false;
-  return x.value !== undefined;
-}
-
-function getSubPropertyKeys(prop: CategoryFilterProperty): string[] {
-  return Object.keys(prop).filter(
-    (key) => key !== "name" && key !== "description"
   );
 }
 
@@ -114,17 +103,23 @@ function getSubPropertyKeys(prop: CategoryFilterProperty): string[] {
 ///////////////////////////////////////////////////////
 
 function Panel(props: {
-  appState: AppState;
-  changeHandler: (
+  filterFields: FilterFieldSet;
+  panelSettings: PanelSettings;
+  panelSettingsChangeHandler: (event: any) => void;
+  specialFieldChangeHandler: (event: any) => void;
+  basicFieldChangeHandler: (
     event: any,
-    appState: AppState,
-    topKey?: string,
-    subKey?: string,
-    checkboxValue?: string
+    fieldKey: string,
+    categoryKey?: string
   ) => void;
-  clearPanel: (e: any, appState: AppState) => void;
+  resetPanel: (e: any) => void;
 }) {
-  const { clearPanel, ...other } = props;
+  const {
+    panelSettings,
+    panelSettingsChangeHandler,
+    resetPanel,
+    ...other
+  } = props;
   return (
     <div className="d-flex justify-content-center">
       <div className="w-75">
@@ -139,11 +134,9 @@ function Panel(props: {
                   <div>
                     <Form.Control
                       type="text"
-                      name="propertyFilterString"
-                      value={props.appState.propertyFilterString}
-                      onChange={(e: any) =>
-                        props.changeHandler(e, props.appState)
-                      }
+                      name="fieldFilterString"
+                      value={panelSettings.fieldFilterString}
+                      onChange={(e: any) => panelSettingsChangeHandler(e)}
                       placeholder="Filter for properties..."
                       style={{ width: "300px" }}
                     />
@@ -154,18 +147,13 @@ function Panel(props: {
                       type="checkbox"
                       name="showModifiedOnly"
                       label="Show modified properties only"
-                      checked={props.appState.showModifiedOnly}
-                      onChange={(e: any) =>
-                        props.changeHandler(e, props.appState)
-                      }
+                      checked={panelSettings.showModifiedOnly}
+                      onChange={(e: any) => panelSettingsChangeHandler(e)}
                     />
                   </div>
                 </Form>
                 <div className="d-flex justify-content-between">
-                  <Button
-                    variant="info"
-                    onClick={(e: any) => clearPanel(e, props.appState)}
-                  >
+                  <Button variant="info" onClick={(e: any) => resetPanel(e)}>
                     Clear
                   </Button>
                   <Accordion.Toggle
@@ -189,37 +177,77 @@ function Panel(props: {
   );
 }
 
-function PropertyTable(props: { appState: AppState; changeHandler: any }) {
+function PropertyTable(props: {
+  filterFields: FilterFieldSet;
+  specialFieldChangeHandler: (event: any) => void;
+  basicFieldChangeHandler: (
+    event: any,
+    fieldKey: string,
+    categoryKey?: string
+  ) => void;
+}) {
   let tableRows: JSX.Element[] = [];
-
-  const filteredPropertySet: FilterPropertySet = FilterService.getFilteredProperties(
+  const {
+    filterFields,
+    specialFieldChangeHandler,
+    basicFieldChangeHandler,
+  } = props;
+  {
+    /*const filteredPropertySet: FilterPropertySet = FilterService.getFilteredProperties(
     props.appState
-  );
-
-  const specialKeys = Object.keys(filteredPropertySet.special);
-  for (let key of specialKeys) {
-    tableRows.push(<CheckboxRow key={key} propertyKey={key} {...props} />);
+  );*/
   }
 
-  const basicKeys = Object.keys(filteredPropertySet.basic);
-  for (let key of basicKeys) {
-    const currentProperty: BasicFilterProperty = filteredPropertySet.basic[key];
+  const specialFieldKeys = Object.keys(filterFields.special);
+  for (let fieldKey of specialFieldKeys) {
+    const currentField = props.filterFields.special[fieldKey];
+    tableRows.push(
+      <CheckboxRow
+        key={fieldKey}
+        specialField={currentField}
+        fieldKey={fieldKey}
+        changeHandler={specialFieldChangeHandler}
+      />
+    );
+  }
 
-    if (isScoreFilterProperty(currentProperty)) {
-      tableRows.push(<ScoreRow key={key} {...props} topKey={key} />);
+  const basicFieldKeys = Object.keys(filterFields.basic);
+  for (let fieldKey of basicFieldKeys) {
+    const currentField = filterFields.basic[fieldKey];
+
+    if (CmsService.isScoreField(currentField)) {
+      tableRows.push(
+        <ScoreRow
+          key={fieldKey}
+          scoreField={currentField}
+          fieldKey={fieldKey}
+          changeHandler={basicFieldChangeHandler}
+        />
+      );
     } else {
       tableRows.push(
         <CategoryRow
-          key={`${key}`}
-          title={currentProperty.name}
-          description={currentProperty.description}
+          key={`${fieldKey}`}
+          title={currentField.name}
+          description={currentField.description}
         />
       );
 
-      const subKeys = getSubPropertyKeys(currentProperty);
+      const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
 
-      for (const subKey of subKeys) {
-        tableRows.push(<ScoreRow key={`${key}_${subKey}`} {...props} topKey={key} subKey={subKey} />);
+      for (const subKey of subFieldKeys) {
+        const currentField = (filterFields.basic[fieldKey] as CategoryField)[
+          subKey
+        ];
+        tableRows.push(
+          <ScoreRow
+            key={`${fieldKey}_${subKey}`}
+            scoreField={currentField}
+            fieldKey={subKey}
+            changeHandler={basicFieldChangeHandler}
+            categoryKey={fieldKey}
+          />
+        );
       }
     }
   }
@@ -240,36 +268,19 @@ function PropertyTable(props: { appState: AppState; changeHandler: any }) {
 }
 
 function CheckboxRow(props: {
-  appState: AppState;
-  changeHandler: (
-    event: any,
-    appState: AppState,
-    topKey?: string,
-    subKey?: string,
-    checkboxValue?: string
-  ) => void;
-  propertyKey: string;
+  specialField: SpecialField;
+  changeHandler: (e: any) => void;
+  fieldKey: string;
 }): JSX.Element {
-  const property: SpecialFilterProperty =
-    props.appState.filterProperties.special[props.propertyKey];
-
   let checkboxes: JSX.Element[] = [];
-  for (const possibleValue of property.possibleValues) {
+  for (const possibleValue of props.specialField.possibleValues) {
     checkboxes.push(
       <Checkbox
-        key={`${props.propertyKey}_${possibleValue}`}
-        propertyKey={props.propertyKey}
-        label={possibleValue}
-        checked={property.value.includes(possibleValue)}
-        changeHandler={(e: any) =>
-          props.changeHandler(
-            e,
-            props.appState,
-            undefined,
-            undefined,
-            possibleValue
-          )
-        }
+        key={`${props.fieldKey}_${possibleValue}`}
+        fieldKey={props.fieldKey}
+        value={possibleValue}
+        checked={props.specialField.values.includes(possibleValue)}
+        changeHandler={props.changeHandler}
       />
     );
   }
@@ -279,9 +290,9 @@ function CheckboxRow(props: {
       <td>
         <div className="d-flex justify-content-between">
           <span className="ml-2">
-            <DescriptionElement description={property.description} />
+            <DescriptionElement description={props.specialField.description} />
           </span>
-          <span className="mr-2">{property.name}</span>
+          <span className="mr-2">{props.specialField.name}</span>
         </div>
       </td>
       <td>{checkboxes}</td>
@@ -290,20 +301,21 @@ function CheckboxRow(props: {
 }
 
 function Checkbox(props: {
-  propertyKey: string;
-  label: string;
+  fieldKey: string;
+  value: string;
   checked: boolean;
-  changeHandler: any;
+  changeHandler: (e: any) => void;
 }) {
   return (
     <label style={{ paddingRight: "2px" }}>
       <input
         type="checkbox"
-        name={props.propertyKey}
+        name={props.fieldKey}
+        value={props.value}
         checked={props.checked}
         onChange={props.changeHandler}
       />{" "}
-      {props.label}
+      {props.value}
     </label>
   );
 }
@@ -326,44 +338,31 @@ function CategoryRow(props: { title: string; description: string }) {
 }
 
 function ScoreRow(props: {
-  appState: AppState;
-  changeHandler: (
-    event: any,
-    appState: AppState,
-    topKey?: string,
-    subKey?: string,
-    checkboxValue?: string
-  ) => void;
-  topKey: string;
-  subKey?: string;
+  scoreField: ScoreField;
+  changeHandler: (event: any, fieldKey: string, categoryKey?: string) => void;
+  fieldKey: string;
+  categoryKey?: string;
 }): JSX.Element {
-  const topKey = props.topKey;
-  const subKey = props.subKey;
-  const filterProperties = props.appState.filterProperties;
-
-  let property: BasicFilterProperty;
-  let style: any;
-  let changeHandler: any;
-
-  if (subKey) {
-    property = (filterProperties.basic[topKey] as CategoryFilterProperty)[
-      subKey
-    ];
+  let style: any = {};
+  if (props.categoryKey) {
     style = { fontStyle: "italic", fontWeight: 800 };
-    changeHandler = (e: any) =>
-      props.changeHandler(e, props.appState, topKey, subKey);
-  } else {
-    property = filterProperties.basic[topKey] as ScoreFilterProperty;
-    style = {};
-    changeHandler = (e: any) => props.changeHandler(e, props.appState, topKey);
   }
-
-  const selectedValue = property.value;
 
   let options: JSX.Element[] = [];
 
-  for (let scoreValue of Object.values(ScoreValue)) {
-    options.push(<option key={subKey ? `${topKey}_${subKey}_${scoreValue}` : `${topKey}_${scoreValue}`} value={scoreValue}>{scoreValue}</option>);
+  for (const scoreValue of Object.values(ScoreValue)) {
+    options.push(
+      <option
+        key={
+          props.categoryKey
+            ? `${props.categoryKey}_${props.fieldKey}_${scoreValue}`
+            : `${props.fieldKey}_${scoreValue}`
+        }
+        value={scoreValue}
+      >
+        {scoreValue}
+      </option>
+    );
   }
 
   return (
@@ -371,18 +370,20 @@ function ScoreRow(props: {
       <td>
         <div className="d-flex justify-content-between">
           <span className="ml-2">
-            <DescriptionElement description={property.description} />
+            <DescriptionElement description={props.scoreField.description} />
           </span>
           <span className="mr-2" style={style}>
-            {property.name}
+            {props.scoreField.name}
           </span>
         </div>
       </td>
       <td style={{ textAlign: "right" }}>
         <select
-          name={subKey ? subKey : topKey}
-          value={selectedValue}
-          onChange={changeHandler}
+          name={props.categoryKey ? props.categoryKey : props.fieldKey}
+          value={props.scoreField.value as string}
+          onChange={(e: any) =>
+            props.changeHandler(e, props.fieldKey, props.categoryKey)
+          }
         >
           {options}
         </select>
@@ -394,7 +395,12 @@ function ScoreRow(props: {
 function NoResultsRow() {
   return (
     <tr>
-      <td><span role="img" aria-label="Not amused">😐</span> No properties found...</td>
+      <td>
+        <span role="img" aria-label="Not amused">
+          😐
+        </span>{" "}
+        No properties found...
+      </td>
     </tr>
   );
 }

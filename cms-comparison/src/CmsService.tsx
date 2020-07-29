@@ -3,17 +3,13 @@ import {
   CmsProperty,
   BooleanCmsProperty,
   Category,
-  ScoreValue,
   License,
-  FilterPropertySet,
-  CategoryFilterProperty,
-  FieldProperty,
-  ScoreFieldProperty,
-  BasicFilterProperty,
+  BasicField,
+  ScoreField,
   CategoryCmsProperty,
-  AppState,
+  CategoryField,
+  CmsData,
 } from "./Cms";
-import deepcopy from "ts-deepcopy";
 import FilterService from "./FilterService";
 
 const CMS_REPO_BASE_URL =
@@ -37,21 +33,34 @@ const CmsService = {
     }
     return cmsData;
   },
+
+  getKeysOfSubFields: function (
+    category: CategoryCmsProperty | CategoryField
+  ): string[] {
+    return Object.keys(category).filter(
+      (key) => key !== "name" && key !== "description"
+    );
+  },
+
+  isScoreField: function (x: BasicField): x is ScoreField {
+    if (!x) return false;
+    return (x as ScoreField).value !== undefined;
+  },
 };
 
 /**
  * Fetches the CMS-Data from the github-repo
- * @param cmsList represents the list of cms
+ * @param cmsKeyList represents the list of cms
  * with the names set to match the json-files in the repo.
  * @returns a promise containing all fetch-processes,
  * when resolved the promise returns an object with two properties:
  * fields: Object containing field-properties
  * cms: Array containing cms-objects
  */
-function fetchCmsData(cmsList: string[]): Promise<any> {
+function fetchCmsData(cmsKeyList: string[]): Promise<CmsData> {
+  let start = Date.now();
   let promises: Promise<any>[] = [];
-  const start = Date.now();
-  cmsList.forEach((cms: string) => {
+  cmsKeyList.forEach((cms: string) => {
     promises.push(
       fetch(CMS_REPO_BASE_URL + cms + ".json")
         .then((response) => {
@@ -67,172 +76,104 @@ function fetchCmsData(cmsList: string[]): Promise<any> {
   });
 
   return Promise.all(promises).then((values) => {
+    console.log(`CMS-Fetching took ${Date.now() - start}ms`);
+    start = Date.now();
     const fields = values[0];
-    const rawCms: Cms[] = values.slice(1);
-    cmsList = cmsList.sort().filter(x => x.toLowerCase() !== "fields");
-    rawCms.sort((a,b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : ((b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 0));
-    const cms: { [x: string]: Cms } = {};
+    let rawCms: Cms[] = values.slice(1);
+
+    cmsKeyList = cmsKeyList.sort().filter((x) => x.toLowerCase() !== "fields");
+
+    rawCms = sortCmsByName(rawCms);
+
+    const parsedCms: { [x: string]: Cms } = {};
     for (let i = 0; i < rawCms.length; i++) {
-      cms[cmsList[i]] = parseCms(rawCms[i]);
+      parsedCms[cmsKeyList[i]] = parseCms(rawCms[i]);
     }
-    const filterProperties: FilterPropertySet = { basic: {}, special: {} };
-    filterProperties.basic = getBasicFilterProperties(fields.properties);
 
-    // Append special properties
-
-    filterProperties.special.category = {
-      name: "Allowed Categories",
-      description: "Which featureset is offered by the cms?",
-      value: Object.values(Category),
-      possibleValues: Object.values(Category),
-    };
-
-    filterProperties.special.license = {
-      name: "Allowed Licenses",
-      description: "License of the system.",
-      value: Object.values(License),
-      possibleValues: Object.values(License),
-    };
-
-    const unchangedFilterProperties = deepcopy<FilterPropertySet>(
-      filterProperties
-    );
-
-    const appState: AppState = {
-      fields: fields,
-      cms: cms,
-      filterProperties: filterProperties,
-      unchangedFilterProperties: unchangedFilterProperties,
-      showModifiedOnly: false,
-      propertyFilterString: "",
-      filterResults: FilterService.getUnfilteredCms(cms),
-    };
-
-    const elapsed = Date.now() - start;
-    console.log(`Fetch took ${elapsed} ms`);
-    return appState;
+    console.log(`CMS-Parsing took ${Date.now() - start}ms`);
+    return { fields: fields, cms: parsedCms };
   });
 }
 
-/**
- * - Parses licenses and categories from string in array form
- * - Looks at each property of a cms and replaces
- *   Yes's and No's with their corresponding boolean values
- */
+function sortCmsByName(cmsArray: Cms[]) {
+  return cmsArray.sort((a, b) =>
+    a.name.toLowerCase() > b.name.toLowerCase()
+      ? 1
+      : b.name.toLowerCase() > a.name.toLowerCase()
+      ? -1
+      : 0
+  );
+}
+
 function parseCms(cms: any): Cms {
   // Special parsing for licenses and categories
-  try {
-    // Parse licenses
-    const licenses: License[] = cms.license.split("/");
-    if (!licenses) throw new Error(`CMS ${cms.name} has no license!`);
-    // Check if all given license values match an enum value
-    if (
-      Object.values(License).filter((value) => licenses.includes(value))
-        .length !== licenses.length
-    ) {
-      throw new Error(`CMS ${cms.name} contains invalid licenses!`);
+
+  // Parse licenses
+  const licenses: License[] = cms.license.split("/");
+  if (!licensesAreValid(licenses)) {
+    console.error(licenses);
+    throw new Error(`CMS ${cms.name} has invalid or no licenses!`);
+  }
+  cms.license = licenses;
+
+  // Parse categories
+  const categories: Category[] = cms.category.split("/");
+  if (!categoriesAreValid(categories)) {
+    console.error(categories);
+    throw new Error(`CMS ${cms.name} has invalid or no categories!`);
+  }
+  cms.category = categories;
+
+  const propertyKeys: string[] = Object.keys(cms.properties);
+  for (const key of propertyKeys) {
+    const currentProperty: CmsProperty = cms.properties[key];
+    if (isBooleanCmsProperty(currentProperty)) {
+      currentProperty.value = currentProperty.value === "Yes";
+    } else {
+      const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
+      for (const subKey of subPropertyKeys) {
+        const subProperty = currentProperty[subKey];
+        subProperty.value = subProperty.value === "Yes";
+      }
     }
-    cms.license = licenses;
-    // Parse categories
-    const categories: Category[] = cms.category.split("/");
-    if (!categories) throw new Error(`CMS ${cms.name} has no category!`);
-    // Check if all given category values match an enum value
-    if (
-      Object.values(Category).filter((value) => categories.includes(value))
-        .length !== categories.length
-    ) {
-      console.error(categories);
-      throw new Error(`CMS ${cms.name} contains invalid categories!`);
-    }
-    cms.category = categories;
-  } catch (e) {
-    throw e;
-    /*throw Error(
-      `An error occured while parsing licenses and categories of cms ${cms.name}! Fields might not exist...`
-    );*/
   }
 
-  // Parse properties by replacing boolean words with actual booleans
-
-  const propKeys: string[] = Object.keys(cms.properties);
-
-  propKeys.forEach((propertyKey: string) => {
+  /*propertyKeys.forEach((propertyKey: string) => {
     const curProp: CmsProperty = cms.properties[propertyKey];
     if (isBooleanCmsProperty(curProp)) {
       curProp.value = curProp.value === "Yes" ? true : false;
       cms.properties[propertyKey] = curProp;
     } else {
-      const curSubPropKeys = getSubPropKeys(curProp);
+      const curSubPropKeys = CmsService.getKeysOfSubFields(curProp);
       curSubPropKeys.forEach((subPropKey: string) => {
         const subProp = curProp[subPropKey] as BooleanCmsProperty;
         subProp.value = subProp.value === "Yes" ? true : false;
         cms.properties[propertyKey][subPropKey] = subProp;
       });
     }
-  });
+  });*/
   return cms;
+}
+
+function licensesAreValid(licenses: string[]): boolean {
+  return (
+    licenses.length > 0 &&
+    FilterService.getArrayIntersection(Object.values(License), licenses)
+      .length === licenses.length
+  );
+}
+
+function categoriesAreValid(categories: string[]): boolean {
+  return (
+    categories.length > 0 &&
+    FilterService.getArrayIntersection(Object.values(Category), categories)
+      .length === categories.length
+  );
 }
 
 function isBooleanCmsProperty(x: CmsProperty): x is BooleanCmsProperty {
   if (!x) return false;
   return (x as BooleanCmsProperty).value !== undefined;
-}
-
-function getSubPropKeys(prop: CategoryCmsProperty): string[] {
-  return Object.keys(prop).filter(
-    (key) => key !== "name" && key !== "description"
-  );
-}
-
-/**
- * Iterates over all fields and collects all possible values from all CMS
- * @returns an object containing all properties with values
- * set to 0 or null, depending on their types
- */
-function getBasicFilterProperties(fields: {
-  [x: string]: FieldProperty;
-}): { [index: string]: BasicFilterProperty } {
-  const basicFilterProps: { [x: string]: BasicFilterProperty } = {};
-  const propKeys: string[] = Object.keys(fields);
-
-  propKeys.forEach((key: string) => {
-    const curFieldProp = fields[key];
-
-    if (isScoreFieldProperty(curFieldProp)) {
-      // Is score field property
-      basicFilterProps[key] = {
-        name: curFieldProp.name,
-        description: curFieldProp.description,
-        value: ScoreValue.DONT_CARE,
-      };
-    } else {
-      // Is category field property
-      const subPropKeys = getSubPropKeys(curFieldProp);
-
-      let catFilterProp: CategoryFilterProperty = {
-        name: curFieldProp.name,
-        description: curFieldProp.description,
-      };
-
-      for (let subKey of subPropKeys) {
-        const curSubFieldProp = curFieldProp[subKey] as ScoreFieldProperty;
-
-        catFilterProp[subKey] = {
-          name: curSubFieldProp.name,
-          description: curSubFieldProp.description,
-          value: ScoreValue.DONT_CARE,
-        };
-      }
-
-      basicFilterProps[key] = catFilterProp;
-    }
-  });
-  return basicFilterProps;
-}
-
-function isScoreFieldProperty(x: FieldProperty): x is ScoreFieldProperty {
-  if (!x) return false;
-  return (x as ScoreFieldProperty).value !== undefined;
 }
 
 export default CmsService;

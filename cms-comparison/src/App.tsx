@@ -4,20 +4,37 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import "./App.css";
 
 import CmsList from "./CmsList";
 import CmsCardList from "./CmsCardList";
 import CmsDetailView from "./CmsDetailView";
+import {
+  AppState,
+  Cms,
+  Category,
+  License,
+  BasicField,
+  CmsData,
+  Field,
+  SpecialField,
+  FilterFieldSet,
+} from "./Cms";
+import CmsService from "./CmsService";
+import FilterService from "./FilterService";
+import deepcopy from "ts-deepcopy";
 
 function App() {
+  const [appState, setAppState] = React.useState<AppState>();
+
+  React.useEffect(() => {
+    CmsService.getCmsData().then((cmsData: CmsData) => {
+      setAppState(constructAppState(cmsData));
+    });
+  }, []);
+
   return (
     <Router>
       <div className="App">
@@ -58,6 +75,27 @@ function App() {
       </div>
     </Router>
   );
+}
+
+function constructAppState(cmsData: {
+  fields: { [x: string]: any };
+  cms: { [x: string]: Cms };
+}): AppState {
+  const filterFields: FilterFieldSet = { basic: {}, special: {} };
+  filterFields.basic = FilterService.initializeBasicFields(
+    cmsData.fields.properties
+  );
+  filterFields.special = FilterService.initializeSpecialFields();
+
+  const untouchedFilterFields = deepcopy<FilterFieldSet>(filterFields);
+
+  const appState: AppState = {
+    cmsData: cmsData,
+    filterFields: filterFields,
+    untouchedFilterFields: untouchedFilterFields,
+    filterResults: FilterService.getUnfilteredCms(cmsData.cms),
+  };
+  return appState;
 }
 
 export default App;

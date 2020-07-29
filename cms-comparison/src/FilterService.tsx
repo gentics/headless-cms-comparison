@@ -1,16 +1,23 @@
 import {
-  FilterPropertySet,
   Cms,
   FilterResult,
   ScoreValue,
-  CategoryFilterProperty,
-  ScoreFilterProperty,
-  BooleanCmsProperty,
-  BasicFilterProperty,
   AppState,
   CmsProperty,
+  BasicField,
+  ScoreField,
+  SpecialField,
+  Category,
+  License,
+  FilterFieldSet,
+  BooleanCmsProperty,
+  CategoryField,
+  CategoryCmsProperty,
+  Field,
+  PanelSettings,
 } from "./Cms";
 import deepcopy from "ts-deepcopy";
+import CmsService from "./CmsService";
 
 const FilterService = {
   /**
@@ -18,125 +25,109 @@ const FilterService = {
    * Returns all cms, satisfactory boolean is set accordingly.
    */
   filterCms: (
-    filterPropertySet: FilterPropertySet,
+    filterFields: FilterFieldSet,
     cms: { [x: string]: Cms }
   ): FilterResult[] => {
     let filterResults: FilterResult[] = [];
 
-    const basicPropertyKeys = Object.keys(filterPropertySet.basic);
-    const specialPropertyKeys = Object.keys(filterPropertySet.special);
-
+    const specialFieldKeys = Object.keys(filterFields.special);
     const cmsKeys = Object.keys(cms);
 
     for (let cmsKey of cmsKeys) {
-      const curCms: any = cms[cmsKey]; // Needs to be any otherwise I cannot access properties of curCms
+      const currentCms: any = cms[cmsKey];
 
-      let has: FilterPropertySet = { basic: {}, special: {} };
+      let has: FilterFieldSet = { basic: {}, special: {} };
+      let hasNot: FilterFieldSet = { basic: {}, special: {} };
 
       let requiredPropertyCount = 0;
       let hasRequiredPropertyCount = 0;
       let niceToHavePropertyCount = 0;
       let hasNiceToHavePropertyCount = 0;
 
-      let hasNot: FilterPropertySet = { basic: {}, special: {} };
       let satisfactory: boolean = true;
 
-      specialPropertyKeys.forEach((propertyKey: string) => {
-        const currentProperty = filterPropertySet.special[propertyKey];
-        const requiredValues: any[] = currentProperty.value;
+      for (const fieldKey of specialFieldKeys) {
+        const currentField = filterFields.special[fieldKey];
+        const currentCmsProperty = currentCms[fieldKey];
+        const requiredValues: any[] = currentField.values;
         if (
-          curCms[propertyKey] !== undefined &&
-          getArrayIntersection(requiredValues, curCms[propertyKey]).length > 0
+          currentCms[fieldKey] !== undefined &&
+          FilterService.getArrayIntersection(requiredValues, currentCmsProperty)
+            .length > 0
         ) {
-          // hasRequiredPropertyCount++;
-          has.special[propertyKey] = currentProperty;
+          has.special[fieldKey] = currentField;
         } else {
-          hasNot.special[propertyKey] = currentProperty;
+          hasNot.special[fieldKey] = currentField;
           satisfactory = false;
         }
-      });
+      }
 
-      basicPropertyKeys.forEach((propertyKey: string) => {
-        const currentFilterProperty = filterPropertySet.basic[propertyKey];
-        const currentCmsProperty: CmsProperty = curCms.properties[propertyKey];
+      const basicFieldKeys = Object.keys(filterFields.basic);
+      for (const fieldKey of basicFieldKeys) {
+        const currentField = filterFields.basic[fieldKey];
+        const currentCmsProperty = currentCms.properties[fieldKey];
 
-        if (isScoreFilterProperty(currentFilterProperty)) {
-          if (currentFilterProperty.value !== ScoreValue.DONT_CARE) {
-            const isRequiredProperty =
-              currentFilterProperty.value === ScoreValue.REQUIRED;
+        if (CmsService.isScoreField(currentField)) {
+          if (isOfInterest(currentField)) {
+            const fieldIsRequired = isRequired(currentField);
 
-            isRequiredProperty
+            fieldIsRequired
               ? requiredPropertyCount++
               : niceToHavePropertyCount++;
 
-            const hasProperty = cmsHasProperty(
-              currentCmsProperty as BooleanCmsProperty
-            );
-
-            if (hasProperty) {
-              has.basic[propertyKey] = currentFilterProperty;
-              isRequiredProperty
+            if (cmsHasProperty(currentCmsProperty as BooleanCmsProperty)) {
+              has.basic[fieldKey] = currentField;
+              fieldIsRequired
                 ? hasRequiredPropertyCount++
                 : hasNiceToHavePropertyCount++;
             } else {
-              hasNot.basic[propertyKey] = currentFilterProperty;
-              if (isRequiredProperty) satisfactory = false;
+              hasNot.basic[fieldKey] = currentField;
+              if (fieldIsRequired) satisfactory = false;
             }
           }
         } else {
-          const currentSubPropertyKeys = getSubPropertyKeys(
-            currentFilterProperty
-          );
+          const hasCategoryField = Object.assign({}, currentField);
+          const hasNotCategoryField = Object.assign({}, currentField);
 
-          const hasCategoryProperty: CategoryFilterProperty = {
-            name: currentFilterProperty.name,
-            description: currentFilterProperty.description,
-          };
-          const hasNotCategoryProperty: CategoryFilterProperty = {
-            name: currentFilterProperty.name,
-            description: currentFilterProperty.description,
-          };
+          const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
+          for (const subFieldKey of subFieldKeys) {
+            const currentSubField = currentField[subFieldKey] as ScoreField;
+            const currentCmsSubProperty = currentCmsProperty[
+              subFieldKey
+            ] as BooleanCmsProperty;
+            if (isOfInterest(currentSubField)) {
+              const fieldIsRequired = isRequired(currentSubField);
 
-          currentSubPropertyKeys.forEach((subPropertyKey: string) => {
-            const currentSubFilterProperty: ScoreFilterProperty =
-              currentFilterProperty[subPropertyKey];
-            const currentSubCmsProperty: CmsProperty =
-              curCms.properties[propertyKey][subPropertyKey];
-            if (currentSubFilterProperty.value !== ScoreValue.DONT_CARE) {
-              const isRequiredProperty =
-                currentSubFilterProperty.value === ScoreValue.REQUIRED;
-
-              isRequiredProperty
+              fieldIsRequired
                 ? requiredPropertyCount++
                 : niceToHavePropertyCount++;
 
-              const hasProperty = cmsHasProperty(
-                currentSubCmsProperty as BooleanCmsProperty
-              );
-
-              if (hasProperty) {
-                hasCategoryProperty[subPropertyKey] = currentSubFilterProperty;
-                isRequiredProperty
+              if (cmsHasProperty(currentCmsSubProperty)) {
+                hasCategoryField[subFieldKey] = currentField;
+                fieldIsRequired
                   ? hasRequiredPropertyCount++
                   : hasNiceToHavePropertyCount++;
               } else {
-                hasNotCategoryProperty[subPropertyKey] = currentSubFilterProperty;
-                if (isRequiredProperty) satisfactory = false;
+                hasNotCategoryField[subFieldKey] = currentField;
+                if (fieldIsRequired) satisfactory = false;
               }
             }
-          });
 
-          if (getSubPropertyKeys(hasCategoryProperty).length > 0)
-            has.basic[propertyKey] = hasCategoryProperty;
+            if (!categoryFieldIsEmpty(hasCategoryField)) {
+              has.basic[fieldKey] = hasCategoryField;
+            }
 
-          if (getSubPropertyKeys(hasNotCategoryProperty).length > 0)
-            hasNot.basic[propertyKey] = hasNotCategoryProperty;
+            if (!categoryFieldIsEmpty(hasNotCategoryField)) {
+              hasNot.basic[fieldKey] = hasCategoryField;
+            }
+          }
         }
-      });
+      }
 
       filterResults.push({
         cmsKey: cmsKey,
         has: has,
+        hasNot: hasNot,
         hasRequiredShare:
           requiredPropertyCount > 0
             ? hasRequiredPropertyCount / requiredPropertyCount
@@ -144,7 +135,6 @@ const FilterService = {
         hasNiceToHaveShare: niceToHavePropertyCount
           ? hasNiceToHavePropertyCount / niceToHavePropertyCount
           : -1,
-        hasNot: hasNot,
         satisfactory: satisfactory,
       });
     }
@@ -169,137 +159,161 @@ const FilterService = {
     });
   },
 
-  getFilteredProperties: (appState: AppState): FilterPropertySet => {
+  getFilteredProperties: (
+    panelSettings: PanelSettings,
+    filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet }
+  ): FilterFieldSet => {
     if (
-      !appState.showModifiedOnly &&
-      appState.propertyFilterString.length === 0
+      !panelSettings.showModifiedOnly &&
+      panelSettings.fieldFilterString.length === 0
     ) {
-      // No filtering required, return whole propertySet
-      return appState.filterProperties;
+      return filterFields.actual;
     }
 
-    const filterProperties: FilterPropertySet = appState.filterProperties;
-    const unchangedFilterProperties: FilterPropertySet =
-      appState.unchangedFilterProperties;
+    const untouchedFields: FilterFieldSet = filterFields.untouched;
 
-    let workPropertySet: FilterPropertySet = deepcopy(
-      appState.filterProperties
-    );
+    const workFields = deepcopy<FilterFieldSet>(filterFields.actual);
 
-    if (appState.showModifiedOnly) {
-      let specialPropertyKeys = Object.keys(workPropertySet.special);
+    if (panelSettings.showModifiedOnly) {
+      const specialFieldKeys = Object.keys(workFields.special);
 
-      specialPropertyKeys.forEach((key: string) => {
-        const currentProperty = filterProperties.special[key];
-        const referenceProperty = unchangedFilterProperties.special[key];
-        if (arraysAreEqual(currentProperty.value, referenceProperty.value)) {
-          delete workPropertySet.special[key];
+      specialFieldKeys.forEach((key: string) => {
+        const currentField = workFields.special[key];
+        const referenceField = untouchedFields.special[key];
+        if (arraysAreEqual(currentField.values, referenceField.values)) {
+          delete workFields.special[key];
         }
       });
 
-      const basicPropertyKeys = Object.keys(filterProperties.basic);
+      const basicFieldKeys = Object.keys(workFields.basic);
 
-      for (const currentPropertyKey of basicPropertyKeys) {
-        const currentProperty = filterProperties.basic[currentPropertyKey];
-        if (isScoreFilterProperty(currentProperty)) {
-          const referenceProperty = unchangedFilterProperties.basic[
-            currentPropertyKey
-          ] as ScoreFilterProperty;
-          if (currentProperty.value === referenceProperty.value) {
-            delete workPropertySet.basic[currentPropertyKey];
+      for (const fieldKey of basicFieldKeys) {
+        const currentField = workFields.basic[fieldKey];
+        if (CmsService.isScoreField(currentField)) {
+          const untouchedField = untouchedFields.basic[fieldKey] as ScoreField;
+          if (currentField.value === untouchedField.value) {
+            delete workFields.basic[fieldKey];
           }
         } else {
-          const currentSubPropertyKeys = getSubPropertyKeys(currentProperty);
+          const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
 
-          for (const subKey of currentSubPropertyKeys) {
-            const subProperty = (filterProperties.basic[
-              currentPropertyKey
-            ] as CategoryFilterProperty)[subKey];
+          for (const subFieldKey of subFieldKeys) {
+            const currentSubField = (workFields.basic[
+              fieldKey
+            ] as CategoryField)[subFieldKey];
 
-            const refProp = (unchangedFilterProperties.basic[
-              currentPropertyKey
-            ] as CategoryFilterProperty)[subKey];
+            const untouchedSubField = (untouchedFields.basic[
+              fieldKey
+            ] as CategoryField)[subFieldKey];
 
-            if (subProperty.value === refProp.value) {
-              delete (workPropertySet.basic[
-                currentPropertyKey
-              ] as CategoryFilterProperty)[subKey];
+            if (currentSubField.value === untouchedSubField.value) {
+              delete (workFields.basic[fieldKey] as CategoryField)[subFieldKey];
             }
           }
-          if (
-            getSubPropertyKeys(workPropertySet.basic[currentPropertyKey])
-              .length === 0
-          ) {
-            delete workPropertySet.basic[currentPropertyKey];
+          if (categoryFieldIsEmpty(workFields.basic[fieldKey])) {
+            delete workFields.basic[fieldKey];
           }
         }
       }
     }
 
-    const propertyFilterString = appState.propertyFilterString;
+    const fieldFilterString = panelSettings.fieldFilterString;
 
-    if (propertyFilterString.length > 0) {
-      const specialPropertyKeys = Object.keys(workPropertySet.special);
+    if (fieldFilterString.length > 0) {
+      const specialFieldKeys = Object.keys(workFields.special);
 
-      specialPropertyKeys.forEach((key: string) => {
-        const property = workPropertySet.special[key];
-        if (
-          !property.name
-            .toUpperCase()
-            .includes(propertyFilterString.toUpperCase())
-        ) {
-          delete workPropertySet.special[key];
+      specialFieldKeys.forEach((fieldKey: string) => {
+        const currentField = workFields.special[fieldKey];
+        if (!fieldNameContainsString(currentField, fieldFilterString)) {
+          delete workFields.special[fieldKey];
         }
       });
 
-      const basicPropertyKeys = Object.keys(workPropertySet.basic);
-      for (const currentPropertyKey of basicPropertyKeys) {
-        const currentProperty = workPropertySet.basic[currentPropertyKey];
-        if (isScoreFilterProperty(currentProperty)) {
-          if (
-            !currentProperty.name
-              .toUpperCase()
-              .includes(propertyFilterString.toUpperCase())
-          ) {
-            delete workPropertySet.basic[currentPropertyKey];
+      const basicFieldKeys = Object.keys(workFields.basic);
+      for (const fieldKey of basicFieldKeys) {
+        const currentField = workFields.basic[fieldKey];
+        if (CmsService.isScoreField(currentField)) {
+          if (!fieldNameContainsString(currentField, fieldFilterString)) {
+            delete workFields.basic[fieldKey];
           }
         } else {
-          if (
-            !currentProperty.name
-              .toUpperCase()
-              .includes(propertyFilterString.toUpperCase())
-          ) {
+          if (!fieldNameContainsString(currentField, fieldFilterString)) {
             // If category itself does not match the search string, filter the subProperties in the category
-            workPropertySet.basic[currentPropertyKey] = currentProperty;
-            const subPropertyKeys = getSubPropertyKeys(currentProperty);
+            const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
 
-            for (const currentSubPropertyKey of subPropertyKeys) {
-              const currentSubProperty = (currentProperty as CategoryFilterProperty)[
-                currentSubPropertyKey
+            for (const subFieldKey of subFieldKeys) {
+              const currentSubField = (currentField as CategoryField)[
+                subFieldKey
               ];
               if (
-                !currentSubProperty.name
-                  .toUpperCase()
-                  .includes(propertyFilterString.toUpperCase())
+                !fieldNameContainsString(currentSubField, fieldFilterString)
               ) {
-                delete (workPropertySet.basic[
-                  currentPropertyKey
-                ] as CategoryFilterProperty)[currentSubPropertyKey];
+                delete (workFields.basic[fieldKey] as CategoryField)[
+                  subFieldKey
+                ];
               }
             }
 
-            if (
-              getSubPropertyKeys(workPropertySet.basic[currentPropertyKey])
-                .length === 0
-            ) {
-              delete workPropertySet.basic[currentPropertyKey];
+            if (categoryFieldIsEmpty(workFields.basic[fieldKey])) {
+              delete workFields.basic[fieldKey];
             }
           }
         }
       }
     }
 
-    return workPropertySet;
+    return workFields;
+  },
+
+  /**
+   * Initializes all non-special FieldProperties to FilterProperties by setting values accordingly
+   * @returns an object containing all properties with values set to Score.DONT_CARE
+   */
+  initializeBasicFields: function (basicFields: {
+    [x: string]: BasicField;
+  }): { [x: string]: BasicField } {
+    const fields: { [x: string]: BasicField } = deepcopy<{
+      [x: string]: BasicField;
+    }>(basicFields);
+
+    const fieldKeys: string[] = Object.keys(fields);
+
+    for (const key of fieldKeys) {
+      const currentField = fields[key];
+      if (CmsService.isScoreField(currentField)) {
+        currentField.value = ScoreValue.DONT_CARE;
+      } else {
+        const subPropertyKeys = CmsService.getKeysOfSubFields(currentField);
+        for (const subKey of subPropertyKeys) {
+          const currentSubField = currentField[subKey] as ScoreField;
+          currentSubField.value = ScoreValue.DONT_CARE;
+        }
+      }
+    }
+    return fields;
+  },
+
+  initializeSpecialFields: function (): { [x: string]: SpecialField } {
+    const specialFields: { [x: string]: SpecialField } = {};
+    specialFields.category = {
+      name: "Allowed Categories",
+      description: "Which featureset is offered by the cms?",
+      values: Object.values(Category),
+      possibleValues: Object.values(Category),
+    };
+
+    specialFields.license = {
+      name: "Allowed Licenses",
+      description: "License of the system.",
+      values: Object.values(License),
+      possibleValues: Object.values(License),
+    };
+
+    return specialFields;
+  },
+
+  getArrayIntersection: function (a: string[], b: string[]): string[] {
+    return a.filter((value) => b.includes(value));
   },
 };
 
@@ -325,6 +339,21 @@ function sortFilterResults(filterResults: FilterResult[]): FilterResult[] {
   return filterResults;
 }
 
+function isOfInterest(scoreField: ScoreField): boolean {
+  return (
+    scoreField.value === ScoreValue.DONT_CARE ||
+    scoreField.value === ScoreValue.NICE_TO_HAVE
+  );
+}
+
+function isRequired(scoreField: ScoreField): boolean {
+  return scoreField.value === ScoreValue.REQUIRED;
+}
+
+function fieldNameContainsString(field: Field, str: string) {
+  return field.name.toUpperCase().includes(str.toUpperCase());
+}
+
 /**
  * Checks if a CMS has a certain property
  */
@@ -339,8 +368,8 @@ function cmsHasProperty(cmsProperty: BooleanCmsProperty): boolean {
   }
 }
 
-function getArrayIntersection(a: string[], b: string[]): string[] {
-  return a.filter((value) => b.includes(value));
+function categoryFieldIsEmpty(categoryProperty: CategoryField): boolean {
+  return CmsService.getKeysOfSubFields(categoryProperty).length === 0;
 }
 
 function arraysAreEqual(a: any[], b: any[]): boolean {
@@ -352,19 +381,6 @@ function arraysAreEqual(a: any[], b: any[]): boolean {
     if (a[i] !== b[i]) return false;
   }
   return true;
-}
-
-function isScoreFilterProperty(
-  x: BasicFilterProperty
-): x is ScoreFilterProperty {
-  if (!x) return false;
-  return x.value !== undefined;
-}
-
-function getSubPropertyKeys(prop: CategoryFilterProperty): string[] {
-  return Object.keys(prop).filter(
-    (key) => key !== "name" && key !== "description"
-  );
 }
 
 export default FilterService;

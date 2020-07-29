@@ -2,15 +2,20 @@ import * as React from "react";
 import {
   FilterResult,
   Cms,
-  ScoreFilterProperty,
   ScoreValue,
-  BasicFilterProperty,
-  CategoryFilterProperty,
+  BasicField,
+  ScoreField,
 } from "./Cms";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { FiCheckCircle, FiBox, FiPackage, FiAward, FiPower } from "react-icons/fi";
+import {
+  FiCheckCircle,
+  FiBox,
+  FiPackage,
+  FiAward,
+  FiPower,
+} from "react-icons/fi";
 import { FiSlash } from "react-icons/fi";
 import { GrLicense } from "react-icons/gr";
 import { MdUpdate } from "react-icons/md";
@@ -19,7 +24,8 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { Link } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
-import TsDeepCopy from "ts-deepcopy";
+import deepcopy from "ts-deepcopy";
+import CmsService from "./CmsService";
 
 export default function CmsDetailView(props: any) {
   if (props.location.state) {
@@ -48,7 +54,11 @@ export default function CmsDetailView(props: any) {
               >
                 <Button variant="dark">Back to results</Button>
               </Link>
-              <h1><b><i>{cms.name}</i></b></h1>
+              <h1>
+                <b>
+                  <i>{cms.name}</i>
+                </b>
+              </h1>
             </div>
             <hr />
             <div
@@ -71,59 +81,14 @@ export default function CmsDetailView(props: any) {
             <hr />
             <PropertyList filterResult={filterResult} />
             <span className="lastUpdated">
-                <MdUpdate className="mr-1"/> This information was last updated on {new Date(cms.lastUpdated).toDateString()}
-              </span>
+              <MdUpdate className="mr-1" /> This information was last updated on{" "}
+              {new Date(cms.lastUpdated).toDateString()}
+            </span>
             <span></span>
           </Col>
         </Row>
       </Container>
     </>
-  );
-}
-
-function categorizePropertiesByScores(indexedPropertyArray: {
-  [x: string]: BasicFilterProperty;
-}): { required: ScoreFilterProperty[]; niceToHave: ScoreFilterProperty[] } {
-  let requiredProperties: ScoreFilterProperty[] = [];
-  let niceToHaveProperties: ScoreFilterProperty[] = [];
-
-  const indexedPropertyArrayCopy = TsDeepCopy<{[x: string]: BasicFilterProperty}>(indexedPropertyArray);
-  const propertyKeys = Object.keys(indexedPropertyArrayCopy);
-
-  for (const propertyKey of propertyKeys) {
-    const currentProperty = indexedPropertyArrayCopy[propertyKey];
-    if (isScoreFilterProperty(currentProperty)) {
-      currentProperty.value === ScoreValue.REQUIRED
-        ? requiredProperties.push(currentProperty)
-        : niceToHaveProperties.push(currentProperty);
-    } else {
-      const hasSubKeys = getSubPropertyKeys(currentProperty);
-      for (const subKey of hasSubKeys) {
-        const currentSubProperty = currentProperty[subKey];
-        currentSubProperty.name =
-          currentProperty.name + ": " + currentSubProperty.name;
-        currentSubProperty.value === ScoreValue.REQUIRED
-          ? requiredProperties.push(currentSubProperty)
-          : niceToHaveProperties.push(currentSubProperty);
-      }
-    }
-  }
-  return {
-    required: requiredProperties,
-    niceToHave: niceToHaveProperties,
-  };
-}
-
-function isScoreFilterProperty(
-  x: BasicFilterProperty
-): x is ScoreFilterProperty {
-  if (!x) return false;
-  return x.value !== undefined;
-}
-
-function getSubPropertyKeys(property: CategoryFilterProperty): string[] {
-  return Object.keys(property).filter(
-    (key) => key !== "name" && key !== "description"
   );
 }
 
@@ -136,85 +101,129 @@ function PropertyList(props: { filterResult: FilterResult }) {
     props.filterResult.hasNot.basic
   );
 
-  const requiredProperties = {
-    has: hasProperties.required,
-    hasNot: hasNotProperties.required,
+  let categorizedProperties: {
+    required: {
+      has: { [x: string]: ScoreField };
+      hasNot: { [x: string]: ScoreField };
+    };
+    niceToHave: {
+      has: { [x: string]: ScoreField };
+      hasNot: { [x: string]: ScoreField };
+    };
+  } = {
+    required: {
+      has: hasProperties.required,
+      hasNot: hasNotProperties.required,
+    },
+    niceToHave: {
+      has: hasProperties.niceToHave,
+      hasNot: hasNotProperties.niceToHave,
+    },
   };
 
-  const requiredHasListItems = constructResultListItems(
-    requiredProperties.has,
-    true
-  );
-  const requiredHasNotListItems = constructResultListItems(
-    requiredProperties.hasNot,
-    false
+  const requiredListItems = constructResultListItems(
+    categorizedProperties.required
   );
 
-  const niceToHaveProperties = {
-    has: hasProperties.niceToHave,
-    hasNot: hasNotProperties.niceToHave,
-  };
+  if (requiredListItems.length > 0) {
+    requiredListItems.push(<RequiredSummaryListItem {...props} />);
+  }
 
-  const niceToHaveHasListItems = constructResultListItems(
-    niceToHaveProperties.has,
-    true
+  const niceToHaveListItems = constructResultListItems(
+    categorizedProperties.niceToHave
   );
-  const niceToHaveHasNotListItems = constructResultListItems(
-    niceToHaveProperties.hasNot,
-    false
-  );
+
+  if (niceToHaveListItems.length > 0) {
+    niceToHaveListItems.push(<NiceToHaveSummaryListItem {...props} />);
+  }
 
   return (
     <div>
       <ListGroup className="w-75 mx-auto">
-        {props.filterResult.hasRequiredShare !== -1 ? (
-          <>
-            {requiredHasListItems}
-            {requiredHasNotListItems}
-            <RequiredSummaryListItem {...props} />
-          </>
-        ) : (
-          <></>
-        )}
-
-        {props.filterResult.hasNiceToHaveShare !== -1 ? (
-          <>
-            {niceToHaveHasListItems}
-            {niceToHaveHasNotListItems}
-            <NiceToHaveSummaryListItem {...props} />
-          </>
-        ) : (
-          <></>
-        )}
+        {requiredListItems}
+        {niceToHaveListItems}
       </ListGroup>
     </div>
   );
 }
 
-function constructResultListItems(
-  propertyArray: ScoreFilterProperty[],
-  hasProperties: boolean
-) {
+function categorizePropertiesByScores(indexedPropertyArray: {
+  [x: string]: BasicField;
+}): {
+  required: { [x: string]: ScoreField };
+  niceToHave: { [x: string]: ScoreField };
+} {
+  let requiredProperties: { [x: string]: ScoreField } = {};
+  let niceToHaveProperties: { [x: string]: ScoreField } = {};
+
+  const indexedPropertyArrayCopy = deepcopy<{
+    [x: string]: BasicField;
+  }>(indexedPropertyArray);
+  const propertyKeys = Object.keys(indexedPropertyArrayCopy);
+
+  for (const propertyKey of propertyKeys) {
+    const currentProperty = indexedPropertyArrayCopy[propertyKey];
+    if (isScoreFilterProperty(currentProperty)) {
+      currentProperty.value === ScoreValue.REQUIRED
+        ? (requiredProperties[propertyKey] = currentProperty)
+        : (niceToHaveProperties[propertyKey] = currentProperty);
+    } else {
+      const hasSubKeys = CmsService.getKeysOfSubFields(currentProperty);
+      for (const subKey of hasSubKeys) {
+        const currentSubProperty = currentProperty[subKey];
+        currentSubProperty.name =
+          currentProperty.name + ": " + currentSubProperty.name;
+        currentSubProperty.value === ScoreValue.REQUIRED
+          ? (requiredProperties[subKey] = currentSubProperty)
+          : (niceToHaveProperties[subKey] = currentSubProperty);
+      }
+    }
+  }
+  return {
+    required: requiredProperties,
+    niceToHave: niceToHaveProperties,
+  };
+}
+
+function isScoreFilterProperty(
+  x: BasicField
+): x is ScoreField {
+  if (!x) return false;
+  return x.value !== undefined;
+}
+
+function constructResultListItems(fieldSet: {
+  has: { [x: string]: ScoreField };
+  hasNot: { [x: string]: ScoreField };
+}) {
   let listItems: JSX.Element[] = [];
-  for (let i = 0; i < propertyArray.length; i++) {
-    const currentProperty = propertyArray[i];
+
+  const hasKeys = Object.keys(fieldSet.has);
+  for (const hasKey of hasKeys) {
+    const currentProperty = fieldSet.has[hasKey];
     listItems.push(
-      <ResultListItem hasProperty={hasProperties} property={currentProperty} />
+      <ResultListItem cmsHasProperty property={currentProperty} />
     );
   }
+
+  const hasNotKeys = Object.keys(fieldSet.hasNot);
+  for (const hasNotKey of hasNotKeys) {
+    const currentProperty = fieldSet.hasNot[hasNotKey];
+    listItems.push(<ResultListItem property={currentProperty} />);
+  }
+
   return listItems;
 }
 
 function ResultListItem(props: {
-  property: ScoreFilterProperty;
-  hasProperty?: boolean;
+  property: ScoreField;
+  cmsHasProperty?: boolean;
 }) {
-  const icon = props.hasProperty ? <FiCheckCircle /> : <FiSlash />;
+  const icon = props.cmsHasProperty ? <FiCheckCircle /> : <FiSlash />;
   return (
     <ListGroup.Item
-      action
       className="resultListItem"
-      variant={props.hasProperty ? undefined : "light"}
+      variant={props.cmsHasProperty ? undefined : "light"}
     >
       <span>{props.property.name}</span>
       {icon}
@@ -225,7 +234,6 @@ function ResultListItem(props: {
 function RequiredSummaryListItem(props: { filterResult: FilterResult }) {
   return (
     <ListGroup.Item
-      action
       variant={props.filterResult.satisfactory ? "success" : "warning"}
     >
       <h2 style={{ fontSize: "1.3em" }}>
@@ -240,7 +248,7 @@ function RequiredSummaryListItem(props: { filterResult: FilterResult }) {
 
 function NiceToHaveSummaryListItem(props: { filterResult: FilterResult }) {
   return (
-    <ListGroup.Item action variant="info">
+    <ListGroup.Item variant="info">
       <div className="d-inline-flex w-100 align-items-center">
         {props.filterResult.hasNiceToHaveShare > 0 ? (
           <FiAward style={{ marginRight: "0.5em", fontSize: "1.5em" }} />

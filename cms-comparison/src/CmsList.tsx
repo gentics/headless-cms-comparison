@@ -5,16 +5,16 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import {
   AppState,
-  FieldProperty,
-  ScoreFieldProperty,
+  BasicField,
+  ScoreField,
   Cms,
   CmsProperty,
   BooleanCmsProperty,
 } from "./Cms";
-import 'primereact/resources/themes/nova-light/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
-
+import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import Alert from "react-bootstrap/Alert";
 
 export default function CmsList() {
   const [appState, setAppState] = React.useState<any>();
@@ -34,35 +34,50 @@ export default function CmsList() {
     console.log(cms);
     return (
       <div>
-        <DataTable value={cms} autoLayout scrollable scrollHeight="650px" className="w-100" frozenWidth="200px">{columns}</DataTable>
+        <DataTable
+          value={cms}
+          autoLayout
+          scrollable
+          scrollHeight="650px"
+          className="w-100"
+          frozenWidth="200px"
+        >
+          {columns}
+        </DataTable>
       </div>
     );
   } else {
-    return <ProgressBar animated now={100} />;
+    return <Alert variant="info">Loading CMS-Data...</Alert>;
   }
 }
 
 function constructColumnDataStructure(appState: AppState) {
-  const properties: { [x: string]: FieldProperty } = appState.fields.properties;
-  const propertyKeys = Object.keys(properties);
+  const basicFields: { [x: string]: BasicField } =
+    appState.fields.properties;
+  const basicFieldKeys = Object.keys(basicFields);
   const columns: JSX.Element[] = [];
+
+  const specialFields: { [x: string]: any } = appState.fields;
+  const specialFieldKeys = getSpecialKeys(specialFields);
 
   columns.push(convertToColumn("name", "CMS-Name", true));
 
-  for (const currentPropertyKey of propertyKeys) {
-    const currentProperty = properties[currentPropertyKey];
-    if (isScoreFieldProperty(currentProperty)) {
-      columns.push(
-        convertToColumn(currentPropertyKey, currentProperty.name, false)
-      );
+  specialFieldKeys.forEach((key) => {
+    columns.push(convertToColumn(key, specialFields[key].name, false));
+  });
+
+  for (const currentFieldKey of basicFieldKeys) {
+    const currentField = basicFields[currentFieldKey];
+    if (isScoreFieldProperty(currentField)) {
+      columns.push(convertToColumn(currentFieldKey, currentField.name, false));
     } else {
-      const subPropertyKeys = getSubPropertyKeys(currentProperty);
-      for (const currentSubPropertyKey of subPropertyKeys) {
-        const currentSubProperty = currentProperty[currentSubPropertyKey];
+      const subFieldKeys = getSubPropertyKeys(currentField);
+      for (const currentSubPropertyKey of subFieldKeys) {
+        const currentSubField = currentField[currentSubPropertyKey];
         columns.push(
           convertToColumn(
             currentSubPropertyKey,
-            currentProperty.name + ": " + currentSubProperty.name,
+            currentField.name + ": " + currentSubField.name,
             false
           )
         );
@@ -73,7 +88,7 @@ function constructColumnDataStructure(appState: AppState) {
   return columns;
 }
 
-function isScoreFieldProperty(x: FieldProperty): x is ScoreFieldProperty {
+function isScoreFieldProperty(x: BasicField): x is ScoreField {
   return x && x.value !== undefined;
 }
 
@@ -87,8 +102,8 @@ function convertToColumn(
       field={propertyKey}
       header={propertyDisplayName}
       frozen={frozen}
-      style={{width: "150px", height: "150px"}}
-      className={frozen ? "cmsTableName" : undefined}
+      style={{ width: "220px", height: "150px" }}
+      className={frozen ? "cmsTableNameColumn" : undefined}
       sortable
     />
   );
@@ -96,20 +111,41 @@ function convertToColumn(
 
 function convertCmsToTableDataStructure(cms: Cms) {
   const properties = cms.properties;
-  const propertyKeys = Object.keys(properties);
+  
   const tableCms: { [x: string]: any } = {};
+
+  const specialProperties: any = cms;
+  const specialPropertyKeys = getSpecialKeys(cms);
+  specialPropertyKeys.forEach((key) => {
+    const specialProperty = specialProperties[key];
+    console.log(specialProperty);
+    if (specialProperty) {
+      if (specialProperty.value !== undefined) {
+        tableCms[key] = specialProperty.value ? specialProperty.value : "Not specified";
+      } else {
+        tableCms[key] = specialProperty;
+      }
+    } else {
+      tableCms[key] = "Not specified";
+    }
+    
+    if (typeof tableCms[key] === "object") {
+      tableCms[key] = tableCms[key].toString();
+    }
+  });
 
   tableCms.name = cms.name;
 
-  for (const currentPropertyKey of propertyKeys) {
-    const currentProperty = properties[currentPropertyKey];
+  const propertyKeys = Object.keys(properties);
+  for (const currentKey of propertyKeys) {
+    const currentProperty = properties[currentKey];
     if (isBooleanCmsProperty(currentProperty)) {
-      tableCms[currentPropertyKey] = currentProperty.value ? "Yes" : "No";
+      tableCms[currentKey] = currentProperty.value ? "Yes" : "No";
     } else {
       const subPropertyKeys = getSubPropertyKeys(currentProperty);
-      for (const currentSubPropertyKey of subPropertyKeys) {
-        const currentSubProperty = currentProperty[currentSubPropertyKey];
-        tableCms[currentSubPropertyKey] = currentSubProperty.value
+      for (const currentSubKey of subPropertyKeys) {
+        const currentSubProperty = currentProperty[currentSubKey];
+        tableCms[currentSubKey] = currentSubProperty.value
           ? "Yes"
           : "No";
       }
@@ -126,5 +162,11 @@ function isBooleanCmsProperty(x: CmsProperty): x is BooleanCmsProperty {
 function getSubPropertyKeys(property: any): string[] {
   return Object.keys(property).filter(
     (key) => key !== "name" && key !== "description"
+  );
+}
+
+function getSpecialKeys(indexedArray: any): string[] {
+  return Object.keys(indexedArray).filter(
+    (key) => key !== "properties" && key !== "name" && key !== "specialFeatures"
   );
 }

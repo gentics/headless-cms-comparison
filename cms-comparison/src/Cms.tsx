@@ -30,15 +30,15 @@ export interface Cms {
 }
 
 export interface AppState {
-  fields: {
-    [x: string]: any
-  },
-  cms: { [x: string]: Cms },
-  filterProperties: FilterPropertySet,
-  unchangedFilterProperties: FilterPropertySet
-  showModifiedOnly: boolean,
-  propertyFilterString: string,
+  cmsData: CmsData,
+  filterFields: FilterFieldSet,
+  untouchedFilterFields: FilterFieldSet,
   filterResults: FilterResult[],
+}
+
+export interface PanelSettings {
+  showModifiedOnly: boolean,
+  fieldFilterString: string
 }
 
 // Tristate boolean for "scoring"
@@ -50,10 +50,10 @@ export enum ScoreValue {
 
 export interface FilterResult {
   cmsKey: string;
-  has: FilterPropertySet;
+  has: FilterFieldSet;
+  hasNot: FilterFieldSet;
   hasRequiredShare: number,
   hasNiceToHaveShare: number,
-  hasNot: FilterPropertySet;
   satisfactory: boolean;
 }
 
@@ -61,27 +61,38 @@ export interface FilterResult {
 // PROPERTY //
 //////////////
 
-export interface Property {
+export interface Field {
   name: string
 }
 
-export type FieldProperty = ScoreFieldProperty | CategoryFieldProperty;
+export type BasicField = ScoreField | CategoryField;
 
-export interface ScoreFieldProperty extends Property {
+export interface ScoreField extends Field {
   description: string,
-  value: null
+  value: null | ScoreValue
 }
 
-export interface CategoryFieldProperty extends Property {
+export interface CategoryField extends Field {
   description: string;
-  [index: string]: any; // Contains only ScoreFieldProperties
+  [index: string]: any; // Contains only ScoreFields
+}
+
+export interface SpecialField extends Field {
+  description: string
+  values: any[];
+  possibleValues: any[];
+}
+
+export interface FilterFieldSet {
+  basic: { [x: string]: BasicField };
+  special: { [x: string]: SpecialField };
 }
 
 ///////////////////////
 // FILTER PROPERTIES //
 ///////////////////////
 
-export type FilterProperty = BasicFilterProperty | SpecialFilterProperty;
+/*export type FilterProperty = BasicFilterProperty | SpecialFilterProperty;
 
 export type BasicFilterProperty = ScoreFilterProperty | CategoryFilterProperty;
 
@@ -104,20 +115,26 @@ export interface SpecialFilterProperty extends Property {
 export interface FilterPropertySet {
   basic: { [x: string]: BasicFilterProperty }; // Can contain Category or Score
   special: { [x: string]: SpecialFilterProperty };
-}
+}*/
 
 ////////////////////
 // CMS PROPERTIES //
 ////////////////////
 
+export interface CmsData {
+  fields: { [x: string]: any }
+  cms: { [x: string]: Cms }
+}
+
 export type CmsProperty = BooleanCmsProperty | CategoryCmsProperty;
 
-export interface BooleanCmsProperty extends Property {
+export interface BooleanCmsProperty extends Field {
   description?: string;
   value: boolean | string;
 }
 
-export interface CategoryCmsProperty extends Property {
+export interface CategoryCmsProperty extends Field {
   description?: string;
   [index: string]: any; // Contains only BasicCmsProperties
 }
+

@@ -80,10 +80,11 @@ span.specialProperty {
 span.lastUpdated {
   display: inline-flex;
   align-items: center;
+  margin-top: 1em;
   font-size: smaller;
 }
 
-.cmsTableName {
+.cmsTableNameColumn{
   font-size: "1.1em";
   font-style: oblique;
   font-weight: bold;

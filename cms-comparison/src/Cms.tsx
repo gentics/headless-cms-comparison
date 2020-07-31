@@ -1,3 +1,7 @@
+///////////
+// ENUMS //
+///////////
+
 export enum License {
   GPLv3 = "GPLv3",
   Proprietary = "Proprietary",
@@ -15,6 +19,33 @@ export enum Category {
   Enterprise = "Enterprise"
 }
 
+// Tristate boolean for "scoring"
+export enum ScoreValue {
+  DONT_CARE = "Don't Care",
+  NICE_TO_HAVE = "Nice-to-Have",
+  REQUIRED = "Required"
+}
+
+/////////////////////
+// CORE INTERFACES //
+/////////////////////
+
+export interface AppState {
+  cmsData: CmsData,
+  filterFields: { actual: FilterFieldSet, untouched: FilterFieldSet },
+  filterResults: FilterResult[],
+}
+
+export interface CmsData {
+  fields: { [x: string]: any }
+  cms: { [x: string]: Cms }
+}
+
+export interface PanelSettings {
+  showModifiedOnly: boolean,
+  fieldFilterString: string
+}
+
 export interface Cms {
   lastUpdated: Date;
   name: string;
@@ -29,25 +60,6 @@ export interface Cms {
   };
 }
 
-export interface AppState {
-  cmsData: CmsData,
-  filterFields: FilterFieldSet,
-  untouchedFilterFields: FilterFieldSet,
-  filterResults: FilterResult[],
-}
-
-export interface PanelSettings {
-  showModifiedOnly: boolean,
-  fieldFilterString: string
-}
-
-// Tristate boolean for "scoring"
-export enum ScoreValue {
-  DONT_CARE = "Don't Care",
-  NICE_TO_HAVE = "Nice-to-Have",
-  REQUIRED = "Required"
-}
-
 export interface FilterResult {
   cmsKey: string;
   has: FilterFieldSet;
@@ -57,9 +69,9 @@ export interface FilterResult {
   satisfactory: boolean;
 }
 
-//////////////
-// PROPERTY //
-//////////////
+////////////
+// FIELDS //
+////////////
 
 export interface Field {
   name: string
@@ -88,43 +100,9 @@ export interface FilterFieldSet {
   special: { [x: string]: SpecialField };
 }
 
-///////////////////////
-// FILTER PROPERTIES //
-///////////////////////
-
-/*export type FilterProperty = BasicFilterProperty | SpecialFilterProperty;
-
-export type BasicFilterProperty = ScoreFilterProperty | CategoryFilterProperty;
-
-export interface ScoreFilterProperty extends Property {
-  description: string
-  value: ScoreValue
-}
-
-export interface CategoryFilterProperty extends Property {
-  description: string
-  [index: string]: any; // Contains only BasicFilterProperties
-}
-
-export interface SpecialFilterProperty extends Property {
-  description: string
-  value: any[];
-  possibleValues: any[];
-}
-
-export interface FilterPropertySet {
-  basic: { [x: string]: BasicFilterProperty }; // Can contain Category or Score
-  special: { [x: string]: SpecialFilterProperty };
-}*/
-
 ////////////////////
 // CMS PROPERTIES //
 ////////////////////
-
-export interface CmsData {
-  fields: { [x: string]: any }
-  cms: { [x: string]: Cms }
-}
 
 export type CmsProperty = BooleanCmsProperty | CategoryCmsProperty;
 
@@ -135,6 +113,6 @@ export interface BooleanCmsProperty extends Field {
 
 export interface CategoryCmsProperty extends Field {
   description?: string;
-  [index: string]: any; // Contains only BasicCmsProperties
+  [index: string]: any; // Contains only BooleanCmsProperties
 }
 

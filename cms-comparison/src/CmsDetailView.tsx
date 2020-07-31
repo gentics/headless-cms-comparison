@@ -5,6 +5,7 @@ import {
   ScoreValue,
   BasicField,
   ScoreField,
+  CmsData,
 } from "./Cms";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -21,27 +22,34 @@ import { GrLicense } from "react-icons/gr";
 import { MdUpdate } from "react-icons/md";
 import ListGroup from "react-bootstrap/ListGroup";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import { Link } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
+import { Link, useLocation } from "react-router-dom";
 
-export default function CmsDetailView(props: any) {
-  if (props.location.state) {
-    console.log(props.location.state);
+export default function CmsDetailView(props: {
+  filterResults: FilterResult[];
+  cmsData: CmsData;
+}) {
+  const cmsKey = useQuery().get("cmsKey");
+  let filterResult: FilterResult;
+  let cms: Cms;
+
+  if (cmsKey && props.cmsData.cms[cmsKey]) {
+    cms = props.cmsData.cms[cmsKey];
+    const filterResultIndex = props.filterResults.findIndex(
+      (filterResult) => filterResult.cmsKey === cmsKey
+    );
+    filterResult = props.filterResults[filterResultIndex];
   } else {
     return (
-      <Alert variant="info">
-        Nothing to show! Please go back to <Link to="/card">the Card-List</Link>{" "}
-        and select a CMS!
+      <Alert variant="warning">
+        Invalid CMS key was given! Go back to the{" "}
+        <Link to="/card"> Card View</Link> and select a CMS!
       </Alert>
     );
   }
-
-  const cms: Cms =
-    props.location.state.appState.cms[props.location.state.cmsKey];
-  const filterResult: FilterResult = props.location.state.filterResult;
 
   return (
     <>
@@ -49,9 +57,7 @@ export default function CmsDetailView(props: any) {
         <Row>
           <Col>
             <div className="d-inline-flex justify-content-between align-items-center w-100">
-              <Link
-                to={{ pathname: "/card", state: props.location.state.appState }}
-              >
+              <Link to="/card">
                 <Button variant="dark">Back to results</Button>
               </Link>
               <h1>
@@ -92,7 +98,12 @@ export default function CmsDetailView(props: any) {
   );
 }
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 function PropertyList(props: { filterResult: FilterResult }) {
+  console.table(props.filterResult);
   const hasProperties = categorizePropertiesByScores(
     props.filterResult.has.basic
   );
@@ -185,9 +196,7 @@ function categorizePropertiesByScores(indexedPropertyArray: {
   };
 }
 
-function isScoreFilterProperty(
-  x: BasicField
-): x is ScoreField {
+function isScoreFilterProperty(x: BasicField): x is ScoreField {
   if (!x) return false;
   return x.value !== undefined;
 }

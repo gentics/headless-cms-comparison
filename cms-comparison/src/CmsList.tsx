@@ -1,63 +1,46 @@
 import * as React from "react";
-import ProgressBar from "react-bootstrap/ProgressBar";
-import CmsService from "./CmsService";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import {
-  AppState,
   BasicField,
   ScoreField,
   Cms,
   CmsProperty,
   BooleanCmsProperty,
+  CmsData,
 } from "./Cms";
 import "primereact/resources/themes/nova-light/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import Alert from "react-bootstrap/Alert";
 
-export default function CmsList() {
-  const [appState, setAppState] = React.useState<any>();
-  // Is called once at startup, when fetch is finished state is set to the fetch-results
-  React.useEffect(() => {
-    CmsService.getCmsData().then((appState: AppState) => {
-      setAppState(appState);
-    });
-  }, []);
-
-  // Show progressBar as long as fetch is not completed, otherwise table
-  if (appState) {
-    const cms: any = Object.keys(appState.cms).map((cmsKey: string) =>
-      convertCmsToTableDataStructure(appState.cms[cmsKey])
-    );
-    const columns = constructColumnDataStructure(appState);
-    console.log(cms);
-    return (
-      <div>
-        <DataTable
-          value={cms}
-          autoLayout
-          scrollable
-          scrollHeight="650px"
-          className="w-100"
-          frozenWidth="200px"
-        >
-          {columns}
-        </DataTable>
-      </div>
-    );
-  } else {
-    return <Alert variant="info">Loading CMS-Data...</Alert>;
-  }
+export default function CmsList(props: { cmsData: CmsData }) {
+  const cms: any = Object.keys(props.cmsData.cms).map((cmsKey: string) =>
+    convertCmsToTableDataStructure(props.cmsData.cms[cmsKey])
+  );
+  const columns = constructColumnDataStructure(props.cmsData);
+  console.log(cms);
+  return (
+    <div>
+      <DataTable
+        value={cms}
+        autoLayout
+        scrollable
+        scrollHeight="650px"
+        className="w-100"
+        frozenWidth="200px"
+      >
+        {columns}
+      </DataTable>
+    </div>
+  );
 }
 
-function constructColumnDataStructure(appState: AppState) {
-  const basicFields: { [x: string]: BasicField } =
-    appState.fields.properties;
+function constructColumnDataStructure(cmsData: CmsData) {
+  const basicFields: { [x: string]: BasicField } = cmsData.fields.properties;
   const basicFieldKeys = Object.keys(basicFields);
   const columns: JSX.Element[] = [];
 
-  const specialFields: { [x: string]: any } = appState.fields;
+  const specialFields: { [x: string]: any } = cmsData.fields;
   const specialFieldKeys = getSpecialKeys(specialFields);
 
   columns.push(convertToColumn("name", "CMS-Name", true));
@@ -111,7 +94,7 @@ function convertToColumn(
 
 function convertCmsToTableDataStructure(cms: Cms) {
   const properties = cms.properties;
-  
+
   const tableCms: { [x: string]: any } = {};
 
   const specialProperties: any = cms;
@@ -121,14 +104,16 @@ function convertCmsToTableDataStructure(cms: Cms) {
     console.log(specialProperty);
     if (specialProperty) {
       if (specialProperty.value !== undefined) {
-        tableCms[key] = specialProperty.value ? specialProperty.value : "Not specified";
+        tableCms[key] = specialProperty.value
+          ? specialProperty.value
+          : "Not specified";
       } else {
         tableCms[key] = specialProperty;
       }
     } else {
       tableCms[key] = "Not specified";
     }
-    
+
     if (typeof tableCms[key] === "object") {
       tableCms[key] = tableCms[key].toString();
     }
@@ -145,9 +130,7 @@ function convertCmsToTableDataStructure(cms: Cms) {
       const subPropertyKeys = getSubPropertyKeys(currentProperty);
       for (const currentSubKey of subPropertyKeys) {
         const currentSubProperty = currentProperty[currentSubKey];
-        tableCms[currentSubKey] = currentSubProperty.value
-          ? "Yes"
-          : "No";
+        tableCms[currentSubKey] = currentSubProperty.value ? "Yes" : "No";
       }
     }
   }

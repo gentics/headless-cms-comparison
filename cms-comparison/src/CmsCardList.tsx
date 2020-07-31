@@ -1,13 +1,11 @@
 import * as React from "react";
 import Card from "react-bootstrap/Card";
 import { GrLicense } from "react-icons/gr";
-
 import { FiSlash, FiCheckCircle, FiAward, FiBox } from "react-icons/fi";
-import { FilterResult, Cms, PanelSettings } from "./Cms";
+import { FilterResult, Cms } from "./Cms";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-
 import { Link } from "react-router-dom";
 
 export default function CardList(props: {
@@ -16,7 +14,6 @@ export default function CardList(props: {
 }) {
   return (
     <div>
-      {/*<FilterPanel appState={appState} updateCardList={updateFilterFields} />*/}
       <div className="d-flex flex-wrap justify-content-center">
         <Cards {...props} />
       </div>
@@ -49,7 +46,7 @@ function satisfactoryResultsExist(filterResults: FilterResult[]) {
 function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
   return (
     <div className={"my-2 mx-2"} key={props.filterResult.cmsKey}>
-      <Link to="/detail" className="cmsCardLink">
+      <Link to={`/detail?cmsKey=${props.filterResult.cmsKey}`} className="cmsCardLink">
         <Card
           style={{ width: "20rem" }}
           className={"cmsCard"}

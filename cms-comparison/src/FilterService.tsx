@@ -2,8 +2,6 @@ import {
   Cms,
   FilterResult,
   ScoreValue,
-  AppState,
-  CmsProperty,
   BasicField,
   ScoreField,
   SpecialField,
@@ -12,7 +10,6 @@ import {
   FilterFieldSet,
   BooleanCmsProperty,
   CategoryField,
-  CategoryCmsProperty,
   Field,
   PanelSettings,
 } from "./Cms";
@@ -86,8 +83,8 @@ const FilterService = {
             }
           }
         } else {
-          const hasCategoryField = Object.assign({}, currentField);
-          const hasNotCategoryField = Object.assign({}, currentField);
+          const hasCategoryField = { name: currentField.name, description: currentField.description } as CategoryField;
+          const hasNotCategoryField = Object.assign({}, hasCategoryField);
 
           const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
           for (const subFieldKey of subFieldKeys) {
@@ -97,7 +94,6 @@ const FilterService = {
             ] as BooleanCmsProperty;
             if (isOfInterest(currentSubField)) {
               const fieldIsRequired = isRequired(currentSubField);
-
               fieldIsRequired
                 ? requiredPropertyCount++
                 : niceToHavePropertyCount++;
@@ -118,7 +114,7 @@ const FilterService = {
             }
 
             if (!categoryFieldIsEmpty(hasNotCategoryField)) {
-              hasNot.basic[fieldKey] = hasCategoryField;
+              hasNot.basic[fieldKey] = hasNotCategoryField;
             }
           }
         }
@@ -132,7 +128,7 @@ const FilterService = {
           requiredPropertyCount > 0
             ? hasRequiredPropertyCount / requiredPropertyCount
             : -1,
-        hasNiceToHaveShare: niceToHavePropertyCount
+        hasNiceToHaveShare: niceToHavePropertyCount > 0
           ? hasNiceToHavePropertyCount / niceToHavePropertyCount
           : -1,
         satisfactory: satisfactory,
@@ -159,7 +155,7 @@ const FilterService = {
     });
   },
 
-  getFilteredProperties: (
+  getFilteredFilterFields: (
     panelSettings: PanelSettings,
     filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet }
   ): FilterFieldSet => {
@@ -189,6 +185,7 @@ const FilterService = {
 
       for (const fieldKey of basicFieldKeys) {
         const currentField = workFields.basic[fieldKey];
+        console.log(workFields);
         if (CmsService.isScoreField(currentField)) {
           const untouchedField = untouchedFields.basic[fieldKey] as ScoreField;
           if (currentField.value === untouchedField.value) {
@@ -196,7 +193,6 @@ const FilterService = {
           }
         } else {
           const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
-
           for (const subFieldKey of subFieldKeys) {
             const currentSubField = (workFields.basic[
               fieldKey
@@ -206,6 +202,7 @@ const FilterService = {
               fieldKey
             ] as CategoryField)[subFieldKey];
 
+            // ERROR
             if (currentSubField.value === untouchedSubField.value) {
               delete (workFields.basic[fieldKey] as CategoryField)[subFieldKey];
             }
@@ -341,7 +338,7 @@ function sortFilterResults(filterResults: FilterResult[]): FilterResult[] {
 
 function isOfInterest(scoreField: ScoreField): boolean {
   return (
-    scoreField.value === ScoreValue.DONT_CARE ||
+    scoreField.value === ScoreValue.REQUIRED ||
     scoreField.value === ScoreValue.NICE_TO_HAVE
   );
 }

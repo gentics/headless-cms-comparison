@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import { AiFillInfoCircle } from "react-icons/ai"
+import { AiFillInfoCircle } from "react-icons/ai";
 
 import {
   ScoreValue,
@@ -18,10 +18,10 @@ import {
 } from "./Cms";
 
 import CmsService from "./CmsService";
+import FilterService from "./FilterService";
 
 export default function FilterPanel(props: {
-  filterFields: FilterFieldSet;
-  resetFilterFields: () => void;
+  filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
   updateFilterFields: (updatedFilterFields: FilterFieldSet) => void;
 }) {
   const [panelSettings, setPanelSettings] = React.useState<PanelSettings>({
@@ -31,7 +31,7 @@ export default function FilterPanel(props: {
 
   const resetPanel = () => {
     setPanelSettings({ showModifiedOnly: false, fieldFilterString: "" });
-    props.resetFilterFields();
+    props.updateFilterFields(props.filterFields.untouched);
   };
 
   const handlePanelSettingsChange = (event: any) => {
@@ -49,7 +49,8 @@ export default function FilterPanel(props: {
   };
 
   const handleSpecialFieldChange = (event: any) => {
-    const updatedFilterFields = Object.assign({}, props.filterFields);
+    console.log(event.target);
+    const updatedFilterFields = Object.assign({}, props.filterFields.actual);
     const fieldKey = event.target.name;
     const valueArray = updatedFilterFields.special[fieldKey].values;
     const value = event.target.value;
@@ -64,8 +65,10 @@ export default function FilterPanel(props: {
         valueArray.splice(valueIndex, 1);
       }
     }
-    // TODO: Check if necessary, is actually only a reference, isn't it?
+
     updatedFilterFields.special[fieldKey].values = valueArray;
+
+    props.updateFilterFields(updatedFilterFields);
   };
 
   const handleBasicFieldChange = (
@@ -74,21 +77,27 @@ export default function FilterPanel(props: {
     categoryKey?: string
   ) => {
     // Clone object, otherwise react won't re-render
-    const updatedFilterFields = Object.assign({}, props.filterFields);
+    const updatedFilterFields = Object.assign({}, props.filterFields.actual);
 
     if (categoryKey) {
-      (updatedFilterFields.basic[categoryKey] as CategoryField)[fieldKey] =
-        event.target.value;
+      (updatedFilterFields.basic[categoryKey] as CategoryField)[
+        fieldKey
+      ].value = event.target.value;
     } else {
-      updatedFilterFields.basic[fieldKey] = event.target.value;
+      updatedFilterFields.basic[fieldKey].value = event.target.value;
     }
 
     props.updateFilterFields(updatedFilterFields);
   };
 
+  const filteredFilterFields = FilterService.getFilteredFilterFields(
+    panelSettings,
+    props.filterFields
+  );
+
   return (
     <Panel
-      filterFields={props.filterFields}
+      filterFields={filteredFilterFields}
       panelSettings={panelSettings}
       panelSettingsChangeHandler={handlePanelSettingsChange}
       specialFieldChangeHandler={handleSpecialFieldChange}
@@ -192,11 +201,6 @@ function PropertyTable(props: {
     specialFieldChangeHandler,
     basicFieldChangeHandler,
   } = props;
-  {
-    /*const filteredPropertySet: FilterPropertySet = FilterService.getFilteredProperties(
-    props.appState
-  );*/
-  }
 
   const specialFieldKeys = Object.keys(filterFields.special);
   for (let fieldKey of specialFieldKeys) {

@@ -32,6 +32,8 @@ export default function CmsDetailView(props: {
   filterResults: FilterResult[];
   cmsData: CmsData;
 }) {
+
+  
   const cmsKey = useQuery().get("cmsKey");
   let filterResult: FilterResult;
   let cms: Cms;
@@ -103,7 +105,6 @@ function useQuery() {
 }
 
 function PropertyList(props: { filterResult: FilterResult }) {
-  console.table(props.filterResult);
   const hasProperties = categorizePropertiesByScores(
     props.filterResult.has.basic
   );
@@ -137,7 +138,7 @@ function PropertyList(props: { filterResult: FilterResult }) {
   );
 
   if (requiredListItems.length > 0) {
-    requiredListItems.push(<RequiredSummaryListItem {...props} />);
+    requiredListItems.push(<RequiredSummaryListItem key="requiredSummary" {...props} />);
   }
 
   const niceToHaveListItems = constructResultListItems(
@@ -145,7 +146,7 @@ function PropertyList(props: { filterResult: FilterResult }) {
   );
 
   if (niceToHaveListItems.length > 0) {
-    niceToHaveListItems.push(<NiceToHaveSummaryListItem {...props} />);
+    niceToHaveListItems.push(<NiceToHaveSummaryListItem key="niceToHaveSummary" {...props} />);
   }
 
   return (
@@ -180,6 +181,7 @@ function categorizePropertiesByScores(indexedPropertyArray: {
         : (niceToHaveProperties[propertyKey] = currentProperty);
     } else {
       const hasSubKeys = CmsService.getKeysOfSubFields(currentProperty);
+      
       for (const subKey of hasSubKeys) {
         const currentSubProperty = currentProperty[subKey];
         currentSubProperty.name =
@@ -211,14 +213,14 @@ function constructResultListItems(fieldSet: {
   for (const hasKey of hasKeys) {
     const currentProperty = fieldSet.has[hasKey];
     listItems.push(
-      <ResultListItem cmsHasProperty property={currentProperty} />
+      <ResultListItem key={hasKey} cmsHasProperty property={currentProperty} />
     );
   }
 
   const hasNotKeys = Object.keys(fieldSet.hasNot);
   for (const hasNotKey of hasNotKeys) {
     const currentProperty = fieldSet.hasNot[hasNotKey];
-    listItems.push(<ResultListItem property={currentProperty} />);
+    listItems.push(<ResultListItem key={hasNotKey}  property={currentProperty} />);
   }
 
   return listItems;

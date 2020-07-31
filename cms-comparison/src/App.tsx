@@ -15,6 +15,9 @@ import FilterService from "./FilterService";
 import deepcopy from "ts-deepcopy";
 import Alert from "react-bootstrap/Alert";
 import FilterPanel from "./FilterPanel";
+import Card from "react-bootstrap/Card";
+import { BsCardHeading } from "react-icons/bs";
+import { BsTable } from "react-icons/bs";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -34,10 +37,6 @@ function App() {
       );
       updatedAppState.filterFields.actual = updatedFilterFields;
       setAppState(updatedAppState);
-    } else {
-      console.warn(
-        "AppState could not be updated, because app has not been fully initialized..."
-      );
     }
   };
 
@@ -45,33 +44,61 @@ function App() {
     return (
       <Router>
         <div className="App">
-          {/*<header className="App-header">
+          <header className="App-header" style={{ minHeight: "20rem" }}>
             <h1>Welcome to the headless CMS Comparison Website!</h1>
-          </header>*/}
-          <Container fluid className="mt-3">
-            <Row>
-              <Col>
-                <Nav variant="pills" defaultActiveKey="/home">
-                  <Nav.Item>
-                    <Nav.Link>
-                      <Link to="/list">List View</Link>
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link>
-                      <Link to="/card">Card View</Link>
-                    </Nav.Link>
-                  </Nav.Item>
-                </Nav>
-              </Col>
-              <Col></Col>
-            </Row>
-          </Container>
+          </header>
+
           <Container fluid className="my-3">
             <Row>
               <Col>
                 <Switch>
+                  <Route exact path="/">
+                    <div className="d-flex justify-content-around mx-auto my-2 w-50">
+                      <Link to="/card" className="cmsCardLink">
+                        <Card className={"optionCard"} border="info">
+                          <Card.Title>
+                            <BsCardHeading /> Card-View
+                          </Card.Title>
+                          <Card.Text>
+                            Get an overview of relevant CMS by filtering for
+                            must-have or nice-to-have properties.
+                          </Card.Text>
+                        </Card>
+                      </Link>
+
+                      <Link to="/list" className="cmsCardLink">
+                        <Card className={"optionCard"} border="info">
+                          <Card.Title>
+                            <BsTable /> List-View
+                          </Card.Title>
+                          <Card.Text>
+                            Get an overall overview of all CMS and their
+                            properties by scrolling through the table.
+                          </Card.Text>
+                        </Card>
+                      </Link>
+                    </div>
+                  </Route>
                   <Route exact path="/card">
+                    <Container fluid className="mt-3">
+                      <Row>
+                        <Col>
+                          <Nav variant="pills" defaultActiveKey="/card">
+                            <Nav.Item>
+                              <Nav.Link as="span">
+                                <Link to="/list">List View</Link>
+                              </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link as="span">
+                                <Link to="/card">Card View</Link>
+                              </Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                        </Col>
+                        <Col></Col>
+                      </Row>
+                    </Container>
                     <FilterPanel
                       filterFields={appState.filterFields}
                       updateFilterFields={updateFilterFields}
@@ -82,6 +109,25 @@ function App() {
                     />
                   </Route>
                   <Route exact path="/list">
+                    <Container fluid className="mt-3">
+                      <Row>
+                        <Col>
+                          <Nav variant="pills" defaultActiveKey="/card">
+                            <Nav.Item>
+                              <Nav.Link as="span">
+                                <Link to="/list">List View</Link>
+                              </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link as="span">
+                                <Link to="/card">Card View</Link>
+                              </Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                        </Col>
+                        <Col></Col>
+                      </Row>
+                    </Container>
                     <CmsList cmsData={appState.cmsData} />
                   </Route>
                   <Route exact path="/detail">

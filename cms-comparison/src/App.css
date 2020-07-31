@@ -38,13 +38,13 @@
 }
 
 div.cmsCard {
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-   -khtml-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 div.cmsCard:hover {
@@ -71,10 +71,10 @@ span.specialProperty {
   justify-content: space-between;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-   -khtml-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 span.lastUpdated {
@@ -84,9 +84,26 @@ span.lastUpdated {
   font-size: smaller;
 }
 
-.cmsTableNameColumn{
+.cmsTableNameColumn {
   font-size: "1.1em";
   font-style: oblique;
   font-weight: bold;
 }
 
+.optionCard {
+  transition: all 0.2s ease-in-out;
+  width: 20rem;
+  padding: 20px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.optionCard:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+  background-color: #7bd6e4;
+}

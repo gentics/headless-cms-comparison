@@ -17,7 +17,7 @@ const CMS_REPO_BASE_URL =
 // TODO: Add 'cms-list.json' to cms-comparison repo and fetch from there
 const CMS_LIST_PATH = "./cms-list.json";
 
-let cmsData: Promise<any>; // TODO: Difficulties while typing Promises
+let cmsData: Promise<any>;
 
 const CmsService = {
   getCmsData: function (): Promise<any> {
@@ -58,7 +58,6 @@ const CmsService = {
  * cms: Array containing cms-objects
  */
 function fetchCmsData(cmsKeyList: string[]): Promise<CmsData> {
-  let start = Date.now();
   let promises: Promise<any>[] = [];
   cmsKeyList.forEach((cms: string) => {
     promises.push(
@@ -76,8 +75,6 @@ function fetchCmsData(cmsKeyList: string[]): Promise<CmsData> {
   });
 
   return Promise.all(promises).then((values) => {
-    console.log(`CMS-Fetching took ${Date.now() - start}ms`);
-    start = Date.now();
     const fields = values[0];
     let rawCms: Cms[] = values.slice(1);
 
@@ -90,7 +87,6 @@ function fetchCmsData(cmsKeyList: string[]): Promise<CmsData> {
       parsedCms[cmsKeyList[i]] = parseCms(rawCms[i]);
     }
 
-    console.log(`CMS-Parsing took ${Date.now() - start}ms`);
     return { fields: fields, cms: parsedCms };
   });
 }
@@ -138,20 +134,6 @@ function parseCms(cms: any): Cms {
     }
   }
 
-  /*propertyKeys.forEach((propertyKey: string) => {
-    const curProp: CmsProperty = cms.properties[propertyKey];
-    if (isBooleanCmsProperty(curProp)) {
-      curProp.value = curProp.value === "Yes" ? true : false;
-      cms.properties[propertyKey] = curProp;
-    } else {
-      const curSubPropKeys = CmsService.getKeysOfSubFields(curProp);
-      curSubPropKeys.forEach((subPropKey: string) => {
-        const subProp = curProp[subPropKey] as BooleanCmsProperty;
-        subProp.value = subProp.value === "Yes" ? true : false;
-        cms.properties[propertyKey][subPropKey] = subProp;
-      });
-    }
-  });*/
   return cms;
 }
 

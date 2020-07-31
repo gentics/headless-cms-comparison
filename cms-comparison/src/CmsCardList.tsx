@@ -31,7 +31,7 @@ function Cards(props: {
   if (satisfactoryResultsExist(filterResults)) {
     let cards: JSX.Element[] = [];
     filterResults.forEach((result) => {
-      cards.push(<CmsCard cms={cms[result.cmsKey]} filterResult={result} />);
+      cards.push(<CmsCard key={result.cmsKey} cms={cms[result.cmsKey]} filterResult={result} />);
     });
     return <>{cards}</>;
   } else {
@@ -55,9 +55,7 @@ function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
         >
           <Card.Body style={{ textAlign: "left" }}>
             <Card.Title>{props.cms.name}</Card.Title>
-            <Card.Text>
-              <CmsCardText {...props} />
-            </Card.Text>
+            <CmsCardText {...props} />
           </Card.Body>
         </Card>
       </Link>
@@ -69,13 +67,13 @@ function CmsCardText(props: { cms: Cms; filterResult: FilterResult }) {
   let cardListElements: JSX.Element[] = [];
 
   cardListElements.push(
-    <li>
+    <li key={`${props.filterResult.cmsKey}_license`}>
       <GrLicense /> {props.cms.license.toString()}
     </li>
   );
 
   cardListElements.push(
-    <li>
+    <li key={`${props.filterResult.cmsKey}_category`}>
       <FiBox /> {props.cms.category.toString()}
     </li>
   );
@@ -83,13 +81,13 @@ function CmsCardText(props: { cms: Cms; filterResult: FilterResult }) {
   if (props.filterResult.hasRequiredShare !== -1) {
     if (props.filterResult.hasRequiredShare === 1) {
       cardListElements.push(
-        <li>
+        <li key={`${props.filterResult.cmsKey}_fulfill`}>
           <FiCheckCircle /> Fulfills all essential requirements
         </li>
       );
     } else if (props.filterResult.hasRequiredShare > 0) {
       cardListElements.push(
-        <li>
+        <li key={`${props.filterResult.cmsKey}_fulfill`}>
           <FiSlash /> Fulfills only{" "}
           {(props.filterResult.hasRequiredShare * 100).toFixed(0)}% of the
           essential requirements
@@ -97,7 +95,7 @@ function CmsCardText(props: { cms: Cms; filterResult: FilterResult }) {
       );
     } else {
       cardListElements.push(
-        <li>
+        <li key={`${props.filterResult.cmsKey}_fulfill`}>
           <FiSlash /> Fulfills none of the essential requirements
         </li>
       );
@@ -109,7 +107,7 @@ function CmsCardText(props: { cms: Cms; filterResult: FilterResult }) {
     props.filterResult.hasNiceToHaveShare !== -1
   ) {
     cardListElements.push(
-      <li>
+      <li key={`${props.filterResult.cmsKey}_niceToHaveShare`}>
         <OverlayTrigger
           placement="bottom"
           delay={{ show: 100, hide: 200 }}

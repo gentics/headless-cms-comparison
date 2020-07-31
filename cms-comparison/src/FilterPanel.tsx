@@ -49,7 +49,6 @@ export default function FilterPanel(props: {
   };
 
   const handleSpecialFieldChange = (event: any) => {
-    console.log(event.target);
     const updatedFilterFields = Object.assign({}, props.filterFields.actual);
     const fieldKey = event.target.name;
     const valueArray = updatedFilterFields.special[fieldKey].values;
@@ -231,7 +230,7 @@ function PropertyTable(props: {
     } else {
       tableRows.push(
         <CategoryRow
-          key={`${fieldKey}`}
+          key={fieldKey}
           title={currentField.name}
           description={currentField.description}
         />

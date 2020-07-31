@@ -18,7 +18,7 @@ export default function CmsList(props: { cmsData: CmsData }) {
     convertCmsToTableDataStructure(props.cmsData.cms[cmsKey])
   );
   const columns = constructColumnDataStructure(props.cmsData);
-  console.log(cms);
+  
   return (
     <div>
       <DataTable
@@ -82,6 +82,7 @@ function convertToColumn(
 ) {
   return (
     <Column
+      key={propertyKey}
       field={propertyKey}
       header={propertyDisplayName}
       frozen={frozen}
@@ -101,7 +102,6 @@ function convertCmsToTableDataStructure(cms: Cms) {
   const specialPropertyKeys = getSpecialKeys(cms);
   specialPropertyKeys.forEach((key) => {
     const specialProperty = specialProperties[key];
-    console.log(specialProperty);
     if (specialProperty) {
       if (specialProperty.value !== undefined) {
         tableCms[key] = specialProperty.value

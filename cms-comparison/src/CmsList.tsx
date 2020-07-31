@@ -12,13 +12,14 @@ import {
 import "primereact/resources/themes/nova-light/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import CmsService from "./CmsService";
 
 export default function CmsList(props: { cmsData: CmsData }) {
   const cms: any = Object.keys(props.cmsData.cms).map((cmsKey: string) =>
     convertCmsToTableDataStructure(props.cmsData.cms[cmsKey])
   );
   const columns = constructColumnDataStructure(props.cmsData);
-  
+
   return (
     <div>
       <DataTable
@@ -54,7 +55,7 @@ function constructColumnDataStructure(cmsData: CmsData) {
     if (isScoreFieldProperty(currentField)) {
       columns.push(convertToColumn(currentFieldKey, currentField.name, false));
     } else {
-      const subFieldKeys = getSubPropertyKeys(currentField);
+      const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
       for (const currentSubPropertyKey of subFieldKeys) {
         const currentSubField = currentField[currentSubPropertyKey];
         columns.push(
@@ -127,7 +128,7 @@ function convertCmsToTableDataStructure(cms: Cms) {
     if (isBooleanCmsProperty(currentProperty)) {
       tableCms[currentKey] = currentProperty.value ? "Yes" : "No";
     } else {
-      const subPropertyKeys = getSubPropertyKeys(currentProperty);
+      const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
       for (const currentSubKey of subPropertyKeys) {
         const currentSubProperty = currentProperty[currentSubKey];
         tableCms[currentSubKey] = currentSubProperty.value ? "Yes" : "No";
@@ -140,12 +141,6 @@ function convertCmsToTableDataStructure(cms: Cms) {
 
 function isBooleanCmsProperty(x: CmsProperty): x is BooleanCmsProperty {
   return x && x.value !== undefined;
-}
-
-function getSubPropertyKeys(property: any): string[] {
-  return Object.keys(property).filter(
-    (key) => key !== "name" && key !== "description"
-  );
 }
 
 function getSpecialKeys(indexedArray: any): string[] {

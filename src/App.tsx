@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import "./App.css";
 import CmsList from "./CmsList";
 import CmsCardList from "./CmsCardList";
@@ -15,9 +15,6 @@ import FilterService from "./FilterService";
 import deepcopy from "ts-deepcopy";
 import Alert from "react-bootstrap/Alert";
 import FilterPanel from "./FilterPanel";
-import Card from "react-bootstrap/Card";
-import { BsCardHeading } from "react-icons/bs";
-import { BsTable } from "react-icons/bs";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -53,31 +50,7 @@ function App() {
               <Col>
                 <Switch>
                   <Route exact path="/">
-                    <div className="d-flex justify-content-around mx-auto my-2 w-50">
-                      <Link to="/card" className="cmsCardLink">
-                        <Card className={"optionCard"} border="info">
-                          <Card.Title>
-                            <BsCardHeading /> Card-View
-                          </Card.Title>
-                          <Card.Text>
-                            Get an overview of relevant CMS by filtering for
-                            must-have or nice-to-have properties.
-                          </Card.Text>
-                        </Card>
-                      </Link>
-
-                      <Link to="/list" className="cmsCardLink">
-                        <Card className={"optionCard"} border="info">
-                          <Card.Title>
-                            <BsTable /> List-View
-                          </Card.Title>
-                          <Card.Text>
-                            Get an overall overview of all CMS and their
-                            properties by scrolling through the table.
-                          </Card.Text>
-                        </Card>
-                      </Link>
-                    </div>
+                    <Redirect to="/card" />
                   </Route>
                   <Route exact path="/card">
                     <Container fluid className="mt-3">
@@ -169,4 +142,3 @@ function constructAppState(cmsData: {
 }
 
 export default App;
-// Unt1l n3xt t1me :)

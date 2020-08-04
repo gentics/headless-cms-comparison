@@ -15,6 +15,7 @@ import FilterService from "./FilterService";
 import deepcopy from "ts-deepcopy";
 import Alert from "react-bootstrap/Alert";
 import FilterPanel from "./FilterPanel";
+import Analytics from "./Analytics";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -114,6 +115,7 @@ function App() {
             </Row>
           </Container>
         </div>
+        <Analytics />
       </Router>
     );
   } else {

@@ -38,41 +38,47 @@ function App() {
     }
   };
 
+  const menu = (<Container fluid className="mt-3">
+  <Row>
+    <Col>
+      <Nav variant="pills" defaultActiveKey="/card">
+        <Nav.Item>
+          <Nav.Link as="span">
+            <Link to="/card">Card View</Link>
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link as="span">
+            <Link to="/list">List View</Link>
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+    </Col>
+    <Col></Col>
+  </Row>
+</Container>);
+
   if (appState) {
     return (
       <Router>
         <div className="App">
           <header className="App-header" style={{ minHeight: "20rem" }}>
-            <h1>Welcome to the headless CMS Comparison Website!</h1>
+            <h1>Welcome to the <em>Headless CMS Comparison Website</em></h1>
+            <h3>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</h3>
           </header>
 
           <Container fluid className="my-3">
             <Row>
               <Col>
                 <Switch>
+
                   <Route exact path="/">
                     <Redirect to="/card" />
                   </Route>
+
                   <Route exact path="/card">
-                    <Container fluid className="mt-3">
-                      <Row>
-                        <Col>
-                          <Nav variant="pills" defaultActiveKey="/card">
-                            <Nav.Item>
-                              <Nav.Link as="span">
-                                <Link to="/list">List View</Link>
-                              </Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                              <Nav.Link as="span">
-                                <Link to="/card">Card View</Link>
-                              </Nav.Link>
-                            </Nav.Item>
-                          </Nav>
-                        </Col>
-                        <Col></Col>
-                      </Row>
-                    </Container>
+                    {menu}
                     <FilterPanel
                       filterFields={appState.filterFields}
                       updateFilterFields={updateFilterFields}
@@ -82,34 +88,19 @@ function App() {
                       cms={appState.cmsData.cms}
                     />
                   </Route>
+
                   <Route exact path="/list">
-                    <Container fluid className="mt-3">
-                      <Row>
-                        <Col>
-                          <Nav variant="pills" defaultActiveKey="/card">
-                            <Nav.Item>
-                              <Nav.Link as="span">
-                                <Link to="/list">List View</Link>
-                              </Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                              <Nav.Link as="span">
-                                <Link to="/card">Card View</Link>
-                              </Nav.Link>
-                            </Nav.Item>
-                          </Nav>
-                        </Col>
-                        <Col></Col>
-                      </Row>
-                    </Container>
+                    {menu}
                     <CmsList cmsData={appState.cmsData} />
                   </Route>
+
                   <Route exact path="/detail">
                     <CmsDetailView
                       filterResults={appState.filterResults}
                       cmsData={appState.cmsData}
                     />
                   </Route>
+
                 </Switch>
               </Col>
             </Row>

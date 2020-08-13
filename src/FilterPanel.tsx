@@ -128,17 +128,19 @@ function Panel(props: {
     resetPanel,
     ...other
   } = props;
+  const [showFilter, setShowFilter] = React.useState<boolean>(false);
   return (
     <div className="d-flex justify-content-center">
       <div className="w-75">
-        <Accordion>
+        <Accordion onSelect={() => setShowFilter(!showFilter)}>
           <Card>
             <Card.Header>
               <div className="d-flex justify-content-between">
                 <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>
-                  Filter Panel
+                  Filter
                 </h4>
                 <Form className="w-50 d-flex justify-content-between">
+                  { showFilter ? (<>
                   <div>
                     <Form.Control
                       type="text"
@@ -158,19 +160,21 @@ function Panel(props: {
                       checked={panelSettings.showModifiedOnly}
                       onChange={(e: any) => panelSettingsChangeHandler(e)}
                     />
-                  </div>
+                  </div></>) : null }
                 </Form>
                 <div className="d-flex justify-content-between">
+                  { showFilter ? (
                   <Button variant="info" onClick={(e: any) => resetPanel(e)}>
                     Clear
                   </Button>
+                  ) : null }
                   <Accordion.Toggle
                     as={Button}
                     variant="secondary"
                     eventKey="0"
                     className="ml-2"
                   >
-                    Toggle
+                    Show Filter
                   </Accordion.Toggle>
                 </div>
               </div>
@@ -402,7 +406,7 @@ function NoResultsRow() {
         <span role="img" aria-label="Not amused">
           😐
         </span>{" "}
-        No properties found...
+        No modified properties
       </td>
     </tr>
   );

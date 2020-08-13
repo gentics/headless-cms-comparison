@@ -174,7 +174,7 @@ function Panel(props: {
                     eventKey="0"
                     className="ml-2"
                   >
-                    Show Filter
+                    {showFilter ? "Hide" : "Show"} filter
                   </Accordion.Toggle>
                 </div>
               </div>

@@ -26,7 +26,8 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 
 export default function CmsDetailView(props: {
   filterResults: FilterResult[];
@@ -48,7 +49,7 @@ export default function CmsDetailView(props: {
     return (
       <Alert variant="warning">
         Invalid CMS key was given! Go back to the{" "}
-        <Link to="/card"> Card View</Link> and select a CMS!
+        <LinkContainer to="/card">Card View</LinkContainer> and select a CMS!
       </Alert>
     );
   }
@@ -59,9 +60,9 @@ export default function CmsDetailView(props: {
         <Row>
           <Col>
             <div className="d-inline-flex justify-content-between align-items-center w-100">
-              <Link to="/card">
+              <LinkContainer to="/card">
                 <Button variant="dark">Back to results</Button>
-              </Link>
+              </LinkContainer>
               <h1>
                 <b>
                   <i>{cms.name}</i>
@@ -251,7 +252,7 @@ function RequiredSummaryListItem(props: { filterResult: FilterResult }) {
         {props.filterResult.satisfactory ? <FiCheckCircle /> : <FiSlash />}{" "}
         {`CMS ${
           props.filterResult.satisfactory ? `satisfies` : `does not satisfy`
-        } all essential requirements.`}
+        } all your essential requirements.`}
       </h2>
     </ListGroup.Item>
   );

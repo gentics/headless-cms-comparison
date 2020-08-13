@@ -3,8 +3,10 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
+import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { LinkContainer } from 'react-router-bootstrap';
 import "./App.css";
 import CmsList from "./CmsList";
 import CmsCardList from "./CmsCardList";
@@ -16,6 +18,8 @@ import deepcopy from "ts-deepcopy";
 import Alert from "react-bootstrap/Alert";
 import FilterPanel from "./FilterPanel";
 import Analytics from "./Analytics";
+import GithubRibbon from "./GithubRibbon";
+import About from "./About";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -38,23 +42,23 @@ function App() {
     }
   };
 
+  const githubUrl = "https://github.com/gentics/headless-cms-comparison";
+
   const menu = (<Container fluid className="mt-3">
   <Row>
     <Col>
-      <Nav variant="pills" defaultActiveKey="/card">
+      <Nav variant="tabs" defaultActiveKey="/card">
         <Nav.Item>
-          <Nav.Link as="span">
-            <Link to="/card">Card View</Link>
-          </Nav.Link>
+          <LinkContainer to="/card"><Button>Card View</Button></LinkContainer>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as="span">
-            <Link to="/list">List View</Link>
-          </Nav.Link>
+          <LinkContainer to="/list"><Button>List View</Button></LinkContainer>
+        </Nav.Item>
+        <Nav.Item>
+          <LinkContainer to="/about"><Button>About</Button></LinkContainer>
         </Nav.Item>
       </Nav>
     </Col>
-    <Col></Col>
   </Row>
 </Container>);
 
@@ -63,9 +67,9 @@ function App() {
       <Router>
         <div className="App">
           <header className="App-header" style={{ minHeight: "20rem" }}>
+            <GithubRibbon url={githubUrl} />
             <h1>Welcome to the <em>Headless CMS Comparison Website</em></h1>
-            <h3>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</h3>
+            <h2>Find the perfect headless CMS for your requirements!</h2>
           </header>
 
           <Container fluid className="my-3">
@@ -101,6 +105,11 @@ function App() {
                     />
                   </Route>
 
+                  <Route exact path="/about">
+                    {menu}
+                    <About url={githubUrl} />
+                  </Route>
+
                 </Switch>
               </Col>
             </Row>
@@ -110,7 +119,7 @@ function App() {
       </Router>
     );
   } else {
-    return <Alert variant="info">Loading CMS-Data...</Alert>;
+    return <Alert variant="info">Loading data...</Alert>;
   }
 }
 

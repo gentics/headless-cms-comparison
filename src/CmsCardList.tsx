@@ -6,7 +6,7 @@ import { FilterResult, Cms } from "./Cms";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 
 export default function CardList(props: {
   filterResults: FilterResult[];
@@ -45,11 +45,11 @@ function satisfactoryResultsExist(filterResults: FilterResult[]) {
 
 function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
   return (
-    <div className={"my-2 mx-2"} key={props.filterResult.cmsKey}>
-      <Link to={`/detail?cmsKey=${props.filterResult.cmsKey}`} className="cmsCardLink">
+    <div className="my-2 mx-2" key={props.filterResult.cmsKey}>
+      <LinkContainer to={`/detail?cmsKey=${props.filterResult.cmsKey}`} className="cmsCardLink">
         <Card
           style={{ width: "20rem" }}
-          className={"cmsCard"}
+          className="cmsCard"
           border={props.filterResult.satisfactory ? "info" : undefined}
           bg={props.filterResult.satisfactory ? undefined : "light"}
         >
@@ -58,7 +58,7 @@ function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
             <CmsCardText {...props} />
           </Card.Body>
         </Card>
-      </Link>
+      </LinkContainer>
     </div>
   );
 }
@@ -152,7 +152,7 @@ function renderNiceToHaveProgressBarTooltip(cmsKey: string, share: number) {
 
 function NoResultsCard() {
   return (
-    <div className={"my-2 mx-2 w-75"}>
+    <div className="my-2 mx-2 w-75">
       <Card bg="light" border="dark">
         <Card.Body>
           <Card.Title>

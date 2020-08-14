@@ -13,6 +13,10 @@
     "name": "Special Features",
     "value": "Instant Live Preview"
   },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": null
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -149,10 +153,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "supportedDatabases": {
-      "name": "Supported Databases",
-      "value": null
     },
     "clustering": {
       "name": "Clustering",

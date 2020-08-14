@@ -39,6 +39,11 @@
     "description": "Noteworthy Features",
     "value": null
   },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "description": "",
+    "value": null
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -213,11 +218,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "description": "Is it possible to hook into the upload process to directly process uploaded assets (e.g. re-encode videos, shrink large images)?",
-      "value": null
-    },
-    "supportedDatabases": {
-      "name": "Supported Databases",
-      "description": "",
       "value": null
     },
     "clustering": {

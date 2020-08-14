@@ -13,6 +13,10 @@
     "name": "Special Features",
     "value": "Instant Live Preview"
   },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": "MongoDB, MySQL, PostgreSQL"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -149,10 +153,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "Yes"
-    },
-    "supportedDatabases": {
-      "name": "Supported Databases",
-      "value": "MongoDB, MySQL, PostgreSQL"
     },
     "clustering": {
       "name": "Clustering",

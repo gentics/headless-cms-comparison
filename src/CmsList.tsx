@@ -9,9 +9,7 @@ import {
   BooleanCmsProperty,
   CmsData,
 } from "./Cms";
-import "primereact/resources/themes/nova-light/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
+
 import CmsService from "./CmsService";
 
 export default function CmsList(props: { cmsData: CmsData }) {

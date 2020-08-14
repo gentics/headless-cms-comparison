@@ -4,9 +4,6 @@ import Table from "react-bootstrap/Table";
 import Accordion from "react-bootstrap/Accordion";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Tooltip from "react-bootstrap/Tooltip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import { AiFillInfoCircle } from "react-icons/ai";
 
 import {
   ScoreValue,
@@ -19,6 +16,7 @@ import {
 
 import CmsService from "./CmsService";
 import FilterService from "./FilterService";
+import Description from "./Description";
 
 export default function FilterPanel(props: {
   filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
@@ -297,7 +295,7 @@ function CheckboxRow(props: {
       <td>
         <div className="d-flex justify-content-between">
           <span className="ml-2">
-            <DescriptionElement description={props.specialField.description} />
+            <Description description={props.specialField.description} />
           </span>
           <span className="mr-2">{props.specialField.name}</span>
         </div>
@@ -333,7 +331,7 @@ function CategoryRow(props: { title: string; description: string }) {
       <td colSpan={2}>
         <div className="d-flex justify-content-between">
           <span className="ml-2">
-            <DescriptionElement description={props.description} />
+            <Description description={props.description} />
           </span>
           <span className="mr-2">
             <h4>{props.title}</h4>
@@ -377,7 +375,7 @@ function ScoreRow(props: {
       <td>
         <div className="d-flex justify-content-between">
           <span className="ml-2">
-            <DescriptionElement description={props.scoreField.description} />
+            <Description description={props.scoreField.description} />
           </span>
           <span className="mr-2" style={style}>
             {props.scoreField.name}
@@ -412,22 +410,4 @@ function NoResultsRow() {
   );
 }
 
-function DescriptionElement(props: { description: string }) {
-  if (props.description) {
-    return (
-      <OverlayTrigger
-        placement="top"
-        delay={{ show: 100, hide: 200 }}
-        overlay={renderTooltip(props.description)}
-      >
-        <AiFillInfoCircle size={`${1.5}em`} />
-      </OverlayTrigger>
-    );
-  } else {
-    return <span></span>;
-  }
-}
 
-function renderTooltip(description: string) {
-  return <Tooltip id={`Tooltip_${description}`}>{description}</Tooltip>;
-}

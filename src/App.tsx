@@ -10,6 +10,9 @@ import { LinkContainer } from 'react-router-bootstrap';
 import deepcopy from "ts-deepcopy";
 import Alert from "react-bootstrap/Alert";
 
+import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 import "./App.css";
 
 import CmsList from "./CmsList";
@@ -91,6 +94,7 @@ const content = appState ? (
 
       <Route exact path="/detail">
         <CmsDetailView
+          filterFields={appState.filterFields.actual}
           filterResults={appState.filterResults}
           cmsData={appState.cmsData}
         />

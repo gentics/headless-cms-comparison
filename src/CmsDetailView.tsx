@@ -1,11 +1,14 @@
 import * as React from "react";
 import {
+  FilterFieldSet,
   FilterResult,
   Cms,
   ScoreValue,
   BasicField,
   ScoreField,
   CmsData,
+  CategoryCmsProperty,
+  CategoryField,
 } from "./Cms";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -28,12 +31,31 @@ import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
 import { useLocation } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
+import { DataTable } from 'primereact/datatable';
+import { Column } from "primereact/column";
+import Description from "./Description";
+
+type TableData = {name: string, value: boolean, description?: string};
+
+const TitleTemplate = (rowData: TableData) => {
+  return (
+  <div className="d-flex justify-content-between">
+  <span className="ml-2">
+    {rowData.description ? <Description description={rowData.description} /> : null }
+  </span>
+  <span className="mr-2">{rowData.name}</span>
+  </div>);
+};
+
+const BooleanPropertyTemplate = (rowData: TableData) => {
+  return rowData.value ? <FiCheckCircle style={{color: "green"}} /> : <FiSlash style={{color: "red"}} />;
+};
 
 export default function CmsDetailView(props: {
+  filterFields: FilterFieldSet;
   filterResults: FilterResult[];
   cmsData: CmsData;
 }) {
-
   
   const cmsKey = useQuery().get("cmsKey");
   let filterResult: FilterResult;
@@ -54,6 +76,23 @@ export default function CmsDetailView(props: {
     );
   }
 
+  let tableValues: TableData[] = [];
+  const basicFilterFields = props.filterFields.basic;
+  Object.keys(basicFilterFields).forEach((key: string) => {
+    const prop = cms.properties[key];
+    if (prop && prop.value !== undefined) {
+      tableValues.push({name: prop.name, value: prop.value, description: basicFilterFields[key].description});
+    } else {
+      const basicFilterSubFields: CategoryField = basicFilterFields[key];
+      const catprop: CategoryCmsProperty = prop;
+      const subFieldKeys = CmsService.getKeysOfSubFields(basicFilterFields[key]);
+      subFieldKeys.forEach((subkey: string) => {
+        const subprop = catprop[subkey] as CategoryCmsProperty;
+        tableValues.push({name: `${prop.name}: ${subprop.name}`, value: subprop.value, description: basicFilterSubFields[subkey].description});
+      });
+    }
+  });
+
   return (
     <>
       <Container fluid>
@@ -61,7 +100,7 @@ export default function CmsDetailView(props: {
           <Col>
             <div className="d-inline-flex justify-content-between align-items-center w-100">
               <LinkContainer to="/card">
-                <Button variant="dark">Back to results</Button>
+                <Button variant="dark">Back to the overview</Button>
               </LinkContainer>
               <h1>
                 <b>
@@ -88,7 +127,13 @@ export default function CmsDetailView(props: {
               </span>
             </div>
             <hr />
-            <PropertyList filterResult={filterResult} />
+            <PropertyList name={cms.name} filterResult={filterResult} />
+            <hr />
+            <h2>All Features or {cms.name}</h2>
+            <DataTable value={tableValues}>
+              <Column header="Feature" field="name" sortable body={TitleTemplate} />
+              <Column header="Supported?" field="value" sortable body={BooleanPropertyTemplate} />
+            </DataTable>
             <span className="lastUpdated">
               <MdUpdate className="mr-1" /> This information was last updated on{" "}
               {new Date(cms.lastUpdated).toDateString()}
@@ -105,7 +150,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-function PropertyList(props: { filterResult: FilterResult }) {
+function PropertyList(props: { filterResult: FilterResult, name: string}) {
   const hasProperties = categorizePropertiesByScores(
     props.filterResult.has.basic
   );
@@ -139,6 +184,7 @@ function PropertyList(props: { filterResult: FilterResult }) {
   );
 
   if (requiredListItems.length > 0) {
+    requiredListItems.unshift(<h2>Your required features of {props.name}</h2>);
     requiredListItems.push(<RequiredSummaryListItem key="requiredSummary" {...props} />);
   }
 
@@ -147,6 +193,7 @@ function PropertyList(props: { filterResult: FilterResult }) {
   );
 
   if (niceToHaveListItems.length > 0) {
+    niceToHaveListItems.unshift(<h2>Your nice-to-have features of {props.name}</h2>);
     niceToHaveListItems.push(<NiceToHaveSummaryListItem key="niceToHaveSummary" {...props} />);
   }
 

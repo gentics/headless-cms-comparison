@@ -108,7 +108,7 @@ export type CmsProperty = BooleanCmsProperty | CategoryCmsProperty;
 
 export interface BooleanCmsProperty extends Field {
   description?: string;
-  value: boolean | string;
+  value: boolean;
 }
 
 export interface CategoryCmsProperty extends Field {

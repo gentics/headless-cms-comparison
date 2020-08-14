@@ -258,7 +258,7 @@ function PropertyTable(props: {
   }
 
   if (tableRows.length === 0) {
-    tableRows.push(<NoResultsRow />);
+    tableRows.push(<NoResultsRow key="no" />);
   }
 
   return (

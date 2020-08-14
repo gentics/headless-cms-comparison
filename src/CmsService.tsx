@@ -120,16 +120,17 @@ function parseCms(cms: any): Cms {
   }
   cms.category = categories;
 
+  validateProperties(cms);
   const propertyKeys: string[] = Object.keys(cms.properties);
   for (const key of propertyKeys) {
-    const currentProperty: CmsProperty = cms.properties[key];
+    const currentProperty: any = cms.properties[key];
     if (isBooleanCmsProperty(currentProperty)) {
-      currentProperty.value = currentProperty.value === "Yes";
+      currentProperty.value = currentProperty.value && (currentProperty.value as string).startsWith("Yes");
     } else {
       const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
       for (const subKey of subPropertyKeys) {
         const subProperty = currentProperty[subKey];
-        subProperty.value = subProperty.value === "Yes";
+        subProperty.value = subProperty.value && (subProperty.value as string).startsWith("Yes");
       }
     }
   }
@@ -153,9 +154,34 @@ function categoriesAreValid(categories: string[]): boolean {
   );
 }
 
-function isBooleanCmsProperty(x: CmsProperty): x is BooleanCmsProperty {
+function isBooleanCmsProperty(x: any) {
   if (!x) return false;
   return (x as BooleanCmsProperty).value !== undefined;
 }
+
+const validateProperties = (cms: Cms) => {
+  const propNames = Object.keys(cms.properties);
+  const re = /^(Yes|No$|undefined$|null$|$)/;
+  propNames.forEach((propName: string) => {
+    const prop: CmsProperty = cms.properties[propName];
+    if (prop.value === undefined) {
+      const category: CategoryCmsProperty = prop;
+      const subNames = Object.keys(category);
+      subNames.forEach((subName: string) => {
+        const value: string = category[subName].value;
+        if (! re.test(value)) {
+          delete category[subName];
+          console.warn(`Invalid value for ${cms.name}'s ${propName}.${subName}: ${value}`);
+        }
+      });
+    } else {
+      const value: string = prop.value;
+      if (! re.test(value)) {
+        delete cms.properties[propName];
+        console.warn(`Invalid value for ${cms.name}'s ${propName}: ${value}`);
+      }
+    }
+  });
+};
 
 export default CmsService;

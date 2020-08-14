@@ -80,16 +80,20 @@ export default function CmsDetailView(props: {
   const basicFilterFields = props.filterFields.basic;
   Object.keys(basicFilterFields).forEach((key: string) => {
     const prop = cms.properties[key];
-    if (prop && prop.value !== undefined) {
-      tableValues.push({name: prop.name, value: prop.value, description: basicFilterFields[key].description});
-    } else {
-      const basicFilterSubFields: CategoryField = basicFilterFields[key];
-      const catprop: CategoryCmsProperty = prop;
-      const subFieldKeys = CmsService.getKeysOfSubFields(basicFilterFields[key]);
-      subFieldKeys.forEach((subkey: string) => {
-        const subprop = catprop[subkey] as CategoryCmsProperty;
-        tableValues.push({name: `${prop.name}: ${subprop.name}`, value: subprop.value, description: basicFilterSubFields[subkey].description});
-      });
+    if (prop) {
+      if (prop.value !== undefined) {
+        tableValues.push({name: prop.name, value: prop.value, description: basicFilterFields[key].description});
+      } else {
+        const basicFilterSubFields: CategoryField = basicFilterFields[key];
+        const catprop: CategoryCmsProperty = prop;
+        const subFieldKeys = CmsService.getKeysOfSubFields(basicFilterFields[key]);
+        subFieldKeys.forEach((subkey: string) => {
+          const subprop = catprop[subkey];
+          if (subprop && (subprop.value !== undefined)) {
+            tableValues.push({name: `${prop.name}: ${subprop.name}`, value: subprop.value, description: basicFilterSubFields[subkey].description});
+          }
+        });
+      }
     }
   });
 
@@ -129,7 +133,7 @@ export default function CmsDetailView(props: {
             <hr />
             <PropertyList name={cms.name} filterResult={filterResult} />
             <hr />
-            <h2>All Features or {cms.name}</h2>
+            <h2 key="all">All Features or {cms.name}</h2>
             <DataTable value={tableValues}>
               <Column header="Feature" field="name" sortable body={TitleTemplate} />
               <Column header="Supported?" field="value" sortable body={BooleanPropertyTemplate} />
@@ -184,7 +188,7 @@ function PropertyList(props: { filterResult: FilterResult, name: string}) {
   );
 
   if (requiredListItems.length > 0) {
-    requiredListItems.unshift(<h2>Your required features of {props.name}</h2>);
+    requiredListItems.unshift(<h2 key="required">Your required features of {props.name}</h2>);
     requiredListItems.push(<RequiredSummaryListItem key="requiredSummary" {...props} />);
   }
 
@@ -193,7 +197,7 @@ function PropertyList(props: { filterResult: FilterResult, name: string}) {
   );
 
   if (niceToHaveListItems.length > 0) {
-    niceToHaveListItems.unshift(<h2>Your nice-to-have features of {props.name}</h2>);
+    niceToHaveListItems.unshift(<h2 key="nice-to-have">Your nice-to-have features of {props.name}</h2>);
     niceToHaveListItems.push(<NiceToHaveSummaryListItem key="niceToHaveSummary" {...props} />);
   }
 

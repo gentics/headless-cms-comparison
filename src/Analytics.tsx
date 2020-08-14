@@ -9,7 +9,7 @@ const Analytics = () => {
   function onAccepted() {
     setAccepted(true);
     ReactGA.initialize('UA-77960-5', {
-      debug: true,
+      debug: (process.env.NODE_ENV !== 'production')
     });
   }
   useEffect(() => {
@@ -22,7 +22,7 @@ const Analytics = () => {
   React.useEffect(
     () => {
       if (accepted) {
-        ReactGA.pageview(location.pathname)
+        ReactGA.pageview(location.pathname + location.search);
       };
     },
     [accepted, location]

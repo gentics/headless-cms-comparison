@@ -13,6 +13,10 @@
     "name": "Special Features",
     "value": "custom status (Draft, Reveiw, Published)"
   },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": "MySQL & Variants"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -149,10 +153,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "Yes"
-    },
-    "supportedDatabases": {
-      "name": "Supported Databases",
-      "value": "MySQL & Variants"
     },
     "clustering": {
       "name": "Clustering",

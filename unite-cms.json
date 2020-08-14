@@ -13,6 +13,10 @@
     "name": "Special Features",
     "value": "Live preview while editing, advanced field types (e.g. similar to Gutenberg editor), advanced permission and validation definition, using expressions"
   },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": "MySQL"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",
@@ -149,10 +153,6 @@
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "supportedDatabases": {
-      "name": "Supported Databases",
-      "value": "MySQL"
     },
     "clustering": {
       "name": "Clustering",

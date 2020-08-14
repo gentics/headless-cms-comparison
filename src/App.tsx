@@ -7,15 +7,17 @@ import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap';
+import deepcopy from "ts-deepcopy";
+import Alert from "react-bootstrap/Alert";
+
 import "./App.css";
+
 import CmsList from "./CmsList";
 import CmsCardList from "./CmsCardList";
 import CmsDetailView from "./CmsDetailView";
 import { AppState, Cms, CmsData, FilterFieldSet } from "./Cms";
 import CmsService from "./CmsService";
 import FilterService from "./FilterService";
-import deepcopy from "ts-deepcopy";
-import Alert from "react-bootstrap/Alert";
 import FilterPanel from "./FilterPanel";
 import Analytics from "./Analytics";
 import GithubRibbon from "./GithubRibbon";
@@ -29,6 +31,7 @@ function App() {
       setAppState(constructAppState(cmsData));
     });
   }, []);
+
 
   const updateFilterFields = function (updatedFilterFields: FilterFieldSet) {
     if (appState) {
@@ -62,65 +65,65 @@ function App() {
   </Row>
 </Container>);
 
-  if (appState) {
-    return (
-      <Router>
-        <div className="App">
-          <header className="App-header" style={{ minHeight: "20rem" }}>
-            <GithubRibbon url={githubUrl} />
-            <h1>Welcome to the <em>Headless CMS Comparison Website</em></h1>
-            <h2>Find the perfect headless CMS for your requirements!</h2>
-          </header>
+const content = appState ? (
+  <Router>
+    <Switch>
+      <Route exact path="/">
+        <Redirect to="/card" />
+      </Route>
 
-          <Container fluid className="my-3">
-            <Row>
-              <Col>
-                <Switch>
+      <Route exact path="/card">
+        {menu}
+        <FilterPanel
+          filterFields={appState.filterFields}
+          updateFilterFields={updateFilterFields}
+        />
+        <CmsCardList
+          filterResults={appState.filterResults}
+          cms={appState.cmsData.cms}
+        />
+      </Route>
 
-                  <Route exact path="/">
-                    <Redirect to="/card" />
-                  </Route>
+      <Route exact path="/list">
+        {menu}
+        <CmsList cmsData={appState.cmsData} />
+      </Route>
 
-                  <Route exact path="/card">
-                    {menu}
-                    <FilterPanel
-                      filterFields={appState.filterFields}
-                      updateFilterFields={updateFilterFields}
-                    />
-                    <CmsCardList
-                      filterResults={appState.filterResults}
-                      cms={appState.cmsData.cms}
-                    />
-                  </Route>
+      <Route exact path="/detail">
+        <CmsDetailView
+          filterResults={appState.filterResults}
+          cmsData={appState.cmsData}
+        />
+      </Route>
 
-                  <Route exact path="/list">
-                    {menu}
-                    <CmsList cmsData={appState.cmsData} />
-                  </Route>
+      <Route exact path="/about">
+        {menu}
+        <About url={githubUrl} />
+      </Route>
 
-                  <Route exact path="/detail">
-                    <CmsDetailView
-                      filterResults={appState.filterResults}
-                      cmsData={appState.cmsData}
-                    />
-                  </Route>
+    </Switch>
 
-                  <Route exact path="/about">
-                    {menu}
-                    <About url={githubUrl} />
-                  </Route>
+    <Analytics />
+  </Router>
+) : (<Alert variant="info">Loading data...</Alert>);
 
-                </Switch>
-              </Col>
-            </Row>
-          </Container>
-        </div>
-        <Analytics />
-      </Router>
+  return (
+    <div className="App">
+      <header className="App-header" style={{ minHeight: "20rem" }}>
+        <GithubRibbon url={githubUrl} />
+        <h1>Welcome to the <em>Headless CMS Comparison Website</em></h1>
+        <h2>Find the perfect headless CMS for your requirements!</h2>
+      </header>
+
+      <Container fluid className="my-3">
+        <Row>
+        <Col>
+          {content}
+        </Col>
+        </Row>
+      </Container>
+    </div>
     );
-  } else {
-    return <Alert variant="info">Loading data...</Alert>;
-  }
 }
 
 function constructAppState(cmsData: {

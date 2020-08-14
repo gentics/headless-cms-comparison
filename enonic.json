@@ -7,7 +7,7 @@
   "category": "Professional/Enterprise",
   "systemRequirements": {
     "name": "System Requirements",
-    "value": "Apache/NGINX, PHP, MYSQL"
+    "value": "Apache/NGINX, PHP, MYSQL. Compute 2vCPU and 2GB memory min."
   },
   "specialFeatures": {
     "name": "Special Features",
@@ -52,27 +52,27 @@
     "rest": {
       "api": {
         "name": "API",
-        "value": "Pluggable"
+        "value": "Yes, pluggable"
       },
       "create": {
         "name": "Create",
-        "value": "Pluggable"
+        "value": "Yes, pluggable"
       },
       "read": {
         "name": "Read",
-        "value": "Pluggable"
+        "value": "Yes, pluggable"
       },
       "update": {
         "name": "Update",
-        "value": "Pluggable"
+        "value": "Yes, pluggable"
       },
       "delete": {
         "name": "Delete",
-        "value": "Pluggable"
+        "value": "Yes, pluggable"
       },
       "upload": {
         "name": "Upload",
-        "value": "Pluggable"
+        "value": "Yes, pluggable"
       },
       "name": "REST"
     },
@@ -144,15 +144,11 @@
     },
     "antivirusScanning": {
       "name": "Antivirus Scanning",
-      "value": "Add-on"
+      "value": "Yes, add-on"
     },
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
       "value": "No"
-    },
-    "systemRequirements": {
-      "name": "System Requirements",
-      "value": "Compute 2vCPU and 2GB memory min."
     },
     "supportedDatabases": {
       "name": "Supported Databases",

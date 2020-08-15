@@ -8,8 +8,6 @@ export enum License {
   Apache_2 = "Apache-2.0",
   BSD_3 = "BSD 3-Clause",
   MIT = "MIT",
-  Commercial = "Commercial",
-  Freemium = "Freemium",
   Other = "Other", // No-match fallback value
 }
 

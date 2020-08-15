@@ -16,7 +16,7 @@
   },
   "license": {
     "name": "License",
-    "description": "License of the system. Seperated by slashes '/', a subset of the following values are allowed: GPLv3, Proprietary, Apache-2.0, BSD 3-Clause, MIT, Commercial, Freemium, Other",
+    "description": "License of the system. Separated by slashes '/', a subset of the following values are allowed: GPLv3, Proprietary, Apache-2.0, BSD 3-Clause, MIT",
     "value": null
   },
   "inception": {
@@ -26,7 +26,7 @@
   },
   "category": {
     "name": "Category",
-    "description": "Which featureset is offered by the cms? String containing a subset of the following values seperated by slashes'/': Essential,Professional,Enterprise. E.g. xyz-CMS has professional and enterprise functionality: 'Professional/Enterprise'",
+    "description": "Which featureset is offered by the cms? String containing a subset of the following values separated by slashes'/': Essential,Professional,Enterprise. E.g. xyz-CMS has professional and enterprise functionality: 'Professional/Enterprise'",
     "value": null
   },
   "systemRequirements": {

@@ -31,7 +31,13 @@ function Cards(props: {
   if (satisfactoryResultsExist(filterResults)) {
     let cards: JSX.Element[] = [];
     filterResults.forEach((result) => {
-      cards.push(<CmsCard key={result.cmsKey} cms={cms[result.cmsKey]} filterResult={result} />);
+      cards.push(
+        <CmsCard
+          key={result.cmsKey}
+          cms={cms[result.cmsKey]}
+          filterResult={result}
+        />
+      );
     });
     return <>{cards}</>;
   } else {
@@ -46,7 +52,10 @@ function satisfactoryResultsExist(filterResults: FilterResult[]) {
 function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
   return (
     <div className="my-2 mx-2" key={props.filterResult.cmsKey}>
-      <LinkContainer to={`/detail?cmsKey=${props.filterResult.cmsKey}`} className="cmsCardLink">
+      <LinkContainer
+        to={`/detail?cmsKey=${props.filterResult.cmsKey}`}
+        className="cmsCardLink"
+      >
         <Card
           style={{ width: "20rem" }}
           className="cmsCard"

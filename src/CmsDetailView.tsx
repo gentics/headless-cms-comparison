@@ -31,24 +31,31 @@ import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
 import { useLocation } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import { DataTable } from 'primereact/datatable';
+import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Description from "./Description";
 
-type TableData = {name: string, value: boolean, description?: string};
+type TableData = { name: string; value: boolean; description?: string };
 
 const TitleTemplate = (rowData: TableData) => {
   return (
-  <div className="d-flex justify-content-between">
-  <span className="ml-2">
-    {rowData.description ? <Description description={rowData.description} /> : null }
-  </span>
-  <span className="mr-2">{rowData.name}</span>
-  </div>);
+    <div className="d-flex justify-content-between">
+      <span className="ml-2">
+        {rowData.description ? (
+          <Description description={rowData.description} />
+        ) : null}
+      </span>
+      <span className="mr-2">{rowData.name}</span>
+    </div>
+  );
 };
 
 const BooleanPropertyTemplate = (rowData: TableData) => {
-  return rowData.value ? <FiCheckCircle style={{color: "green"}} /> : <FiSlash style={{color: "red"}} />;
+  return rowData.value ? (
+    <FiCheckCircle style={{ color: "green" }} />
+  ) : (
+    <FiSlash style={{ color: "red" }} />
+  );
 };
 
 export default function CmsDetailView(props: {
@@ -56,7 +63,6 @@ export default function CmsDetailView(props: {
   filterResults: FilterResult[];
   cmsData: CmsData;
 }) {
-  
   const cmsKey = useQuery().get("cmsKey");
   let filterResult: FilterResult;
   let cms: Cms;
@@ -82,15 +88,25 @@ export default function CmsDetailView(props: {
     const prop = cms.properties[key];
     if (prop) {
       if (prop.value !== undefined) {
-        tableValues.push({name: prop.name, value: prop.value, description: basicFilterFields[key].description});
+        tableValues.push({
+          name: prop.name,
+          value: prop.value,
+          description: basicFilterFields[key].description,
+        });
       } else {
         const basicFilterSubFields: CategoryField = basicFilterFields[key];
         const catprop: CategoryCmsProperty = prop;
-        const subFieldKeys = CmsService.getKeysOfSubFields(basicFilterFields[key]);
+        const subFieldKeys = CmsService.getKeysOfSubFields(
+          basicFilterFields[key]
+        );
         subFieldKeys.forEach((subkey: string) => {
           const subprop = catprop[subkey];
-          if (subprop && (subprop.value !== undefined)) {
-            tableValues.push({name: `${prop.name}: ${subprop.name}`, value: subprop.value, description: basicFilterSubFields[subkey].description});
+          if (subprop && subprop.value !== undefined) {
+            tableValues.push({
+              name: `${prop.name}: ${subprop.name}`,
+              value: subprop.value,
+              description: basicFilterSubFields[subkey].description,
+            });
           }
         });
       }
@@ -135,8 +151,18 @@ export default function CmsDetailView(props: {
             <hr />
             <h2 key="all">All Features or {cms.name}</h2>
             <DataTable value={tableValues}>
-              <Column header="Feature" field="name" sortable body={TitleTemplate} />
-              <Column header="Supported?" field="value" sortable body={BooleanPropertyTemplate} />
+              <Column
+                header="Feature"
+                field="name"
+                sortable
+                body={TitleTemplate}
+              />
+              <Column
+                header="Supported?"
+                field="value"
+                sortable
+                body={BooleanPropertyTemplate}
+              />
             </DataTable>
             <span className="lastUpdated">
               <MdUpdate className="mr-1" /> This information was last updated on{" "}
@@ -154,7 +180,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-function PropertyList(props: { filterResult: FilterResult, name: string}) {
+function PropertyList(props: { filterResult: FilterResult; name: string }) {
   const hasProperties = categorizePropertiesByScores(
     props.filterResult.has.basic
   );
@@ -188,8 +214,12 @@ function PropertyList(props: { filterResult: FilterResult, name: string}) {
   );
 
   if (requiredListItems.length > 0) {
-    requiredListItems.unshift(<h2 key="required">Your required features of {props.name}</h2>);
-    requiredListItems.push(<RequiredSummaryListItem key="requiredSummary" {...props} />);
+    requiredListItems.unshift(
+      <h2 key="required">Your required features of {props.name}</h2>
+    );
+    requiredListItems.push(
+      <RequiredSummaryListItem key="requiredSummary" {...props} />
+    );
   }
 
   const niceToHaveListItems = constructResultListItems(
@@ -197,8 +227,12 @@ function PropertyList(props: { filterResult: FilterResult, name: string}) {
   );
 
   if (niceToHaveListItems.length > 0) {
-    niceToHaveListItems.unshift(<h2 key="nice-to-have">Your nice-to-have features of {props.name}</h2>);
-    niceToHaveListItems.push(<NiceToHaveSummaryListItem key="niceToHaveSummary" {...props} />);
+    niceToHaveListItems.unshift(
+      <h2 key="nice-to-have">Your nice-to-have features of {props.name}</h2>
+    );
+    niceToHaveListItems.push(
+      <NiceToHaveSummaryListItem key="niceToHaveSummary" {...props} />
+    );
   }
 
   return (
@@ -233,7 +267,7 @@ function categorizePropertiesByScores(indexedPropertyArray: {
         : (niceToHaveProperties[propertyKey] = currentProperty);
     } else {
       const hasSubKeys = CmsService.getKeysOfSubFields(currentProperty);
-      
+
       for (const subKey of hasSubKeys) {
         const currentSubProperty = currentProperty[subKey];
         currentSubProperty.name =
@@ -272,7 +306,9 @@ function constructResultListItems(fieldSet: {
   const hasNotKeys = Object.keys(fieldSet.hasNot);
   for (const hasNotKey of hasNotKeys) {
     const currentProperty = fieldSet.hasNot[hasNotKey];
-    listItems.push(<ResultListItem key={hasNotKey}  property={currentProperty} />);
+    listItems.push(
+      <ResultListItem key={hasNotKey} property={currentProperty} />
+    );
   }
 
   return listItems;

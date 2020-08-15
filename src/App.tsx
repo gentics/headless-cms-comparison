@@ -5,8 +5,13 @@ import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
-import { LinkContainer } from 'react-router-bootstrap';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import deepcopy from "ts-deepcopy";
 import Alert from "react-bootstrap/Alert";
 
@@ -35,7 +40,6 @@ function App() {
     });
   }, []);
 
-
   const updateFilterFields = function (updatedFilterFields: FilterFieldSet) {
     if (appState) {
       const updatedAppState = deepcopy<AppState>(appState);
@@ -50,84 +54,93 @@ function App() {
 
   const githubUrl = "https://github.com/gentics/headless-cms-comparison";
 
-  const menu = (<Container fluid className="mt-3">
-  <Row>
-    <Col>
-      <Nav variant="tabs" defaultActiveKey="/card">
-        <Nav.Item>
-          <LinkContainer to="/card"><Button>Card View</Button></LinkContainer>
-        </Nav.Item>
-        <Nav.Item>
-          <LinkContainer to="/list"><Button>List View</Button></LinkContainer>
-        </Nav.Item>
-        <Nav.Item>
-          <LinkContainer to="/about"><Button>About</Button></LinkContainer>
-        </Nav.Item>
-      </Nav>
-    </Col>
-  </Row>
-</Container>);
+  const menu = (
+    <Container fluid className="mt-3">
+      <Row>
+        <Col>
+          <Nav variant="tabs" defaultActiveKey="/card">
+            <Nav.Item>
+              <LinkContainer to="/card">
+                <Button>Card View</Button>
+              </LinkContainer>
+            </Nav.Item>
+            <Nav.Item>
+              <LinkContainer to="/list">
+                <Button>List View</Button>
+              </LinkContainer>
+            </Nav.Item>
+            <Nav.Item>
+              <LinkContainer to="/about">
+                <Button>About</Button>
+              </LinkContainer>
+            </Nav.Item>
+          </Nav>
+        </Col>
+      </Row>
+    </Container>
+  );
 
-const content = appState ? (
-  <Router>
-    <Switch>
-      <Route exact path="/">
-        <Redirect to="/card" />
-      </Route>
+  const content = appState ? (
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/card" />
+        </Route>
 
-      <Route exact path="/card">
-        {menu}
-        <FilterPanel
-          filterFields={appState.filterFields}
-          updateFilterFields={updateFilterFields}
-        />
-        <CmsCardList
-          filterResults={appState.filterResults}
-          cms={appState.cmsData.cms}
-        />
-      </Route>
+        <Route exact path="/card">
+          {menu}
+          <FilterPanel
+            filterFields={appState.filterFields}
+            updateFilterFields={updateFilterFields}
+          />
+          <CmsCardList
+            filterResults={appState.filterResults}
+            cms={appState.cmsData.cms}
+          />
+        </Route>
 
-      <Route exact path="/list">
-        {menu}
-        <CmsList cmsData={appState.cmsData} />
-      </Route>
+        <Route exact path="/list">
+          {menu}
+          <CmsList cmsData={appState.cmsData} />
+        </Route>
 
-      <Route exact path="/detail">
-        <CmsDetailView
-          filterFields={appState.filterFields.actual}
-          filterResults={appState.filterResults}
-          cmsData={appState.cmsData}
-        />
-      </Route>
+        <Route exact path="/detail">
+          <CmsDetailView
+            filterFields={appState.filterFields.actual}
+            filterResults={appState.filterResults}
+            cmsData={appState.cmsData}
+          />
+        </Route>
 
-      <Route exact path="/about">
-        {menu}
-        <About url={githubUrl} />
-      </Route>
+        <Route exact path="/about">
+          {menu}
+          <About url={githubUrl} />
+        </Route>
+      </Switch>
 
-    </Switch>
-
-    <Analytics />
-  </Router>
-) : (<Alert variant="info">Loading data...</Alert>);
+      <Analytics />
+    </Router>
+  ) : (
+    <Alert variant="info">Loading data...</Alert>
+  );
 
   return (
     <div className="App">
       <header className="App-header" style={{ minHeight: "20rem" }}>
         <GithubRibbon url={githubUrl} />
-        <h1>Welcome to the <em>Headless CMS Comparison Website</em></h1>
+        <h1>
+          Welcome to the <em>Headless CMS Comparison Website</em>
+        </h1>
         <h2>Find the perfect headless CMS for your requirements!</h2>
       </header>
 
       <Container fluid className="my-3">
         <Row>
-        <Col>
-          {content}
-        </Col>
+          <Col>{content}</Col>
         </Row>
       </Container>
     </div>
-    );
+  );
 }
 
 function constructAppState(cmsData: {

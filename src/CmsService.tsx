@@ -125,12 +125,15 @@ function parseCms(cms: any): Cms {
   for (const key of propertyKeys) {
     const currentProperty: any = cms.properties[key];
     if (isBooleanCmsProperty(currentProperty)) {
-      currentProperty.value = currentProperty.value && (currentProperty.value as string).startsWith("Yes");
+      currentProperty.value =
+        currentProperty.value &&
+        (currentProperty.value as string).startsWith("Yes");
     } else {
       const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
       for (const subKey of subPropertyKeys) {
         const subProperty = currentProperty[subKey];
-        subProperty.value = subProperty.value && (subProperty.value as string).startsWith("Yes");
+        subProperty.value =
+          subProperty.value && (subProperty.value as string).startsWith("Yes");
       }
     }
   }
@@ -169,14 +172,16 @@ const validateProperties = (cms: Cms) => {
       const subNames = Object.keys(category);
       subNames.forEach((subName: string) => {
         const value: string = category[subName].value;
-        if (! re.test(value)) {
+        if (!re.test(value)) {
           delete category[subName];
-          console.warn(`Invalid value for ${cms.name}'s ${propName}.${subName}: ${value}`);
+          console.warn(
+            `Invalid value for ${cms.name}'s ${propName}.${subName}: ${value}`
+          );
         }
       });
     } else {
       const value: string = prop.value;
-      if (! re.test(value)) {
+      if (!re.test(value)) {
         delete cms.properties[propName];
         console.warn(`Invalid value for ${cms.name}'s ${propName}: ${value}`);
       }

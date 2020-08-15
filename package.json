@@ -53,6 +53,17 @@
   "devDependencies": {
     "@types/js-cookie": "^2.2.6",
     "@types/react-router-dom": "^5.1.5",
-    "devextreme-themebuilder": "20.1-stable"
+    "devextreme-themebuilder": "20.1-stable",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md,ts,tsx,json}": "prettier --write"
   }
 }

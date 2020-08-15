@@ -16,14 +16,14 @@ export enum License {
 export enum Category {
   Essential = "Essential",
   Professional = "Professional",
-  Enterprise = "Enterprise"
+  Enterprise = "Enterprise",
 }
 
 // Tristate boolean for "scoring"
 export enum ScoreValue {
   DONT_CARE = "Don't Care",
   NICE_TO_HAVE = "Nice-to-Have",
-  REQUIRED = "Required"
+  REQUIRED = "Required",
 }
 
 /////////////////////
@@ -31,19 +31,19 @@ export enum ScoreValue {
 /////////////////////
 
 export interface AppState {
-  cmsData: CmsData,
-  filterFields: { actual: FilterFieldSet, untouched: FilterFieldSet },
-  filterResults: FilterResult[],
+  cmsData: CmsData;
+  filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
+  filterResults: FilterResult[];
 }
 
 export interface CmsData {
-  fields: { [x: string]: any }
-  cms: { [x: string]: Cms }
+  fields: { [x: string]: any };
+  cms: { [x: string]: Cms };
 }
 
 export interface PanelSettings {
-  showModifiedOnly: boolean,
-  fieldFilterString: string
+  showModifiedOnly: boolean;
+  fieldFilterString: string;
 }
 
 export interface Cms {
@@ -56,7 +56,7 @@ export interface Cms {
   systemRequirements: string | null;
   specialFeatures: string | null;
   properties: {
-    [x: string]: CmsProperty // Category | FieldObject
+    [x: string]: CmsProperty; // Category | FieldObject
   };
 }
 
@@ -64,8 +64,8 @@ export interface FilterResult {
   cmsKey: string;
   has: FilterFieldSet;
   hasNot: FilterFieldSet;
-  hasRequiredShare: number,
-  hasNiceToHaveShare: number,
+  hasRequiredShare: number;
+  hasNiceToHaveShare: number;
   satisfactory: boolean;
 }
 
@@ -74,14 +74,14 @@ export interface FilterResult {
 ////////////
 
 export interface Field {
-  name: string
+  name: string;
 }
 
 export type BasicField = ScoreField | CategoryField;
 
 export interface ScoreField extends Field {
-  description: string,
-  value: null | ScoreValue
+  description: string;
+  value: null | ScoreValue;
 }
 
 export interface CategoryField extends Field {
@@ -90,7 +90,7 @@ export interface CategoryField extends Field {
 }
 
 export interface SpecialField extends Field {
-  description: string
+  description: string;
   values: any[];
   possibleValues: any[];
 }
@@ -115,4 +115,3 @@ export interface CategoryCmsProperty extends Field {
   description?: string;
   [index: string]: any; // Contains only BooleanCmsProperties
 }
-

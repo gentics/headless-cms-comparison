@@ -134,38 +134,39 @@ function Panel(props: {
           <Card>
             <Card.Header>
               <div className="d-flex justify-content-between">
-                <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>
-                  Filter
-                </h4>
+                <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>Filter</h4>
                 <Form className="w-50 d-flex justify-content-between">
-                  { showFilter ? (<>
-                  <div>
-                    <Form.Control
-                      type="text"
-                      name="fieldFilterString"
-                      value={panelSettings.fieldFilterString}
-                      onChange={(e: any) => panelSettingsChangeHandler(e)}
-                      placeholder="Filter for properties..."
-                      style={{ width: "300px" }}
-                    />
-                  </div>
-                  <div className="d-flex align-items-center ml-2">
-                    {" "}
-                    <Form.Check
-                      type="checkbox"
-                      name="showModifiedOnly"
-                      label="Show modified properties only"
-                      checked={panelSettings.showModifiedOnly}
-                      onChange={(e: any) => panelSettingsChangeHandler(e)}
-                    />
-                  </div></>) : null }
+                  {showFilter ? (
+                    <>
+                      <div>
+                        <Form.Control
+                          type="text"
+                          name="fieldFilterString"
+                          value={panelSettings.fieldFilterString}
+                          onChange={(e: any) => panelSettingsChangeHandler(e)}
+                          placeholder="Filter for properties..."
+                          style={{ width: "300px" }}
+                        />
+                      </div>
+                      <div className="d-flex align-items-center ml-2">
+                        {" "}
+                        <Form.Check
+                          type="checkbox"
+                          name="showModifiedOnly"
+                          label="Show modified properties only"
+                          checked={panelSettings.showModifiedOnly}
+                          onChange={(e: any) => panelSettingsChangeHandler(e)}
+                        />
+                      </div>
+                    </>
+                  ) : null}
                 </Form>
                 <div className="d-flex justify-content-between">
-                  { showFilter ? (
-                  <Button variant="info" onClick={(e: any) => resetPanel(e)}>
-                    Clear
-                  </Button>
-                  ) : null }
+                  {showFilter ? (
+                    <Button variant="info" onClick={(e: any) => resetPanel(e)}>
+                      Clear
+                    </Button>
+                  ) : null}
                   <Accordion.Toggle
                     as={Button}
                     variant="secondary"
@@ -409,5 +410,3 @@ function NoResultsRow() {
     </tr>
   );
 }
-
-

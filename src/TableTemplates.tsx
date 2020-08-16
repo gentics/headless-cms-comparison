@@ -3,18 +3,20 @@ import Description from "./Description";
 import { FiCheckCircle, FiHelpCircle, FiSlash } from "react-icons/fi";
 import { ColumnProps } from "primereact/column";
 
-export type CmsTableData = { [columnKey: string]: TableData }[];
+export type CmsTableData = { [columnKey: string]: TableCellData }[];
 export type BodyTemplate = (
-  rowData: { [columnKey: string]: TableData },
+  rowData: TableRowData,
   column: ColumnProps
 ) => JSX.Element | null;
 
-export type TableData = {
+export type TableCellData = {
   name: string;
   value?: boolean | undefined;
   description?: string;
   info?: string;
 };
+
+export type TableRowData = { [columnKey: string]: TableCellData };
 
 export const TitleTemplate: BodyTemplate = (rowData, column) => {
   if (!column.field) return null;
@@ -64,4 +66,17 @@ export const SpecialPropertyTemplate: BodyTemplate = (rowData, column) => {
   if (!column.field) return null;
   const cellData = rowData[column.field];
   return cellData?.info ? <span>{cellData.info}</span> : null;
+};
+
+export const sortData = (
+  data: CmsTableData,
+  event: { field: string; order: number }
+): CmsTableData => {
+  return data.sort((a: TableRowData, b: TableRowData) => {
+    const aData = a[event.field];
+    const bData = b[event.field];
+    const aValue = aData?.value ?? aData?.info ?? aData?.name;
+    const bValue = bData?.value ?? bData?.info ?? bData?.name;
+    return (aValue < bValue ? -1 : aValue > bValue ? 1 : 0) * event.order;
+  });
 };

@@ -39,6 +39,7 @@ import {
   TitleTemplate,
   BooleanPropertyTemplate,
   CmsTableData,
+  sortData,
 } from "./TableTemplates";
 
 export default function CmsDetailView(props: {
@@ -151,12 +152,14 @@ export default function CmsDetailView(props: {
                 header="Feature"
                 field="name"
                 sortable
+                sortFunction={(e) => sortData(tableValues, e)}
                 body={TitleTemplate}
               />
               <Column
                 header="Supported?"
                 field="value"
                 sortable
+                sortFunction={(e) => sortData(tableValues, e)}
                 body={BooleanPropertyTemplate}
               />
             </DataTable>

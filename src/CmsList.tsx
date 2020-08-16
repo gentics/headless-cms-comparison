@@ -13,12 +13,13 @@ import {
 
 import CmsService from "./CmsService";
 import {
-  TableData,
   BooleanPropertyTemplate,
   NameTemplate,
   BodyTemplate,
   CmsTableData,
   SpecialPropertyTemplate,
+  TableRowData,
+  sortData,
 } from "./TableTemplates";
 
 export default function CmsList(props: {
@@ -30,7 +31,8 @@ export default function CmsList(props: {
   );
 
   const columns: JSX.Element[] = constructColumnDataStructure(
-    props.filterFields
+    props.filterFields,
+    data
   );
 
   return (
@@ -50,10 +52,11 @@ export default function CmsList(props: {
 }
 
 function constructColumnDataStructure(
-  filterFields: FilterFieldSet
+  filterFields: FilterFieldSet,
+  data: CmsTableData
 ): JSX.Element[] {
   const columns: JSX.Element[] = [
-    convertToColumn("name", "CMS-Name", {
+    convertToColumn("name", "CMS-Name", data, {
       frozen: true,
       template: NameTemplate,
     }),
@@ -62,7 +65,7 @@ function constructColumnDataStructure(
   const specialFieldKeys = Object.keys(filterFields.special);
   specialFieldKeys.forEach((key: string) => {
     columns.push(
-      convertToColumn(key, filterFields.special[key].name, {
+      convertToColumn(key, filterFields.special[key].name, data, {
         template: SpecialPropertyTemplate,
       })
     );
@@ -72,7 +75,7 @@ function constructColumnDataStructure(
     const currentField = filterFields.basic[currentFieldKey];
     if (currentField.value !== undefined) {
       columns.push(
-        convertToColumn(currentFieldKey, currentField.name, {
+        convertToColumn(currentFieldKey, currentField.name, data, {
           template: BooleanPropertyTemplate,
         })
       );
@@ -85,6 +88,7 @@ function constructColumnDataStructure(
           convertToColumn(
             currentSubPropertyKey,
             `${currentField.name}: ${currentSubField.name}`,
+            data,
             { template: BooleanPropertyTemplate }
           )
         );
@@ -98,6 +102,7 @@ function constructColumnDataStructure(
 function convertToColumn(
   propertyKey: string,
   propertyDisplayName: string,
+  data: CmsTableData,
   props?: {
     frozen?: boolean;
     template?: BodyTemplate;
@@ -113,6 +118,7 @@ function convertToColumn(
       body={props && props.template ? props.template : null}
       className={props && props.frozen ? "cmsTableNameColumn" : undefined}
       sortable
+      sortFunction={(e) => sortData(data, e)}
     />
   );
 }
@@ -120,10 +126,8 @@ function convertToColumn(
 function convertCmsToTableDataStructure(
   cms: Cms,
   filterFields: FilterFieldSet
-): { [columnKey: string]: TableData } {
-  const tableCms: { [columnKey: string]: TableData } = {
-    name: { name: cms.name },
-  };
+): TableRowData {
+  const tableCms: TableRowData = { name: { name: cms.name } };
 
   Object.keys(filterFields.special).forEach((key: string) => {
     const prop = cms[key];

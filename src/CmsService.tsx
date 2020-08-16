@@ -9,6 +9,7 @@ import {
   CategoryCmsProperty,
   CategoryField,
   CmsData,
+  PropertyType,
 } from "./Cms";
 import FilterService from "./FilterService";
 
@@ -125,21 +126,32 @@ function parseCms(cms: any): Cms {
   for (const key of propertyKeys) {
     const currentProperty: any = cms.properties[key];
     if (isBooleanCmsProperty(currentProperty)) {
-      currentProperty.value =
-        currentProperty.value &&
-        (currentProperty.value as string).startsWith("Yes");
+      cms.properties[key] = parseValue(currentProperty);
     } else {
       const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
       for (const subKey of subPropertyKeys) {
-        const subProperty = currentProperty[subKey];
-        subProperty.value =
-          subProperty.value && (subProperty.value as string).startsWith("Yes");
+        currentProperty[subKey] = parseValue(currentProperty[subKey]);
       }
     }
   }
 
   return cms;
 }
+
+const parseValue = (p: any): BooleanCmsProperty => {
+  const re = /^(Yes|No)[,\s*](.*)$/;
+  let value: boolean | undefined = undefined;
+  let info: string | undefined = undefined;
+
+  if (p.value) {
+    value = p.value.startsWith("Yes");
+    const match = re.exec(p.value);
+    if (match) {
+      info = match[2];
+    }
+  }
+  return { name: p.name, value, info, type: PropertyType.Boolean };
+};
 
 function licensesAreValid(licenses: string[]): boolean {
   return (
@@ -164,11 +176,14 @@ function isBooleanCmsProperty(x: any) {
 
 const validateProperties = (cms: Cms) => {
   const propNames = Object.keys(cms.properties);
-  const re = /^(Yes|No$|undefined$|null$|$)/;
+  const re = /^(Yes|No|undefined$|null$|$)/;
   propNames.forEach((propName: string) => {
     const prop: CmsProperty = cms.properties[propName];
     if (prop.value === undefined) {
-      const category: CategoryCmsProperty = prop;
+      const category: CategoryCmsProperty = {
+        ...prop,
+        type: PropertyType.Category,
+      };
       const subNames = Object.keys(category);
       subNames.forEach((subName: string) => {
         const value: string = category[subName].value;
@@ -180,6 +195,7 @@ const validateProperties = (cms: Cms) => {
         }
       });
     } else {
+      prop.type = PropertyType.Boolean;
       const value: string = prop.value;
       if (!re.test(value)) {
         delete cms.properties[propName];

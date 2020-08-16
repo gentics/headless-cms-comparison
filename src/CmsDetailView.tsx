@@ -9,6 +9,7 @@ import {
   CmsData,
   CategoryCmsProperty,
   CategoryField,
+  PropertyType,
 } from "./Cms";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -19,6 +20,7 @@ import {
   FiPackage,
   FiAward,
   FiPower,
+  FiHelpCircle,
 } from "react-icons/fi";
 import { FiSlash } from "react-icons/fi";
 import { GrLicense } from "react-icons/gr";
@@ -35,7 +37,12 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Description from "./Description";
 
-type TableData = { name: string; value: boolean; description?: string };
+type TableData = {
+  name: string;
+  value: boolean;
+  description?: string;
+  info: string;
+};
 
 const TitleTemplate = (rowData: TableData) => {
   return (
@@ -51,10 +58,20 @@ const TitleTemplate = (rowData: TableData) => {
 };
 
 const BooleanPropertyTemplate = (rowData: TableData) => {
-  return rowData.value ? (
-    <FiCheckCircle style={{ color: "green" }} />
+  const bool = rowData.value ? (
+    <FiCheckCircle aria-label="yes" style={{ color: "green" }} />
+  ) : rowData.value === undefined ? (
+    <FiHelpCircle aria-label="unknown" style={{ color: "orange" }} />
   ) : (
-    <FiSlash style={{ color: "red" }} />
+    <FiSlash aria-label="no" style={{ color: "red" }} />
+  );
+
+  const info = rowData.info ? <span> ({rowData.info})</span> : null;
+  return (
+    <>
+      {bool}
+      {info}
+    </>
   );
 };
 
@@ -87,10 +104,11 @@ export default function CmsDetailView(props: {
   Object.keys(basicFilterFields).forEach((key: string) => {
     const prop = cms.properties[key];
     if (prop) {
-      if (prop.value !== undefined) {
+      if (prop.type === PropertyType.Boolean) {
         tableValues.push({
           name: prop.name,
           value: prop.value,
+          info: prop.info,
           description: basicFilterFields[key].description,
         });
       } else {
@@ -101,10 +119,11 @@ export default function CmsDetailView(props: {
         );
         subFieldKeys.forEach((subkey: string) => {
           const subprop = catprop[subkey];
-          if (subprop && subprop.value !== undefined) {
+          if (subprop && subprop.type === PropertyType.Boolean) {
             tableValues.push({
               name: `${prop.name}: ${subprop.name}`,
               value: subprop.value,
+              info: subprop.info,
               description: basicFilterSubFields[subkey].description,
             });
           }

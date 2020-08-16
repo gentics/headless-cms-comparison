@@ -102,14 +102,22 @@ export interface FilterFieldSet {
 // CMS PROPERTIES //
 ////////////////////
 
+export enum PropertyType {
+  Boolean = "B",
+  Category = "C",
+}
+
 export type CmsProperty = BooleanCmsProperty | CategoryCmsProperty;
 
 export interface BooleanCmsProperty extends Field {
+  type: PropertyType;
   description?: string;
-  value: boolean;
+  value?: boolean;
+  info?: string;
 }
 
 export interface CategoryCmsProperty extends Field {
+  type: PropertyType;
   description?: string;
   [index: string]: any; // Contains only BooleanCmsProperties
 }

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {
   FilterFieldSet,
   FilterResult,
@@ -31,7 +31,7 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -47,7 +47,7 @@ export default function CmsDetailView(props: {
   filterResults: FilterResult[];
   cmsData: CmsData;
 }) {
-  const cmsKey = useQuery().get("cmsKey");
+  const { cmsKey } = useParams();
   let filterResult: FilterResult;
   let cms: Cms;
 
@@ -61,7 +61,10 @@ export default function CmsDetailView(props: {
     return (
       <Alert variant="warning">
         Invalid CMS key was given! Go back to the{" "}
-        <LinkContainer to="/card">Card View</LinkContainer> and select a CMS!
+        <LinkContainer to="/card">
+          <Button>Card View</Button>
+        </LinkContainer>{" "}
+        and select a CMS!
       </Alert>
     );
   }
@@ -173,10 +176,6 @@ export default function CmsDetailView(props: {
       </Container>
     </>
   );
-}
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
 }
 
 function PropertyList(props: { filterResult: FilterResult; name: string }) {

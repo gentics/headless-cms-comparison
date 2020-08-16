@@ -30,6 +30,7 @@ import FilterPanel from "./FilterPanel";
 import Analytics from "./Analytics";
 import GithubRibbon from "./GithubRibbon";
 import About from "./About";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -107,7 +108,7 @@ function App() {
           />
         </Route>
 
-        <Route exact path="/detail">
+        <Route path="/detail/:cmsKey">
           <CmsDetailView
             filterFields={appState.filterFields.actual}
             filterResults={appState.filterResults}
@@ -139,7 +140,9 @@ function App() {
 
       <Container fluid className="my-3">
         <Row>
-          <Col>{content}</Col>
+          <Col>
+            <ErrorBoundary>{content}</ErrorBoundary>
+          </Col>
         </Row>
       </Container>
     </div>

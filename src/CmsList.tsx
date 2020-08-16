@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import {
@@ -27,7 +27,11 @@ export default function CmsList(props: {
   filterFields: FilterFieldSet;
 }) {
   const data: CmsTableData = Object.keys(props.cmsData).map((cmsKey: string) =>
-    convertCmsToTableDataStructure(props.cmsData[cmsKey], props.filterFields)
+    convertCmsToTableDataStructure(
+      props.cmsData[cmsKey],
+      cmsKey,
+      props.filterFields
+    )
   );
 
   const columns: JSX.Element[] = constructColumnDataStructure(
@@ -125,9 +129,10 @@ function convertToColumn(
 
 function convertCmsToTableDataStructure(
   cms: Cms,
+  cmsKey: string,
   filterFields: FilterFieldSet
 ): TableRowData {
-  const tableCms: TableRowData = { name: { name: cms.name } };
+  const tableCms: TableRowData = { name: { name: cms.name, info: cmsKey } };
 
   Object.keys(filterFields.special).forEach((key: string) => {
     const prop = cms[key];

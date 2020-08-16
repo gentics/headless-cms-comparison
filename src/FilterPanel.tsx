@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Accordion from "react-bootstrap/Accordion";

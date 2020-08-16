@@ -15,8 +15,7 @@ import FilterService from "./FilterService";
 
 const CMS_REPO_BASE_URL =
   "https://raw.githubusercontent.com/gentics/headless-cms-comparison/refactor/";
-// TODO: Add 'cms-list.json' to cms-comparison repo and fetch from there
-const CMS_LIST_PATH = "./cms-list.json";
+const CMS_LIST_PATH = `${CMS_REPO_BASE_URL}/cms-list.json`;
 
 let cmsData: Promise<any>;
 
@@ -26,7 +25,7 @@ const CmsService = {
       cmsData = fetch(CMS_LIST_PATH)
         .then((response) => response.json())
         .then((data) => {
-          return fetchCmsData(data.cms);
+          return fetchCmsData(data.fields, data.cms);
         })
         .then((rawCmsData) => {
           return rawCmsData;
@@ -58,9 +57,12 @@ const CmsService = {
  * fields: Object containing field-properties
  * cms: Array containing cms-objects
  */
-async function fetchCmsData(cmsKeyList: string[]): Promise<ReceivedCmsData> {
+async function fetchCmsData(
+  fields: string,
+  cms: string[]
+): Promise<ReceivedCmsData> {
   let promises: Promise<any>[] = [];
-  cmsKeyList.forEach((cms: string) => {
+  [fields, ...cms].forEach((cms: string) => {
     promises.push(
       fetch(CMS_REPO_BASE_URL + cms + ".json")
         .then((response) => {
@@ -76,15 +78,14 @@ async function fetchCmsData(cmsKeyList: string[]): Promise<ReceivedCmsData> {
   });
 
   const values = await Promise.all(promises);
-  const fields = values[0];
+  const fieldsData = values[0];
   let rawCms: Cms[] = values.slice(1);
-  cmsKeyList = cmsKeyList.sort().filter((x) => x.toLowerCase() !== "fields");
   rawCms = sortCmsByName(rawCms);
   const parsedCms: { [x_1: string]: Cms } = {};
   for (let i = 0; i < rawCms.length; i++) {
-    parsedCms[cmsKeyList[i]] = parseCms(rawCms[i]);
+    parsedCms[cms[i]] = parseCms(rawCms[i]);
   }
-  return { fields: fields, cms: parsedCms };
+  return { fields: fieldsData, cms: parsedCms };
 }
 
 function sortCmsByName(cmsArray: Cms[]) {

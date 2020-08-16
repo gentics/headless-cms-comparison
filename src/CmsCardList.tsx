@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Card from "react-bootstrap/Card";
 import { GrLicense } from "react-icons/gr";
 import { FiSlash, FiCheckCircle, FiAward, FiBox } from "react-icons/fi";
@@ -53,7 +53,7 @@ function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
   return (
     <div className="my-2 mx-2" key={props.filterResult.cmsKey}>
       <LinkContainer
-        to={`/detail?cmsKey=${props.filterResult.cmsKey}`}
+        to={`/detail/${props.filterResult.cmsKey}`}
         className="cmsCardLink"
       >
         <Card

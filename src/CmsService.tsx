@@ -8,8 +8,8 @@ import {
   ScoreField,
   CategoryCmsProperty,
   CategoryField,
-  CmsData,
   PropertyType,
+  ReceivedCmsData,
 } from "./Cms";
 import FilterService from "./FilterService";
 
@@ -58,7 +58,7 @@ const CmsService = {
  * fields: Object containing field-properties
  * cms: Array containing cms-objects
  */
-function fetchCmsData(cmsKeyList: string[]): Promise<CmsData> {
+async function fetchCmsData(cmsKeyList: string[]): Promise<ReceivedCmsData> {
   let promises: Promise<any>[] = [];
   cmsKeyList.forEach((cms: string) => {
     promises.push(
@@ -75,21 +75,16 @@ function fetchCmsData(cmsKeyList: string[]): Promise<CmsData> {
     );
   });
 
-  return Promise.all(promises).then((values) => {
-    const fields = values[0];
-    let rawCms: Cms[] = values.slice(1);
-
-    cmsKeyList = cmsKeyList.sort().filter((x) => x.toLowerCase() !== "fields");
-
-    rawCms = sortCmsByName(rawCms);
-
-    const parsedCms: { [x: string]: Cms } = {};
-    for (let i = 0; i < rawCms.length; i++) {
-      parsedCms[cmsKeyList[i]] = parseCms(rawCms[i]);
-    }
-
-    return { fields: fields, cms: parsedCms };
-  });
+  const values = await Promise.all(promises);
+  const fields = values[0];
+  let rawCms: Cms[] = values.slice(1);
+  cmsKeyList = cmsKeyList.sort().filter((x) => x.toLowerCase() !== "fields");
+  rawCms = sortCmsByName(rawCms);
+  const parsedCms: { [x_1: string]: Cms } = {};
+  for (let i = 0; i < rawCms.length; i++) {
+    parsedCms[cmsKeyList[i]] = parseCms(rawCms[i]);
+  }
+  return { fields: fields, cms: parsedCms };
 }
 
 function sortCmsByName(cmsArray: Cms[]) {
@@ -102,52 +97,72 @@ function sortCmsByName(cmsArray: Cms[]) {
   );
 }
 
-function parseCms(cms: any): Cms {
-  // Special parsing for licenses and categories
-
+function parseCms(data: any): Cms {
   // Parse licenses
-  const licenses: License[] = cms.license.split("/");
+  const licenses: License[] = data.license.split("/");
   if (!licensesAreValid(licenses)) {
     console.error(licenses);
-    throw new Error(`CMS ${cms.name} has invalid or no licenses!`);
+    throw new Error(`CMS ${data.name} has invalid or no licenses!`);
   }
-  cms.license = licenses;
 
   // Parse categories
-  const categories: Category[] = cms.category.split("/");
+  const categories: Category[] = data.category.split("/");
   if (!categoriesAreValid(categories)) {
     console.error(categories);
-    throw new Error(`CMS ${cms.name} has invalid or no categories!`);
+    throw new Error(`CMS ${data.name} has invalid or no categories!`);
   }
-  cms.category = categories;
 
-  validateProperties(cms);
-  const propertyKeys: string[] = Object.keys(cms.properties);
+  // Parse properties
+  const properties: { [x: string]: CmsProperty } = {};
+  const propertyKeys: string[] = Object.keys(data.properties);
   for (const key of propertyKeys) {
-    const currentProperty: any = cms.properties[key];
-    if (isBooleanCmsProperty(currentProperty)) {
-      cms.properties[key] = parseValue(currentProperty);
+    const currentProperty: any = data.properties[key];
+    if (currentProperty.value !== undefined) {
+      properties[key] = parseValue(currentProperty);
     } else {
+      const category: CategoryCmsProperty = {
+        type: PropertyType.Category,
+        name: currentProperty.name,
+        description: currentProperty.description,
+      };
+      properties[key] = category;
       const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
       for (const subKey of subPropertyKeys) {
-        currentProperty[subKey] = parseValue(currentProperty[subKey]);
+        category[subKey] = parseValue(currentProperty[subKey]);
       }
     }
   }
+
+  const cms: Cms = {
+    lastUpdated: data.lastUpdated,
+    name: data.name,
+    version: data.version,
+    inception: data.inception,
+    systemRequirements: data.systemRequirements,
+    specialFeatures: data.specialFeatures,
+    license: licenses,
+    category: categories,
+    properties,
+  };
 
   return cms;
 }
 
 const parseValue = (p: any): BooleanCmsProperty => {
-  const re = /^(Yes|No)[,\s*](.*)$/;
+  const validRe = /^(Yes|No|null)/;
+  const infoRe = /^(Yes|No)[,\s*](.*)$/;
   let value: boolean | undefined = undefined;
   let info: string | undefined = undefined;
 
   if (p.value) {
-    value = p.value.startsWith("Yes");
-    const match = re.exec(p.value);
-    if (match) {
-      info = match[2];
+    if (validRe.test(p.value)) {
+      value = p.value.startsWith("Yes");
+      const match = infoRe.exec(p.value);
+      if (match) {
+        info = match[2];
+      }
+    } else {
+      console.warn(`Invalid value for ${p.name}: ${p.value}`);
     }
   }
   return { name: p.name, value, info, type: PropertyType.Boolean };
@@ -168,41 +183,5 @@ function categoriesAreValid(categories: string[]): boolean {
       .length === categories.length
   );
 }
-
-function isBooleanCmsProperty(x: any) {
-  if (!x) return false;
-  return (x as BooleanCmsProperty).value !== undefined;
-}
-
-const validateProperties = (cms: Cms) => {
-  const propNames = Object.keys(cms.properties);
-  const re = /^(Yes|No|undefined$|null$|$)/;
-  propNames.forEach((propName: string) => {
-    const prop: CmsProperty = cms.properties[propName];
-    if (prop.value === undefined) {
-      const category: CategoryCmsProperty = {
-        ...prop,
-        type: PropertyType.Category,
-      };
-      const subNames = Object.keys(category);
-      subNames.forEach((subName: string) => {
-        const value: string = category[subName].value;
-        if (!re.test(value)) {
-          delete category[subName];
-          console.warn(
-            `Invalid value for ${cms.name}'s ${propName}.${subName}: ${value}`
-          );
-        }
-      });
-    } else {
-      prop.type = PropertyType.Boolean;
-      const value: string = prop.value;
-      if (!re.test(value)) {
-        delete cms.properties[propName];
-        console.warn(`Invalid value for ${cms.name}'s ${propName}: ${value}`);
-      }
-    }
-  });
-};
 
 export default CmsService;

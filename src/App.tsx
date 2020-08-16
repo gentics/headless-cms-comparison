@@ -23,7 +23,7 @@ import "./App.css";
 import CmsList from "./CmsList";
 import CmsCardList from "./CmsCardList";
 import CmsDetailView from "./CmsDetailView";
-import { AppState, Cms, CmsData, FilterFieldSet } from "./Cms";
+import { AppState, Cms, FilterFieldSet, ReceivedCmsData } from "./Cms";
 import CmsService from "./CmsService";
 import FilterService from "./FilterService";
 import FilterPanel from "./FilterPanel";
@@ -35,7 +35,7 @@ function App() {
   const [appState, setAppState] = React.useState<AppState>();
 
   React.useEffect(() => {
-    CmsService.getCmsData().then((cmsData: CmsData) => {
+    CmsService.getCmsData().then((cmsData: ReceivedCmsData) => {
       setAppState(constructAppState(cmsData));
     });
   }, []);
@@ -45,7 +45,7 @@ function App() {
       const updatedAppState = deepcopy<AppState>(appState);
       updatedAppState.filterResults = FilterService.filterCms(
         updatedFilterFields,
-        appState.cmsData.cms
+        appState.cms
       );
       updatedAppState.filterFields.actual = updatedFilterFields;
       setAppState(updatedAppState);
@@ -95,20 +95,23 @@ function App() {
           />
           <CmsCardList
             filterResults={appState.filterResults}
-            cms={appState.cmsData.cms}
+            cms={appState.cms}
           />
         </Route>
 
         <Route exact path="/list">
           {menu}
-          <CmsList cmsData={appState.cmsData} />
+          <CmsList
+            filterFields={appState.filterFields.actual}
+            cmsData={appState.cms}
+          />
         </Route>
 
         <Route exact path="/detail">
           <CmsDetailView
             filterFields={appState.filterFields.actual}
             filterResults={appState.filterResults}
-            cmsData={appState.cmsData}
+            cmsData={appState.cms}
           />
         </Route>
 
@@ -144,19 +147,19 @@ function App() {
 }
 
 function constructAppState(cmsData: {
-  fields: { [x: string]: any };
+  fields?: { [x: string]: any };
   cms: { [x: string]: Cms };
 }): AppState {
   const filterFields: FilterFieldSet = { basic: {}, special: {} };
   filterFields.basic = FilterService.initializeBasicFields(
-    cmsData.fields.properties
+    cmsData.fields?.properties
   );
   filterFields.special = FilterService.initializeSpecialFields();
 
   const untouchedFilterFields = deepcopy<FilterFieldSet>(filterFields);
 
   const appState: AppState = {
-    cmsData: cmsData,
+    cms: cmsData.cms,
     filterFields: { actual: filterFields, untouched: untouchedFilterFields },
     filterResults: FilterService.getUnfilteredCms(cmsData.cms),
   };

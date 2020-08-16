@@ -10,6 +10,7 @@ import {
   CategoryCmsProperty,
   CategoryField,
   PropertyType,
+  BooleanCmsProperty,
 } from "./Cms";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -20,9 +21,8 @@ import {
   FiPackage,
   FiAward,
   FiPower,
-  FiHelpCircle,
+  FiSlash,
 } from "react-icons/fi";
-import { FiSlash } from "react-icons/fi";
 import { GrLicense } from "react-icons/gr";
 import { MdUpdate } from "react-icons/md";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -35,45 +35,11 @@ import { useLocation } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import Description from "./Description";
-
-type TableData = {
-  name: string;
-  value: boolean;
-  description?: string;
-  info: string;
-};
-
-const TitleTemplate = (rowData: TableData) => {
-  return (
-    <div className="d-flex justify-content-between">
-      <span className="ml-2">
-        {rowData.description ? (
-          <Description description={rowData.description} />
-        ) : null}
-      </span>
-      <span className="mr-2">{rowData.name}</span>
-    </div>
-  );
-};
-
-const BooleanPropertyTemplate = (rowData: TableData) => {
-  const bool = rowData.value ? (
-    <FiCheckCircle aria-label="yes" style={{ color: "green" }} />
-  ) : rowData.value === undefined ? (
-    <FiHelpCircle aria-label="unknown" style={{ color: "orange" }} />
-  ) : (
-    <FiSlash aria-label="no" style={{ color: "red" }} />
-  );
-
-  const info = rowData.info ? <span> ({rowData.info})</span> : null;
-  return (
-    <>
-      {bool}
-      {info}
-    </>
-  );
-};
+import {
+  TitleTemplate,
+  BooleanPropertyTemplate,
+  CmsTableData,
+} from "./TableTemplates";
 
 export default function CmsDetailView(props: {
   filterFields: FilterFieldSet;
@@ -84,8 +50,8 @@ export default function CmsDetailView(props: {
   let filterResult: FilterResult;
   let cms: Cms;
 
-  if (cmsKey && props.cmsData.cms[cmsKey]) {
-    cms = props.cmsData.cms[cmsKey];
+  if (cmsKey && props.cmsData[cmsKey]) {
+    cms = props.cmsData[cmsKey];
     const filterResultIndex = props.filterResults.findIndex(
       (filterResult) => filterResult.cmsKey === cmsKey
     );
@@ -99,17 +65,22 @@ export default function CmsDetailView(props: {
     );
   }
 
-  let tableValues: TableData[] = [];
+  const tableValues: CmsTableData = [];
   const basicFilterFields = props.filterFields.basic;
   Object.keys(basicFilterFields).forEach((key: string) => {
     const prop = cms.properties[key];
     if (prop) {
       if (prop.type === PropertyType.Boolean) {
         tableValues.push({
-          name: prop.name,
-          value: prop.value,
-          info: prop.info,
-          description: basicFilterFields[key].description,
+          name: {
+            name: prop.name,
+            description: basicFilterFields[key].description,
+          },
+          value: {
+            name: prop.name,
+            value: prop.value,
+            info: prop.info,
+          },
         });
       } else {
         const basicFilterSubFields: CategoryField = basicFilterFields[key];
@@ -118,13 +89,19 @@ export default function CmsDetailView(props: {
           basicFilterFields[key]
         );
         subFieldKeys.forEach((subkey: string) => {
-          const subprop = catprop[subkey];
-          if (subprop && subprop.type === PropertyType.Boolean) {
+          const subprop: BooleanCmsProperty = catprop[subkey];
+          if (subprop) {
+            const name = `${prop.name}: ${subprop.name}`;
             tableValues.push({
-              name: `${prop.name}: ${subprop.name}`,
-              value: subprop.value,
-              info: subprop.info,
-              description: basicFilterSubFields[subkey].description,
+              name: {
+                name,
+                description: basicFilterSubFields[subkey].description,
+              },
+              value: {
+                name,
+                value: subprop.value,
+                info: subprop.info,
+              },
             });
           }
         });

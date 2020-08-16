@@ -2,26 +2,41 @@ import * as React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import {
-  BasicField,
-  ScoreField,
   Cms,
-  CmsProperty,
   BooleanCmsProperty,
   CmsData,
+  PropertyType,
+  CategoryField,
+  CategoryCmsProperty,
+  FilterFieldSet,
 } from "./Cms";
 
 import CmsService from "./CmsService";
+import {
+  TableData,
+  BooleanPropertyTemplate,
+  NameTemplate,
+  BodyTemplate,
+  CmsTableData,
+  SpecialPropertyTemplate,
+} from "./TableTemplates";
 
-export default function CmsList(props: { cmsData: CmsData }) {
-  const cms: any = Object.keys(props.cmsData.cms).map((cmsKey: string) =>
-    convertCmsToTableDataStructure(props.cmsData.cms[cmsKey])
+export default function CmsList(props: {
+  cmsData: CmsData;
+  filterFields: FilterFieldSet;
+}) {
+  const data: CmsTableData = Object.keys(props.cmsData).map((cmsKey: string) =>
+    convertCmsToTableDataStructure(props.cmsData[cmsKey], props.filterFields)
   );
-  const columns = constructColumnDataStructure(props.cmsData);
+
+  const columns: JSX.Element[] = constructColumnDataStructure(
+    props.filterFields
+  );
 
   return (
     <div>
       <DataTable
-        value={cms}
+        value={data}
         autoLayout
         scrollable
         scrollHeight="650px"
@@ -34,33 +49,43 @@ export default function CmsList(props: { cmsData: CmsData }) {
   );
 }
 
-function constructColumnDataStructure(cmsData: CmsData) {
-  const basicFields: { [x: string]: BasicField } = cmsData.fields.properties;
-  const basicFieldKeys = Object.keys(basicFields);
-  const columns: JSX.Element[] = [];
-
-  const specialFields: { [x: string]: any } = cmsData.fields;
-  const specialFieldKeys = getSpecialKeys(specialFields);
-
-  columns.push(convertToColumn("name", "CMS-Name", true));
-
-  specialFieldKeys.forEach((key) => {
-    columns.push(convertToColumn(key, specialFields[key].name, false));
+function constructColumnDataStructure(
+  filterFields: FilterFieldSet
+): JSX.Element[] {
+  const columns: JSX.Element[] = [
+    convertToColumn("name", "CMS-Name", {
+      frozen: true,
+      template: NameTemplate,
+    }),
+  ];
+  const basicFieldKeys = Object.keys(filterFields.basic);
+  const specialFieldKeys = Object.keys(filterFields.special);
+  specialFieldKeys.forEach((key: string) => {
+    columns.push(
+      convertToColumn(key, filterFields.special[key].name, {
+        template: SpecialPropertyTemplate,
+      })
+    );
   });
 
   for (const currentFieldKey of basicFieldKeys) {
-    const currentField = basicFields[currentFieldKey];
-    if (isScoreFieldProperty(currentField)) {
-      columns.push(convertToColumn(currentFieldKey, currentField.name, false));
+    const currentField = filterFields.basic[currentFieldKey];
+    if (currentField.value !== undefined) {
+      columns.push(
+        convertToColumn(currentFieldKey, currentField.name, {
+          template: BooleanPropertyTemplate,
+        })
+      );
     } else {
-      const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
+      const category: CategoryField = currentField;
+      const subFieldKeys = CmsService.getKeysOfSubFields(category);
       for (const currentSubPropertyKey of subFieldKeys) {
-        const currentSubField = currentField[currentSubPropertyKey];
+        const currentSubField = category[currentSubPropertyKey];
         columns.push(
           convertToColumn(
             currentSubPropertyKey,
-            currentField.name + ": " + currentSubField.name,
-            false
+            `${currentField.name}: ${currentSubField.name}`,
+            { template: BooleanPropertyTemplate }
           )
         );
       }
@@ -70,79 +95,59 @@ function constructColumnDataStructure(cmsData: CmsData) {
   return columns;
 }
 
-function isScoreFieldProperty(x: BasicField): x is ScoreField {
-  return x && x.value !== undefined;
-}
-
 function convertToColumn(
   propertyKey: string,
   propertyDisplayName: string,
-  frozen: boolean
-) {
+  props?: {
+    frozen?: boolean;
+    template?: BodyTemplate;
+  }
+): JSX.Element {
   return (
     <Column
       key={propertyKey}
       field={propertyKey}
       header={propertyDisplayName}
-      frozen={frozen}
+      frozen={props && props.frozen}
       style={{ width: "220px", height: "150px" }}
-      className={frozen ? "cmsTableNameColumn" : undefined}
+      body={props && props.template ? props.template : null}
+      className={props && props.frozen ? "cmsTableNameColumn" : undefined}
       sortable
     />
   );
 }
 
-function convertCmsToTableDataStructure(cms: Cms) {
-  const properties = cms.properties;
+function convertCmsToTableDataStructure(
+  cms: Cms,
+  filterFields: FilterFieldSet
+): { [columnKey: string]: TableData } {
+  const tableCms: { [columnKey: string]: TableData } = {
+    name: { name: cms.name },
+  };
 
-  const tableCms: { [x: string]: any } = {};
-
-  const specialProperties: any = cms;
-  const specialPropertyKeys = getSpecialKeys(cms);
-  specialPropertyKeys.forEach((key) => {
-    const specialProperty = specialProperties[key];
-    if (specialProperty) {
-      if (specialProperty.value !== undefined) {
-        tableCms[key] = specialProperty.value
-          ? specialProperty.value
-          : "Not specified";
-      } else {
-        tableCms[key] = specialProperty;
-      }
-    } else {
-      tableCms[key] = "Not specified";
-    }
-
-    if (typeof tableCms[key] === "object") {
-      tableCms[key] = tableCms[key].toString();
-    }
+  Object.keys(filterFields.special).forEach((key: string) => {
+    const prop = cms[key];
+    tableCms[key] = { name: key, info: prop?.toString() };
   });
 
-  tableCms.name = cms.name;
-
-  const propertyKeys = Object.keys(properties);
-  for (const currentKey of propertyKeys) {
-    const currentProperty = properties[currentKey];
-    if (isBooleanCmsProperty(currentProperty)) {
-      tableCms[currentKey] = currentProperty.value ? "Yes" : "No";
-    } else {
-      const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
-      for (const currentSubKey of subPropertyKeys) {
-        const currentSubProperty = currentProperty[currentSubKey];
-        tableCms[currentSubKey] = currentSubProperty.value ? "Yes" : "No";
+  Object.keys(filterFields.basic).forEach((key: string) => {
+    const prop = cms.properties[key];
+    if (prop) {
+      if (prop.type === PropertyType.Boolean) {
+        tableCms[key] = { name: prop.name, value: prop.value };
+      } else {
+        const category: CategoryCmsProperty = prop;
+        const subPropertyKeys = CmsService.getKeysOfSubFields(category);
+        for (const currentSubKey of subPropertyKeys) {
+          const currentSubProperty: BooleanCmsProperty =
+            category[currentSubKey];
+          tableCms[currentSubKey] = {
+            name: currentSubProperty.name,
+            value: currentSubProperty.value,
+          };
+        }
       }
     }
-  }
-
+  });
   return tableCms;
-}
-
-function isBooleanCmsProperty(x: CmsProperty): x is BooleanCmsProperty {
-  return x && x.value !== undefined;
-}
-
-function getSpecialKeys(indexedArray: any): string[] {
-  return Object.keys(indexedArray).filter(
-    (key) => key !== "properties" && key !== "name" && key !== "specialFeatures"
-  );
 }

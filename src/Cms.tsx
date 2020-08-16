@@ -28,15 +28,17 @@ export enum ScoreValue {
 // CORE INTERFACES //
 /////////////////////
 
+export type CmsData = { [cmsName: string]: Cms };
+
 export interface AppState {
-  cmsData: CmsData;
+  cms: CmsData;
   filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
   filterResults: FilterResult[];
 }
 
-export interface CmsData {
+export interface ReceivedCmsData {
   fields: { [x: string]: any };
-  cms: { [x: string]: Cms };
+  cms: CmsData;
 }
 
 export interface PanelSettings {
@@ -54,8 +56,10 @@ export interface Cms {
   systemRequirements: string | null;
   specialFeatures: string | null;
   properties: {
-    [x: string]: CmsProperty; // Category | FieldObject
+    [x: string]: CmsProperty;
   };
+
+  [x: string]: {} | Date | string | License[] | null | Category[];
 }
 
 export interface FilterResult {

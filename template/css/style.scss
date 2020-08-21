@@ -1,0 +1,429 @@
+/* Main colors */
+$primaryColor: #975cf6; // #AD5389
+$secondaryColor: #35087e; // #3C1053
+$lightBackground: #f4f5f7;
+
+/* Gradient colors */
+$cardColor1: (first: #5a9cfe, second: #073984);
+$cardColor2: (first: #975cf6, second: #35087e);
+$cardColor3: (first: #e374ab, second: #6f1b45);
+$cardColor4: (first: #e77681, second: #721c24);
+$cardColor5: (first: #67dab8, second: #11694f);
+$cardColor6: (first: #fea75f, second: #84420a);
+$cardColors: ($cardColor1, $cardColor2, $cardColor3, $cardColor4, $cardColor5, $cardColor6);
+
+/* Main fonts */
+$primaryFont: 'Open Sans', sans-serif;
+$secondaryFont: 'Alata', sans-serif;
+
+body {
+  font-family: $primaryFont;
+}
+
+nav {
+  padding: 20px 0;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-family: $secondaryFont;
+
+  .logo {
+    font-size: 1.5rem;
+    color: $primaryColor;
+    font-weight: bold;
+    background: linear-gradient(to right, $primaryColor, $secondaryColor);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline;
+      margin-left: 20px;
+    }
+  }
+}
+
+header {
+  height: 600px;
+  background: url("../images/background.svg"), linear-gradient(to right, $primaryColor, $secondaryColor);
+  color: #fff;
+  font-family: $secondaryFont;
+  display: flex;
+  align-items: center;
+  position:relative;
+  z-index: 3;
+
+
+  h1 {
+    font-weight: bold;
+    margin-bottom: 40px;
+  }
+
+  svg {
+    .st0 {
+      fill: #FFFFFF;
+      stroke: #FFFFFF;
+      stroke-miterlimit: 10;
+    }
+
+    .st1 {
+      fill: #E6E6E6;
+    }
+
+    .st2 {
+      fill: #3F3D56;
+    }
+
+    .st3 {
+      fill: $primaryColor;
+    }
+
+    .st4 {
+      fill: #A0616A;
+    }
+
+    .st5 {
+      fill: #2F2E41;
+    }
+
+    .st6 {
+      fill: #CCCCCC;
+    }
+  }
+}
+
+section#filter-menu {
+  background: #fff;
+  height: 50px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.08);
+  box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
+  position:relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+
+  .filters {
+    font-family: $secondaryFont;
+    text-transform: uppercase;
+    font-size: .8rem;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .filter-switch, .list-card-switch {
+      position: absolute;
+      &:hover {
+        color: $primaryColor;
+      }
+
+    }
+    .filter-switch {
+      left: 15px;
+      a {
+        color: #000;
+        position: absolute;
+        width: 100px;
+        left: 0px;
+        top: 50%;
+        transform: translate(0%, -50%);
+        &:hover {
+          color: $primaryColor;
+          text-decoration: none;
+        }
+      }
+
+    }
+    .list-card-switch {
+      right: 15px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li {
+        display: inline-flex;
+        padding: 0 20px;
+        height: 50px;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid transparent;
+        &:hover {
+          border-bottom: 2px solid $primaryColor;
+          color: $primaryColor;
+        }
+
+        @each $cardColor in $cardColors {
+          $i: index($cardColors, $cardColor);
+          &.card-color-#{$i} {
+            &:hover {
+              color: map-get($cardColor, first);
+              border-bottom: 2px solid map-get($cardColor, first);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+section.offset-filters {
+  position: fixed;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background: #fff;
+  overflow-y: auto;
+  transition: width 0.3s ease;
+  text-transform: uppercase;
+  font-size: .8rem;
+  h4 {
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: $secondaryFont;
+  }
+  i.fa.fa-info-circle {
+    position: absolute;
+    right: 20px;
+  }
+  a {
+    display: block;
+    border-bottom: 1px solid #666;
+    color: white;
+    padding: 34px;
+  }
+  a:hover,
+  a:focus {
+    background: #333;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+  }
+  &:target {
+    width: 20%;
+  }
+  &:target + .page-wrap {
+    width: 70%;
+  }
+  &:target + .page-wrap .close-menu {
+    display: block;
+  }
+  &:target + .page-wrap {
+    width: 80%;
+    left: 20%;
+  }
+  &.filters {
+    .switch-toggle {
+      font-size: 0.8rem;
+
+      p {
+        margin-bottom: 5px;
+        font-family: $secondaryFont;
+        text-transform: uppercase;
+      }
+
+      label {
+        background: #fff;
+        color: $primaryColor !important;
+
+        min-width: 30px;
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
+
+        &:first-of-type {
+          border-top-left-radius: .24rem;
+          border-bottom-left-radius: .24rem;
+        }
+
+        &:last-of-type {
+          border-top-right-radius: .24rem;
+          border-bottom-right-radius: .24rem;
+        }
+      }
+
+      input {
+        position: absolute;
+        opacity: 0;
+      }
+
+      input + label {
+        padding: 7px;
+        float: left;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      input:checked + label {
+        background: $secondaryColor;
+        color: #fff !important;
+        box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
+      }
+    }
+  }
+}
+
+.close-menu {
+  display: none;
+  z-index: 5;
+  position: relative;
+}
+
+main {
+
+  position: fixed;
+  width: 100%;
+  left: 0;
+  transition: all 0.3s ease;
+}
+
+.page-wrap {
+  float: right;
+  width: 100%;
+  transition: width 0.3s ease;
+}
+
+main {
+  transition: margin-left .5s;
+  position: relative;
+
+
+  padding-top: 50px;
+  background: $lightBackground;
+  min-height: 500px;
+
+  .cards {
+    .card {
+      margin-bottom: 30px;
+      padding: 3rem 1.5rem;
+      box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
+      border: 0;
+      transition: all .15s ease;
+      border-radius: .25rem !important;
+
+      &:hover {
+        transform: translateY(-10px);
+        transition: all .15s ease;
+        box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
+      }
+
+      h2 {
+        font-family: $secondaryFont;
+        color: $primaryColor;
+        background: linear-gradient(to right, $primaryColor, $secondaryColor);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 20px;
+      }
+
+
+      @each $cardColor in $cardColors {
+        $i: index($cardColors, $cardColor);
+        &.card-color-#{$i} {
+          h2 {
+            background: linear-gradient(to right, map-get($cardColor, first), map-get($cardColor, second));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+        }
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .github-corner {
+        &:hover .octo-arm {
+          animation: octocat-wave 560ms ease-in-out
+        }
+
+        svg {
+          fill: #24292e;
+          color: #fff;
+          position: absolute;
+          top: 0;
+          border: 0;
+          right: 0;
+          border-top-right-radius: .25rem !important;;
+        }
+
+        @keyframes octocat-wave {
+          0%, 100% {
+            transform: rotate(0)
+          }
+          20%, 60% {
+            transform: rotate(-25deg)
+          }
+          40%, 80% {
+            transform: rotate(10deg)
+          }
+        }
+
+        @media (max-width: 500px) {
+          &:hover .octo-arm {
+            animation: none
+          }
+          .octo-arm {
+            animation: octocat-wave 560ms ease-in-out
+          }
+        }
+      }
+
+      &.card-line:after {
+        content: '';
+        height: 4px;
+        width: 100%;
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: 0;
+        border-bottom-right-radius: .25rem !important;
+        border-bottom-left-radius: .25rem !important;
+        background: $primaryColor;
+      }
+
+      @each $cardColor in $cardColors {
+        $i: index($cardColors, $cardColor);
+        &.card-color-#{$i} {
+          &:after {
+            background: map-get($cardColor, first);
+          }
+        }
+      }
+    }
+  }
+}
+
+footer {
+  background: $secondaryColor;
+  color: #fff;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  a {
+    color: #fff;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}

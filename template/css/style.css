@@ -279,8 +279,25 @@ main {
   background: #f4f5f7;
   min-height: 500px;
 }
+main .cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-start;
+  margin: 0 -20px;
+}
+main .cards .mix {
+  display: inline-flex;
+  vertical-align: top;
+}
+@media screen and (min-width: 541px) {
+  main .cards .mix {
+    width: calc(100% / 3);
+  }
+}
 main .cards .card {
-  margin-bottom: 30px;
+  margin: 20px;
   padding: 3rem 1.5rem;
   box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07) !important;
   border: 0;

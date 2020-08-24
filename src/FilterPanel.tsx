@@ -13,6 +13,8 @@ import {
   SpecialField,
   ScoreField,
   CategoryField,
+  FilterPreset,
+  allFilterPresets,
 } from "./Cms";
 
 import CmsService from "./CmsService";
@@ -31,6 +33,14 @@ export default function FilterPanel(props: {
   const resetPanel = () => {
     setPanelSettings({ showModifiedOnly: false, fieldFilterString: "" });
     props.updateFilterFields(props.filterFields.untouched);
+  };
+
+  const resetToPreset = (preset: FilterPreset): void => {
+    const newFilter = FilterService.getPresetFilterFields(
+      props.filterFields.untouched,
+      preset
+    );
+    props.updateFilterFields(newFilter);
   };
 
   const handlePanelSettingsChange = (event: any) => {
@@ -101,6 +111,7 @@ export default function FilterPanel(props: {
       specialFieldChangeHandler={handleSpecialFieldChange}
       basicFieldChangeHandler={handleBasicFieldChange}
       resetPanel={resetPanel}
+      resetToPreset={resetToPreset}
     />
   );
 }
@@ -119,19 +130,29 @@ function Panel(props: {
     fieldKey: string,
     categoryKey?: string
   ) => void;
-  resetPanel: (e: any) => void;
+  resetPanel: () => void;
+  resetToPreset: (preset: FilterPreset) => void;
 }) {
   const {
     panelSettings,
     panelSettingsChangeHandler,
     resetPanel,
+    resetToPreset,
     ...other
   } = props;
   const [showFilter, setShowFilter] = React.useState<boolean>(false);
+
+  const presetButtons = allFilterPresets().map(
+    (p: { name: string; preset: FilterPreset }) => (
+      <Button onClick={() => resetToPreset(p.preset)}> {p.name} </Button>
+    )
+  );
   return (
     <div className="d-flex justify-content-center">
       <div className="w-75">
-        <Button onClick={() => setShowFilter(!showFilter)}> Filters </Button>
+        <Button onClick={() => resetPanel()}>All</Button>
+        {presetButtons}
+        <Button onClick={() => setShowFilter(!showFilter)}> Custom </Button>
         <Sidebar
           visible={showFilter}
           onHide={() => setShowFilter(!showFilter)}

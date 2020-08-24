@@ -41,7 +41,7 @@ function App() {
     });
   }, []);
 
-  const updateFilterFields = function (updatedFilterFields: FilterFieldSet) {
+  const updateFilterFields = (updatedFilterFields: FilterFieldSet): void => {
     if (appState) {
       const updatedAppState = deepcopy<AppState>(appState);
       updatedAppState.filterResults = FilterService.filterCms(

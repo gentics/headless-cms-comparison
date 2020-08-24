@@ -71,6 +71,26 @@ export interface FilterResult {
   satisfactory: boolean;
 }
 
+export enum FilterPreset {
+  OPEN_SOURCE,
+  CLOUD_SERVICE,
+  ENTERPRISE,
+  DOCKER,
+  GRAPHQL,
+}
+export const allFilterPresets = (): {
+  name: string;
+  preset: FilterPreset;
+}[] => {
+  return [
+    { name: "Open Source", preset: FilterPreset.OPEN_SOURCE },
+    { name: "Cloud Service", preset: FilterPreset.CLOUD_SERVICE },
+    { name: "Enterprise", preset: FilterPreset.ENTERPRISE },
+    { name: "Docker", preset: FilterPreset.DOCKER },
+    { name: "GraphQL", preset: FilterPreset.GRAPHQL },
+  ];
+};
+
 ////////////
 // FIELDS //
 ////////////

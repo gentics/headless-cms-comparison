@@ -12,6 +12,7 @@ import {
   CategoryField,
   Field,
   PanelSettings,
+  FilterPreset,
 } from "./Cms";
 import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
@@ -268,9 +269,9 @@ const FilterService = {
    * Initializes all non-special FieldProperties to FilterProperties by setting values accordingly
    * @returns an object containing all properties with values set to Score.DONT_CARE
    */
-  initializeBasicFields: function (basicFields: {
+  initializeBasicFields: (basicFields: {
     [x: string]: BasicField;
-  }): { [x: string]: BasicField } {
+  }): { [x: string]: BasicField } => {
     const fields: { [x: string]: BasicField } = deepcopy<{
       [x: string]: BasicField;
     }>(basicFields);
@@ -292,7 +293,7 @@ const FilterService = {
     return fields;
   },
 
-  initializeSpecialFields: function (): { [x: string]: SpecialField } {
+  initializeSpecialFields: (): { [x: string]: SpecialField } => {
     const specialFields: { [x: string]: SpecialField } = {};
     specialFields.category = {
       name: "Allowed Categories",
@@ -311,8 +312,46 @@ const FilterService = {
     return specialFields;
   },
 
-  getArrayIntersection: function (a: string[], b: string[]): string[] {
+  getArrayIntersection: (a: string[], b: string[]): string[] => {
     return a.filter((value) => b.includes(value));
+  },
+
+  getPresetFilterFields: (
+    filterFields: FilterFieldSet,
+    preset: FilterPreset
+  ): FilterFieldSet => {
+    const newFilter = deepcopy<FilterFieldSet>(filterFields);
+    const basic = newFilter.basic;
+
+    switch (preset) {
+      case FilterPreset.OPEN_SOURCE:
+        basic["openSource"].value = ScoreValue.REQUIRED;
+        basic["commercialSupportAvailable"].value = ScoreValue.NICE_TO_HAVE;
+        break;
+      case FilterPreset.CLOUD_SERVICE:
+        basic["cloudService"].value = ScoreValue.REQUIRED;
+        basic["cloudServiceHostedInEurope"].value = ScoreValue.NICE_TO_HAVE;
+        break;
+      case FilterPreset.ENTERPRISE:
+        newFilter.special["category"].values = [Category.Enterprise];
+        basic["commercialSupportAvailable"].value = ScoreValue.REQUIRED;
+        basic["openSource"].value = ScoreValue.NICE_TO_HAVE;
+        break;
+      case FilterPreset.DOCKER:
+        basic["onPremisesInstallation"].value = ScoreValue.REQUIRED;
+        basic["dockerSupport"].value = ScoreValue.REQUIRED;
+        break;
+      case FilterPreset.GRAPHQL:
+        const graphQl: CategoryField = basic["graphQl"];
+        graphQl["api"].value = ScoreValue.REQUIRED;
+        graphQl["mutations"].value = ScoreValue.NICE_TO_HAVE;
+        graphQl["subscriptions"].value = ScoreValue.NICE_TO_HAVE;
+        break;
+      default:
+        console.error(`No preset defined for ${preset}`);
+    }
+
+    return newFilter;
   },
 };
 

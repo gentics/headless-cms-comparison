@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+const githubUrl = "https://github.com/gentics/headless-cms-comparison";
 const Navigation = () => {
   return (
     <nav>
@@ -15,7 +16,9 @@ const Navigation = () => {
               <li>
                 <Link to="/about">About us</Link>
               </li>
-              <li>Github</li>
+              <li>
+                <a href={githubUrl}>Github</a>
+              </li>
             </ul>
           </div>
         </div>

@@ -13,8 +13,8 @@ export default function CardList(props: {
   cms: { [x: string]: Cms };
 }) {
   return (
-    <div>
-      <div className="d-flex flex-wrap justify-content-center">
+    <div className="container">
+      <div className="cards">
         <Cards {...props} />
       </div>
     </div>
@@ -51,23 +51,18 @@ function satisfactoryResultsExist(filterResults: FilterResult[]) {
 
 function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
   return (
-    <div className="my-2 mx-2" key={props.filterResult.cmsKey}>
-      <LinkContainer
-        to={`/detail/${props.filterResult.cmsKey}`}
-        className="cmsCardLink"
-      >
-        <Card
-          style={{ width: "20rem" }}
-          className="cmsCard"
-          border={props.filterResult.satisfactory ? "info" : undefined}
-          bg={props.filterResult.satisfactory ? undefined : "light"}
+    <div className="mix">
+      <div className="card" key={props.filterResult.cmsKey}>
+        <LinkContainer
+          to={`/detail/${props.filterResult.cmsKey}`}
+          className="cmsCardLink"
         >
           <Card.Body style={{ textAlign: "left" }}>
-            <Card.Title>{props.cms.name}</Card.Title>
+            <h2>{props.cms.name}</h2>
             <CmsCardText {...props} />
           </Card.Body>
-        </Card>
-      </LinkContainer>
+        </LinkContainer>
+      </div>
     </div>
   );
 }

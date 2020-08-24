@@ -25,8 +25,10 @@ import Analytics from "./Analytics";
 import About from "./About";
 import { ErrorBoundary } from "./ErrorBoundary";
 import Header from "./template/Header";
+import SmallHeader from "./template/SmallHeader";
 import Navigation from "./template/Navigation";
 import Menu from "./template/Menu";
+import Footer from "./template/Footer";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -50,46 +52,62 @@ function App() {
   };
 
   const githubUrl = "https://github.com/gentics/headless-cms-comparison";
-
   const content = appState ? (
     <Router>
       <Navigation />
-      <Header />
+
       <Switch>
         <Route exact path="/">
-          <Redirect to="/card" />
+          <Header />
+          <Menu />
+          <main>
+            <Redirect to="/card" />
+          </main>
         </Route>
 
         <Route exact path="/card">
+          <Header />
           <Menu />
-          <CmsCardList
-            filterResults={appState.filterResults}
-            cms={appState.cms}
-          />
+          <main>
+            <CmsCardList
+              filterResults={appState.filterResults}
+              cms={appState.cms}
+            />
+          </main>
         </Route>
 
         <Route exact path="/list">
+          <SmallHeader title="List view" />
           <Menu />
-          <CmsList
-            filterFields={appState.filterFields.actual}
-            cmsData={appState.cms}
-          />
+          <main>
+            <CmsList
+              filterFields={appState.filterFields.actual}
+              cmsData={appState.cms}
+            />
+          </main>
         </Route>
 
         <Route path="/detail/:cmsKey">
-          <CmsDetailView
-            filterFields={appState.filterFields.actual}
-            filterResults={appState.filterResults}
-            cmsData={appState.cms}
-          />
+          <SmallHeader title="" />
+          <Menu />
+          <main>
+            <CmsDetailView
+              filterFields={appState.filterFields.actual}
+              filterResults={appState.filterResults}
+              cmsData={appState.cms}
+            />
+          </main>
         </Route>
 
         <Route exact path="/about">
+          <SmallHeader title="About us" />
           <Menu />
-          <About url={githubUrl} />
+          <main>
+            <About url={githubUrl} />
+          </main>
         </Route>
       </Switch>
-
+      <Footer />
       <Analytics />
     </Router>
   ) : (

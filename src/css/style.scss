@@ -44,6 +44,13 @@ nav {
     li {
       display: inline;
       margin-left: 20px;
+      a {
+        color: #000;
+        &:hover {
+          color: $primaryColor;
+          text-decoration: none;
+        }
+      }
     }
   }
 }
@@ -63,7 +70,13 @@ header {
     font-weight: bold;
     margin-bottom: 40px;
   }
+  &.small {
+    height: 150px;
+    h1 {
+      margin-bottom: 0;
+    }
 
+  }
   svg {
     .st0 {
       fill: #FFFFFF;
@@ -110,6 +123,19 @@ section#filter-menu {
   position: sticky;
   top: 0;
 
+  a {
+    color: #000;
+    position: absolute;
+
+    top: 50%;
+    transform: translate(0%, -50%);
+
+    &:hover {
+      color: $primaryColor;
+      text-decoration: none;
+    }
+  }
+
   .filters {
     font-family: $secondaryFont;
     text-transform: uppercase;
@@ -131,25 +157,18 @@ section#filter-menu {
 
     .filter-switch {
       left: 15px;
-
       a {
-        color: #000;
-        position: absolute;
         width: 100px;
         left: 0px;
-        top: 50%;
-        transform: translate(0%, -50%);
-
-        &:hover {
-          color: $primaryColor;
-          text-decoration: none;
-        }
       }
-
     }
 
     .list-card-switch {
       right: 15px;
+      a {
+        width: 100px;
+        right: 0px;
+      }
     }
 
     ul {
@@ -346,12 +365,14 @@ main {
     }
 
     .card {
+      width: 100%;
       margin: 20px;
       padding: 3rem 1.5rem;
       box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
       border: 0;
       transition: all .15s ease;
       border-radius: .25rem !important;
+      cursor: pointer;
 
       &:hover {
         transform: translateY(-10px);

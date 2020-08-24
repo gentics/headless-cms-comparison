@@ -1,5 +1,7 @@
 import React from "react";
-
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import styles from "./About.module.css";
 
 type PropTypes = {
@@ -8,7 +10,7 @@ type PropTypes = {
 
 const About = ({ url }: PropTypes) => {
   return (
-    <>
+    <Container>
       <h2>About</h2>
       <div className={styles.aboutContent}>
         <p>
@@ -68,7 +70,7 @@ const About = ({ url }: PropTypes) => {
         processing of the data Google gathers about you in the manner and for
         the purpose stated above.
       </div>
-    </>
+    </Container>
   );
 };
 

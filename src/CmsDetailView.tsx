@@ -115,7 +115,7 @@ export default function CmsDetailView(props: {
 
   return (
     <>
-      <Container fluid>
+      <Container>
         <Row>
           <Col>
             <div className="d-inline-flex justify-content-between align-items-center w-100">

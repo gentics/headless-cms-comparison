@@ -336,7 +336,10 @@ main {
     .mix {
       display: inline-flex;
       vertical-align: top;
-      @media screen and (min-width: 541px) {
+      @media screen and (min-width: 768px) {
+        width: calc(100% / 2);
+      }
+      @media screen and (min-width: 1024px) {
         width: calc(100% / 3);
       }
     }

@@ -291,7 +291,12 @@ main .cards .mix {
   display: inline-flex;
   vertical-align: top;
 }
-@media screen and (min-width: 541px) {
+@media screen and (min-width: 768px) {
+  main .cards .mix {
+    width: calc(100% / 2);
+  }
+}
+@media screen and (min-width: 1024px) {
   main .cards .mix {
     width: calc(100% / 3);
   }

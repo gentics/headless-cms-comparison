@@ -2,6 +2,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Accordion from "react-bootstrap/Accordion";
+import { Sidebar } from "primereact/sidebar";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -130,59 +131,42 @@ function Panel(props: {
   return (
     <div className="d-flex justify-content-center">
       <div className="w-75">
-        <Accordion onSelect={() => setShowFilter(!showFilter)}>
-          <Card>
-            <Card.Header>
-              <div className="d-flex justify-content-between">
-                <h4 style={{ lineHeight: 1.5, marginBottom: 0 }}>Filter</h4>
-                <Form className="w-50 d-flex justify-content-between">
-                  {showFilter ? (
-                    <>
-                      <div>
-                        <Form.Control
-                          type="text"
-                          name="fieldFilterString"
-                          value={panelSettings.fieldFilterString}
-                          onChange={(e: any) => panelSettingsChangeHandler(e)}
-                          placeholder="Filter for properties..."
-                          style={{ width: "300px" }}
-                        />
-                      </div>
-                      <div className="d-flex align-items-center ml-2">
-                        {" "}
-                        <Form.Check
-                          type="checkbox"
-                          name="showModifiedOnly"
-                          label="Show modified properties only"
-                          checked={panelSettings.showModifiedOnly}
-                          onChange={(e: any) => panelSettingsChangeHandler(e)}
-                        />
-                      </div>
-                    </>
-                  ) : null}
-                </Form>
-                <div className="d-flex justify-content-between">
-                  {showFilter ? (
-                    <Button variant="info" onClick={(e: any) => resetPanel(e)}>
-                      Clear
-                    </Button>
-                  ) : null}
-                  <Accordion.Toggle
-                    as={Button}
-                    variant="secondary"
-                    eventKey="0"
-                    className="ml-2"
-                  >
-                    {showFilter ? "Hide" : "Show"} filter
-                  </Accordion.Toggle>
+        <Button onClick={() => setShowFilter(!showFilter)}> Filters </Button>
+        <Sidebar
+          visible={showFilter}
+          onHide={() => setShowFilter(!showFilter)}
+          style={{ width: "40em", overflow: "auto" }}
+        >
+          <Form className="w-50 d-flex justify-content-between">
+            {showFilter ? (
+              <>
+                <div>
+                  <Form.Control
+                    type="text"
+                    name="fieldFilterString"
+                    value={panelSettings.fieldFilterString}
+                    onChange={(e: any) => panelSettingsChangeHandler(e)}
+                    placeholder="Filter for properties..."
+                    style={{ width: "300px" }}
+                  />
                 </div>
-              </div>
-            </Card.Header>
-            <Accordion.Collapse eventKey="0">
-              <PropertyTable {...other} />
-            </Accordion.Collapse>
+                <div className="d-flex align-items-center ml-2">
+                  {" "}
+                  <Form.Check
+                    type="checkbox"
+                    name="showModifiedOnly"
+                    label="Show modified properties only"
+                    checked={panelSettings.showModifiedOnly}
+                    onChange={(e: any) => panelSettingsChangeHandler(e)}
+                  />
+                </div>
+              </>
+            ) : null}
+          </Form>
+          <Card>
+            <PropertyTable {...other} />
           </Card>
-        </Accordion>
+        </Sidebar>
       </div>
     </div>
   );
@@ -263,7 +247,7 @@ function PropertyTable(props: {
   }
 
   return (
-    <div style={{ maxHeight: "500px", overflow: "auto" }}>
+    <div style={{ maxHeight: "100%", overflow: "yes" }}>
       <form id="filterForm">
         <Table striped bordered hover className="mb-0">
           <tbody>{tableRows}</tbody>

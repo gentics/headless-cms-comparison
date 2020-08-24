@@ -1,9 +1,4 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
-import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
   BrowserRouter as Router,
@@ -11,11 +6,10 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
 import deepcopy from "ts-deepcopy";
 import Alert from "react-bootstrap/Alert";
 
-import "primereact/resources/themes/nova-light/theme.css";
+import "./css/style.scss";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "./App.css";
@@ -28,9 +22,11 @@ import CmsService from "./CmsService";
 import FilterService from "./FilterService";
 import FilterPanel from "./FilterPanel";
 import Analytics from "./Analytics";
-import GithubRibbon from "./GithubRibbon";
 import About from "./About";
 import { ErrorBoundary } from "./ErrorBoundary";
+import Header from "./template/Header";
+import Navigation from "./template/Navigation";
+import Menu from "./template/Menu";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -55,45 +51,17 @@ function App() {
 
   const githubUrl = "https://github.com/gentics/headless-cms-comparison";
 
-  const menu = (
-    <Container fluid className="mt-3">
-      <Row>
-        <Col>
-          <Nav variant="tabs" defaultActiveKey="/card">
-            <Nav.Item>
-              <LinkContainer to="/card">
-                <Button>Card View</Button>
-              </LinkContainer>
-            </Nav.Item>
-            <Nav.Item>
-              <LinkContainer to="/list">
-                <Button>List View</Button>
-              </LinkContainer>
-            </Nav.Item>
-            <Nav.Item>
-              <LinkContainer to="/about">
-                <Button>About</Button>
-              </LinkContainer>
-            </Nav.Item>
-          </Nav>
-        </Col>
-      </Row>
-    </Container>
-  );
-
   const content = appState ? (
     <Router>
+      <Navigation />
+      <Header />
       <Switch>
         <Route exact path="/">
           <Redirect to="/card" />
         </Route>
 
         <Route exact path="/card">
-          {menu}
-          <FilterPanel
-            filterFields={appState.filterFields}
-            updateFilterFields={updateFilterFields}
-          />
+          <Menu />
           <CmsCardList
             filterResults={appState.filterResults}
             cms={appState.cms}
@@ -101,7 +69,7 @@ function App() {
         </Route>
 
         <Route exact path="/list">
-          {menu}
+          <Menu />
           <CmsList
             filterFields={appState.filterFields.actual}
             cmsData={appState.cms}
@@ -117,7 +85,7 @@ function App() {
         </Route>
 
         <Route exact path="/about">
-          {menu}
+          <Menu />
           <About url={githubUrl} />
         </Route>
       </Switch>
@@ -130,21 +98,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header" style={{ minHeight: "20rem" }}>
-        <GithubRibbon url={githubUrl} />
-        <h1>
-          Welcome to the <em>Headless CMS Comparison Website</em>
-        </h1>
-        <h2>Find the perfect headless CMS for your requirements!</h2>
-      </header>
-
-      <Container fluid className="my-3">
-        <Row>
-          <Col>
-            <ErrorBoundary>{content}</ErrorBoundary>
-          </Col>
-        </Row>
-      </Container>
+      <ErrorBoundary>{content}</ErrorBoundary>
     </div>
   );
 }

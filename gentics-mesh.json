@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": "Embedded (GraphDB)"
   },
+  "teaser": {
+    "value": "Gentics Mesh is an open source API-first headless CMS."
+  },
+  "gitHubURL": {
+    "value": "https://github.com/gentics/mesh"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

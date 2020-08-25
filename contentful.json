@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": null
   },
+  "teaser": {
+    "value": "Contentful is a content management developer platform with an API at its core."
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

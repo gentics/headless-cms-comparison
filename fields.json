@@ -44,6 +44,16 @@
     "description": "",
     "value": null
   },
+  "teaser": {
+    "name": "Description",
+    "description": "",
+    "value": null
+  },
+  "gitHubURL": {
+    "name": "GitHub URL",
+    "description": "",
+    "value": null
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

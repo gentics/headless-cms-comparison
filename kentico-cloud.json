@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": null
   },
+  "teaser": {
+    "value": "Kentico Kontent offers Content as a Service to gain full control over content presentation across all digital channels."
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

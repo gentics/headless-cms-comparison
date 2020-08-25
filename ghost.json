@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": "MySQL"
   },
+  "teaser": {
+    "value": "A fiercely independent platform for professional publishers. Headless Node.js REST API for developers, beautiful Ember.js admin client for editors. Used by Apple, NASA, Sky News, OpenAI & many more."
+  },
+  "gitHubURL": {
+    "value": "https://github.com/tryghost/ghost"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

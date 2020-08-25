@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": "Embedded"
   },
+  "teaser": {
+    "value": "Headless CMS with automatic JSON API. Featuring auto-HTTPS from Let's Encrypt, HTTP/2 Server Push, and flexible server framework written in Go."
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": null
   },
+  "teaser": {
+    "value": "DatoCMS is a friendly, secure and powerful platform that enables marketer, editorial or developer team to build complex backend in minutes and to bring any kind of content everywhere"
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

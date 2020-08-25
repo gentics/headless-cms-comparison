@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": "MySQL & Variants"
   },
+  "teaser": {
+    "value": "Directus is a database-first platform that provides an instant REST API for custom SQL databases and an intuitive Admin App for non-technical users to manage that content."
+  },
+  "gitHubURL": {
+    "value": "https://github.com/directus/directus"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

@@ -93,7 +93,7 @@ function App() {
         </Route>
 
         <Route path="/detail/:cmsKey">
-          <SmallHeader title="" />
+          <SmallHeader title={appState.cms} />
           <main>
             <CmsDetailView
               filterFields={appState.filterFields.actual}

@@ -24,11 +24,6 @@ export const TitleTemplate: BodyTemplate = (rowData, column) => {
   const cellData = rowData[column.field];
   return (
     <div className="d-flex justify-content-between">
-      <span className="ml-2">
-        {cellData.description ? (
-          <Description description={cellData.description || ""} />
-        ) : null}
-      </span>
       <span className="mr-2">{cellData.name}</span>
     </div>
   );

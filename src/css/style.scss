@@ -20,6 +20,23 @@ body {
   font-family: $primaryFont;
 }
 
+a {
+  color: #000;
+
+  &:hover {
+    color: $primaryColor;
+    text-decoration: none;
+  }
+}
+
+.card {
+  box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
+  border: 0;
+  &:hover {
+    box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
+  }
+}
+
 nav {
   padding: 20px 0;
   text-transform: uppercase;
@@ -44,8 +61,10 @@ nav {
     li {
       display: inline;
       margin-left: 20px;
+
       a {
         color: #000;
+
         &:hover {
           color: $primaryColor;
           text-decoration: none;
@@ -70,13 +89,16 @@ header {
     font-weight: bold;
     margin-bottom: 40px;
   }
+
   &.small {
     height: 150px;
+
     h1 {
       margin-bottom: 0;
     }
 
   }
+
   svg {
     .st0 {
       fill: #FFFFFF;
@@ -157,6 +179,7 @@ section#filter-menu {
 
     .filter-switch {
       left: 15px;
+
       a {
         width: 100px;
         left: 0px;
@@ -165,6 +188,7 @@ section#filter-menu {
 
     .list-card-switch {
       right: 15px;
+
       a {
         width: 100px;
         right: 0px;
@@ -349,7 +373,6 @@ main {
       width: 100%;
       margin: 20px;
       padding: 3rem 1.5rem;
-      box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
       border: 0;
       transition: all .15s ease;
       border-radius: .25rem !important;
@@ -358,7 +381,6 @@ main {
       &:hover {
         transform: translateY(-10px);
         transition: all .15s ease;
-        box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
       }
 
       h2 {
@@ -449,14 +471,27 @@ main {
   }
 }
 
-section#list-view {
+section#detail-view {
+  .card {
+    &.info-box{
+
+    }
+    .p-datatable {
+      background: $primaryColor;
+      border-top-left-radius: .24rem !important;
+      border-top-right-radius: .24rem !important;
+    }
+  }
+}
+
+section#list-view, section#detail-view {
 
   .card {
-
     .p-datatable-frozen-view {
       border-top-left-radius: .24rem;
       background: #ac7df8;
     }
+
     .p-datatable-unfrozen-view {
       background: $primaryColor;
       border-top-right-radius: .24rem;
@@ -464,39 +499,48 @@ section#list-view {
 
     table {
       font-size: .8rem;
+
       thead {
         color: #fff;
+
         tr {
           th {
             width: 250px;
             height: 50px;
             padding: 0 10px;
             vertical-align: middle;
-            &:first-child,&:nth-child(2) {
+
+            &:first-child, &:nth-child(2) {
               text-align: left;
             }
           }
         }
 
       }
+
       tbody {
         background: #f4f4f4;
+
         tr {
           &:hover {
             background: #fff;
           }
+
           td {
             width: 250px;
             padding: 10px;
-            &:first-child,&:nth-child(2) {
+
+            &:first-child, &:nth-child(2) {
               text-align: left;
             }
+
             &.cmsTableNameColumn {
               background: #fff;
             }
 
             a {
               color: $primaryColor;
+
               &:hover {
                 color: $secondaryColor;
                 text-decoration: none;

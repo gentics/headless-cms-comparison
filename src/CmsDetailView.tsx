@@ -29,10 +29,12 @@ import ListGroup from "react-bootstrap/ListGroup";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
 import { useParams } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import {
@@ -61,9 +63,9 @@ export default function CmsDetailView(props: {
     return (
       <Alert variant="warning">
         Invalid CMS key was given! Go back to the{" "}
-        <LinkContainer to="/card">
+        <Link to="/card">
           <Button>Card View</Button>
-        </LinkContainer>{" "}
+        </Link>{" "}
         and select a CMS!
       </Alert>
     );
@@ -114,25 +116,17 @@ export default function CmsDetailView(props: {
   });
 
   return (
-    <>
+    <section id="detail-view" className="pb-5">
       <Container>
         <Row>
           <Col>
-            <div className="d-inline-flex justify-content-between align-items-center w-100">
-              <LinkContainer to="/card">
-                <Button variant="dark">Back to the overview</Button>
-              </LinkContainer>
-              <h1>
-                <b>
-                  <i>{cms.name}</i>
-                </b>
-              </h1>
+            <div className="text-left mb-5">
+              <Link to="/card">
+                {" "}
+                <i className="pi pi-arrow-left"></i> Back to the overview
+              </Link>
             </div>
-            <hr />
-            <div
-              style={{ margin: "auto" }}
-              className="d-flex justify-content-between"
-            >
+            <Card className="p-2 d-flex flex-row justify-content-between">
               <span className="specialProperty">
                 <GrLicense /> {cms.license}
               </span>
@@ -145,27 +139,31 @@ export default function CmsDetailView(props: {
               <span className="specialProperty">
                 <FiPower /> {cms.inception}
               </span>
-            </div>
-            <hr />
+            </Card>
+
             <PropertyList name={cms.name} filterResult={filterResult} />
-            <hr />
-            <h2 key="all">All Features or {cms.name}</h2>
-            <DataTable value={tableValues}>
-              <Column
-                header="Feature"
-                field="name"
-                sortable
-                sortFunction={(e) => sortData(tableValues, e)}
-                body={TitleTemplate}
-              />
-              <Column
-                header="Supported?"
-                field="value"
-                sortable
-                sortFunction={(e) => sortData(tableValues, e)}
-                body={BooleanPropertyTemplate}
-              />
-            </DataTable>
+
+            <h3 className="my-5" key="all">
+              All Features or {cms.name}
+            </h3>
+            <Card>
+              <DataTable value={tableValues}>
+                <Column
+                  header="Feature"
+                  field="name"
+                  sortable
+                  sortFunction={(e) => sortData(tableValues, e)}
+                  body={TitleTemplate}
+                />
+                <Column
+                  header="Supported?"
+                  field="value"
+                  sortable
+                  sortFunction={(e) => sortData(tableValues, e)}
+                  body={BooleanPropertyTemplate}
+                />
+              </DataTable>
+            </Card>
             <span className="lastUpdated">
               <MdUpdate className="mr-1" /> This information was last updated on{" "}
               {new Date(cms.lastUpdated).toDateString()}
@@ -174,7 +172,7 @@ export default function CmsDetailView(props: {
           </Col>
         </Row>
       </Container>
-    </>
+    </section>
   );
 }
 
@@ -213,7 +211,7 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
 
   if (requiredListItems.length > 0) {
     requiredListItems.unshift(
-      <h2 key="required">Your required features of {props.name}</h2>
+      <h3 key="required">Your required features of {props.name}</h3>
     );
     requiredListItems.push(
       <RequiredSummaryListItem key="requiredSummary" {...props} />
@@ -226,7 +224,7 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
 
   if (niceToHaveListItems.length > 0) {
     niceToHaveListItems.unshift(
-      <h2 key="nice-to-have">Your nice-to-have features of {props.name}</h2>
+      <h3 key="nice-to-have">Your nice-to-have features of {props.name}</h3>
     );
     niceToHaveListItems.push(
       <NiceToHaveSummaryListItem key="niceToHaveSummary" {...props} />
@@ -235,10 +233,12 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
 
   return (
     <div>
-      <ListGroup className="w-75 mx-auto">
-        {requiredListItems}
-        {niceToHaveListItems}
-      </ListGroup>
+      <Card className="info-box my-5">
+        <div className="p-3">{requiredListItems}</div>
+      </Card>
+      <Card className="info-box my-5">
+        <div className="p-3">{niceToHaveListItems}</div>
+      </Card>
     </div>
   );
 }
@@ -318,20 +318,20 @@ function ResultListItem(props: {
 }) {
   const icon = props.cmsHasProperty ? <FiCheckCircle /> : <FiSlash />;
   return (
-    <ListGroup.Item
+    <div
       className="resultListItem"
-      variant={props.cmsHasProperty ? undefined : "light"}
+      // variant={props.cmsHasProperty ? undefined : "light"}
     >
       <span>{props.property.name}</span>
       {icon}
-    </ListGroup.Item>
+    </div>
   );
 }
 
 function RequiredSummaryListItem(props: { filterResult: FilterResult }) {
   return (
-    <ListGroup.Item
-      variant={props.filterResult.satisfactory ? "success" : "warning"}
+    <div
+    // variant={props.filterResult.satisfactory ? "success" : "warning"}
     >
       <h2 style={{ fontSize: "1.3em" }}>
         {props.filterResult.satisfactory ? <FiCheckCircle /> : <FiSlash />}{" "}
@@ -339,13 +339,15 @@ function RequiredSummaryListItem(props: { filterResult: FilterResult }) {
           props.filterResult.satisfactory ? `satisfies` : `does not satisfy`
         } all your essential requirements.`}
       </h2>
-    </ListGroup.Item>
+    </div>
   );
 }
 
 function NiceToHaveSummaryListItem(props: { filterResult: FilterResult }) {
   return (
-    <ListGroup.Item variant="info">
+    <div
+    // variant="info"
+    >
       <div className="d-inline-flex w-100 align-items-center">
         {props.filterResult.hasNiceToHaveShare > 0 ? (
           <FiAward style={{ marginRight: "0.5em", fontSize: "1.5em" }} />
@@ -360,6 +362,6 @@ function NiceToHaveSummaryListItem(props: { filterResult: FilterResult }) {
           label={`${(props.filterResult.hasNiceToHaveShare * 100).toFixed(0)}%`}
         />
       </div>
-    </ListGroup.Item>
+    </div>
   );
 }

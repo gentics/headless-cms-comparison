@@ -7,6 +7,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { LinkContainer } from "react-router-bootstrap";
+import GithubRibbon from "./GithubRibbon";
 
 export default function CardList(props: {
   filterResults: FilterResult[];
@@ -30,14 +31,20 @@ function Cards(props: {
 
   if (satisfactoryResultsExist(filterResults)) {
     let cards: JSX.Element[] = [];
+    let cardNumber = 1;
     filterResults.forEach((result) => {
       cards.push(
         <CmsCard
           key={result.cmsKey}
           cms={cms[result.cmsKey]}
           filterResult={result}
+          cardNumber={cardNumber}
         />
       );
+      cardNumber++;
+      if (cardNumber > 5) {
+        cardNumber = 1;
+      }
     });
     return <>{cards}</>;
   } else {
@@ -49,17 +56,29 @@ function satisfactoryResultsExist(filterResults: FilterResult[]) {
   return filterResults.some((result) => result.satisfactory);
 }
 
-function CmsCard(props: { cms: Cms; filterResult: FilterResult }) {
+function CmsCard(props: {
+  cms: Cms;
+  filterResult: FilterResult;
+  cardNumber: number;
+}) {
+  const classes = "card card-line card-color-" + props.cardNumber;
   return (
     <div className="mix">
-      <div className="card" key={props.filterResult.cmsKey}>
+      <div className={classes} key={props.filterResult.cmsKey}>
+        <GithubRibbon url={props.cms.name} />
         <LinkContainer
           to={`/detail/${props.filterResult.cmsKey}`}
           className="cmsCardLink"
         >
-          <Card.Body style={{ textAlign: "left" }}>
+          <Card.Body className="text-left">
             <h2>{props.cms.name}</h2>
             <CmsCardText {...props} />
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid
+              assumenda ducimus eos est, iure nam praesentium? Aspernatur
+              consectetur eos explicabo itaque, nesciunt perspiciatis possimus
+              qui, quidem reiciendis rerum unde, voluptas!
+            </p>
           </Card.Body>
         </LinkContainer>
       </div>

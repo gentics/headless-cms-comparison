@@ -1,6 +1,7 @@
 import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import Card from "react-bootstrap/Card";
 import {
   Cms,
   BooleanCmsProperty,
@@ -10,7 +11,7 @@ import {
   CategoryCmsProperty,
   FilterFieldSet,
 } from "./Cms";
-
+import Container from "react-bootstrap/Container";
 import CmsService from "./CmsService";
 import {
   BooleanPropertyTemplate,
@@ -40,18 +41,22 @@ export default function CmsList(props: {
   );
 
   return (
-    <div>
-      <DataTable
-        value={data}
-        autoLayout
-        scrollable
-        scrollHeight="650px"
-        className="w-100"
-        frozenWidth="200px"
-      >
-        {columns}
-      </DataTable>
-    </div>
+    <section id="list-view">
+      <Container className="pb-5">
+        <Card>
+          <DataTable
+            value={data}
+            autoLayout
+            scrollable
+            scrollHeight="400px"
+            className=""
+            frozenWidth="140px"
+          >
+            {columns}
+          </DataTable>
+        </Card>
+      </Container>
+    </section>
   );
 }
 
@@ -118,7 +123,7 @@ function convertToColumn(
       field={propertyKey}
       header={propertyDisplayName}
       frozen={props && props.frozen}
-      style={{ width: "220px", height: "150px" }}
+      // style={{ width: "220px" }}
       body={props && props.template ? props.template : null}
       className={props && props.frozen ? "cmsTableNameColumn" : undefined}
       sortable

@@ -317,25 +317,6 @@ section.offset-filters {
   }
 }
 
-.close-menu {
-  display: none;
-  z-index: 5;
-  position: relative;
-}
-
-main {
-  position: fixed;
-  width: 100%;
-  left: 0;
-  transition: all 0.3s ease;
-}
-
-.page-wrap {
-  float: right;
-  width: 100%;
-  transition: width 0.3s ease;
-}
-
 main {
   transition: margin-left .5s;
   position: relative;
@@ -466,6 +447,67 @@ main {
       }
     }
   }
+}
+
+section#list-view {
+
+  .card {
+
+    .p-datatable-frozen-view {
+      border-top-left-radius: .24rem;
+      background: #ac7df8;
+    }
+    .p-datatable-unfrozen-view {
+      background: $primaryColor;
+      border-top-right-radius: .24rem;
+    }
+
+    table {
+      font-size: .8rem;
+      thead {
+        color: #fff;
+        tr {
+          th {
+            width: 250px;
+            height: 50px;
+            padding: 0 10px;
+            vertical-align: middle;
+            &:first-child,&:nth-child(2) {
+              text-align: left;
+            }
+          }
+        }
+
+      }
+      tbody {
+        background: #f4f4f4;
+        tr {
+          &:hover {
+            background: #fff;
+          }
+          td {
+            width: 250px;
+            padding: 10px;
+            &:first-child,&:nth-child(2) {
+              text-align: left;
+            }
+            &.cmsTableNameColumn {
+              background: #fff;
+            }
+
+            a {
+              color: $primaryColor;
+              &:hover {
+                color: $secondaryColor;
+                text-decoration: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 }
 
 footer {

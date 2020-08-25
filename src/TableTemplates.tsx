@@ -2,8 +2,7 @@ import React from "react";
 import Description from "./Description";
 import { FiCheckCircle, FiHelpCircle, FiSlash } from "react-icons/fi";
 import { ColumnProps } from "primereact/column";
-import { LinkContainer } from "react-router-bootstrap";
-import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 
 export type CmsTableData = { [columnKey: string]: TableCellData }[];
 export type BodyTemplate = (
@@ -38,11 +37,7 @@ export const TitleTemplate: BodyTemplate = (rowData, column) => {
 export const NameTemplate: BodyTemplate = (rowData, column) => {
   if (!column.field) return null;
   const cellData = rowData[column.field];
-  return (
-    <LinkContainer to={`/detail/${cellData.info}`}>
-      <Button>{cellData.name}</Button>
-    </LinkContainer>
-  );
+  return <Link to={`/detail/${cellData.info}`}>{cellData.name}</Link>;
 };
 
 export const BooleanPropertyTemplate: BodyTemplate = (rowData, column) => {

@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": "MongoDB, MySQL, PostgreSQL"
   },
+  "teaser": {
+    "value": "Strapi is an open sourced Headless CMS Front-End Developers Love. It's more than a Node.js Framework and more than a Headless CMS, it saves API development time through a beautiful admin panel anyone can use."
+  },
+  "gitHubURL": {
+    "value": "https://github.com/strapi/strapi"
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

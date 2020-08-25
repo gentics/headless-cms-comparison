@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": null
   },
+  "teaser": {
+    "value": "Comfortable is an cloud-based headless CMS, dedicated to simplicity, structure and speed."
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

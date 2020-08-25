@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": "Embedded NoSQL"
   },
+  "teaser": {
+    "value": ""
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": "MySQL"
   },
+  "teaser": {
+    "value": "Really flexible headless CMS, built on top of Symfony and GraphQL."
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

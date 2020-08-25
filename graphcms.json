@@ -17,6 +17,12 @@
     "name": "Supported Databases",
     "value": null
   },
+  "teaser": {
+    "value": "GraphCMS is the original GraphQL native Headless CMS with both read and write support to deliver digital projects at scale."
+  },
+  "gitHubURL": {
+    "value": ""
+  },
   "properties": {
     "openSource": {
       "name": "Open Source",

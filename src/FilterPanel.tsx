@@ -20,6 +20,7 @@ import {
 import CmsService from "./CmsService";
 import FilterService from "./FilterService";
 import Description from "./Description";
+import Col from "react-bootstrap/Col";
 
 export default function FilterPanel(props: {
   filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
@@ -144,15 +145,17 @@ function Panel(props: {
 
   const presetButtons = allFilterPresets().map(
     (p: { name: string; preset: FilterPreset }) => (
-      <Button onClick={() => resetToPreset(p.preset)}> {p.name} </Button>
+      <li onClick={() => resetToPreset(p.preset)}> {p.name} </li>
     )
   );
   return (
-    <div className="d-flex justify-content-center">
-      <div className="w-75">
-        <Button onClick={() => resetPanel()}>All</Button>
-        {presetButtons}
-        <Button onClick={() => setShowFilter(!showFilter)}> Custom </Button>
+    <section id="filter-menu">
+      <div className="w-75 filters">
+        <ul className="controls">
+          <li onClick={() => resetPanel()}>All</li>
+          {presetButtons}
+          <li onClick={() => setShowFilter(!showFilter)}> Custom </li>
+        </ul>
         <Sidebar
           visible={showFilter}
           onHide={() => setShowFilter(!showFilter)}
@@ -189,7 +192,7 @@ function Panel(props: {
           </Card>
         </Sidebar>
       </div>
-    </div>
+    </section>
   );
 }
 

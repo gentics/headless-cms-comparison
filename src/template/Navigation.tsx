@@ -14,6 +14,16 @@ const Navigation = () => {
           <div className="col-6 text-right align-self-center">
             <ul>
               <li>
+                <Link to="/card">
+                  <i className="fa fa-table" aria-hidden="true"></i> Card view
+                </Link>
+              </li>
+              <li>
+                <Link to="/list">
+                  <i className="fa fa-table" aria-hidden="true"></i> List view
+                </Link>
+              </li>
+              <li>
                 <Link to="/about">About us</Link>
               </li>
               <li>

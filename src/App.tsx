@@ -27,7 +27,6 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import Header from "./template/Header";
 import SmallHeader from "./template/SmallHeader";
 import Navigation from "./template/Navigation";
-import Menu from "./template/Menu";
 import Footer from "./template/Footer";
 
 function App() {
@@ -59,7 +58,10 @@ function App() {
       <Switch>
         <Route exact path="/">
           <Header />
-          <Menu />
+          <FilterPanel
+            filterFields={appState.filterFields}
+            updateFilterFields={updateFilterFields}
+          />
           <main>
             <Redirect to="/card" />
           </main>
@@ -67,7 +69,10 @@ function App() {
 
         <Route exact path="/card">
           <Header />
-          <Menu />
+          <FilterPanel
+            filterFields={appState.filterFields}
+            updateFilterFields={updateFilterFields}
+          />
           <main>
             <CmsCardList
               filterResults={appState.filterResults}
@@ -78,7 +83,7 @@ function App() {
 
         <Route exact path="/list">
           <SmallHeader title="List view" />
-          <Menu />
+
           <main>
             <CmsList
               filterFields={appState.filterFields.actual}
@@ -89,7 +94,6 @@ function App() {
 
         <Route path="/detail/:cmsKey">
           <SmallHeader title="" />
-          <Menu />
           <main>
             <CmsDetailView
               filterFields={appState.filterFields.actual}
@@ -101,7 +105,6 @@ function App() {
 
         <Route exact path="/about">
           <SmallHeader title="About us" />
-          <Menu />
           <main>
             <About url={githubUrl} />
           </main>
@@ -111,7 +114,8 @@ function App() {
       <Analytics />
     </Router>
   ) : (
-    <Alert variant="info">Loading data...</Alert>
+    ""
+    // <Alert variant="info">Loading data...</Alert>
   );
 
   return (

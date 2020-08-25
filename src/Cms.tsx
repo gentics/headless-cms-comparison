@@ -34,6 +34,7 @@ export interface AppState {
   cms: CmsData;
   filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
   filterResults: FilterResult[];
+  showAside: boolean;
 }
 
 export interface ReceivedCmsData {

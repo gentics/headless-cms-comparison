@@ -1,10 +1,8 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
-import Accordion from "react-bootstrap/Accordion";
 import { Sidebar } from "primereact/sidebar";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 
 import {
   ScoreValue,
@@ -14,18 +12,20 @@ import {
   ScoreField,
   CategoryField,
   FilterPreset,
-  allFilterPresets,
 } from "./Cms";
 
 import CmsService from "./CmsService";
 import FilterService from "./FilterService";
 import Description from "./Description";
-import Col from "react-bootstrap/Col";
 
-export default function FilterPanel(props: {
+type PropsType = {
   filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
   updateFilterFields: (updatedFilterFields: FilterFieldSet) => void;
-}) {
+  showAside: boolean;
+  toggleAside: () => void;
+};
+
+export const FilterAside = (props: PropsType): JSX.Element => {
   const [panelSettings, setPanelSettings] = React.useState<PanelSettings>({
     showModifiedOnly: false,
     fieldFilterString: "",
@@ -113,9 +113,11 @@ export default function FilterPanel(props: {
       basicFieldChangeHandler={handleBasicFieldChange}
       resetPanel={resetPanel}
       resetToPreset={resetToPreset}
+      showAside={props.showAside}
+      toggleAside={props.toggleAside}
     />
   );
-}
+};
 
 ///////////////////////////////////////////////////////
 ////////////// METHODS FOR HTML-ELEMENTS //////////////
@@ -133,66 +135,55 @@ function Panel(props: {
   ) => void;
   resetPanel: () => void;
   resetToPreset: (preset: FilterPreset) => void;
+  showAside: boolean;
+  toggleAside: () => void;
 }) {
   const {
     panelSettings,
     panelSettingsChangeHandler,
     resetPanel,
     resetToPreset,
+    showAside,
+    toggleAside,
     ...other
   } = props;
-  const [showFilter, setShowFilter] = React.useState<boolean>(false);
 
-  const presetButtons = allFilterPresets().map(
-    (p: { name: string; preset: FilterPreset }) => (
-      <li onClick={() => resetToPreset(p.preset)}> {p.name} </li>
-    )
-  );
   return (
-    <section id="filter-menu">
-      <div className="w-75 filters">
-        <ul className="controls">
-          <li onClick={() => resetPanel()}>All</li>
-          {presetButtons}
-          <li onClick={() => setShowFilter(!showFilter)}> Custom </li>
-        </ul>
-        <Sidebar
-          visible={showFilter}
-          onHide={() => setShowFilter(!showFilter)}
-          style={{ width: "40em", overflow: "auto" }}
-        >
-          <Form className="w-50 d-flex justify-content-between">
-            {showFilter ? (
-              <>
-                <div>
-                  <Form.Control
-                    type="text"
-                    name="fieldFilterString"
-                    value={panelSettings.fieldFilterString}
-                    onChange={(e: any) => panelSettingsChangeHandler(e)}
-                    placeholder="Filter for properties..."
-                    style={{ width: "300px" }}
-                  />
-                </div>
-                <div className="d-flex align-items-center ml-2">
-                  {" "}
-                  <Form.Check
-                    type="checkbox"
-                    name="showModifiedOnly"
-                    label="Show modified properties only"
-                    checked={panelSettings.showModifiedOnly}
-                    onChange={(e: any) => panelSettingsChangeHandler(e)}
-                  />
-                </div>
-              </>
-            ) : null}
-          </Form>
-          <Card>
-            <PropertyTable {...other} />
-          </Card>
-        </Sidebar>
-      </div>
-    </section>
+    <Sidebar
+      visible={showAside}
+      onHide={() => toggleAside()}
+      style={{ width: "40em", overflow: "auto" }}
+    >
+      <Form className="w-50 d-flex justify-content-between">
+        {showAside ? (
+          <>
+            <div>
+              <Form.Control
+                type="text"
+                name="fieldFilterString"
+                value={panelSettings.fieldFilterString}
+                onChange={(e: any) => panelSettingsChangeHandler(e)}
+                placeholder="Filter for properties..."
+                style={{ width: "300px" }}
+              />
+            </div>
+            <div className="d-flex align-items-center ml-2">
+              {" "}
+              <Form.Check
+                type="checkbox"
+                name="showModifiedOnly"
+                label="Show modified properties only"
+                checked={panelSettings.showModifiedOnly}
+                onChange={(e: any) => panelSettingsChangeHandler(e)}
+              />
+            </div>
+          </>
+        ) : null}
+      </Form>
+      <Card>
+        <PropertyTable {...other} />
+      </Card>
+    </Sidebar>
   );
 }
 
@@ -418,3 +409,5 @@ function NoResultsRow() {
     </tr>
   );
 }
+
+export default FilterAside;

@@ -7,7 +7,6 @@ import {
   Redirect,
 } from "react-router-dom";
 import deepcopy from "ts-deepcopy";
-import Alert from "react-bootstrap/Alert";
 
 import "./css/style.scss";
 import "primereact/resources/primereact.min.css";
@@ -20,7 +19,6 @@ import CmsDetailView from "./CmsDetailView";
 import { AppState, Cms, FilterFieldSet, ReceivedCmsData } from "./Cms";
 import CmsService from "./CmsService";
 import FilterService from "./FilterService";
-import FilterPanel from "./FilterPanel";
 import Analytics from "./Analytics";
 import About from "./About";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -28,6 +26,8 @@ import Header from "./template/Header";
 import SmallHeader from "./template/SmallHeader";
 import Navigation from "./template/Navigation";
 import Footer from "./template/Footer";
+import FilterAside from "./FilterAside";
+import FilterMenu from "./FilterMenu";
 
 function App() {
   const [appState, setAppState] = React.useState<AppState>();
@@ -50,6 +50,12 @@ function App() {
     }
   };
 
+  const toggleAside = (): void => {
+    if (appState) {
+      setAppState({ ...appState, showAside: !appState.showAside });
+    }
+  };
+
   const githubUrl = "https://github.com/gentics/headless-cms-comparison";
   const content = appState ? (
     <Router>
@@ -57,23 +63,23 @@ function App() {
 
       <Switch>
         <Route exact path="/">
-          <Header />
-          <FilterPanel
-            filterFields={appState.filterFields}
-            updateFilterFields={updateFilterFields}
-          />
-          <main>
-            <Redirect to="/card" />
-          </main>
+          <Redirect to="/card" />
         </Route>
 
         <Route exact path="/card">
-          <Header />
-          <FilterPanel
+          <FilterAside
             filterFields={appState.filterFields}
             updateFilterFields={updateFilterFields}
+            showAside={appState.showAside}
+            toggleAside={toggleAside}
           />
+          <Header />
           <main>
+            <FilterMenu
+              filterFields={appState.filterFields}
+              updateFilterFields={updateFilterFields}
+              toggleAside={toggleAside}
+            />
             <CmsCardList
               filterResults={appState.filterResults}
               cms={appState.cms}
@@ -141,6 +147,7 @@ function constructAppState(cmsData: {
     cms: cmsData.cms,
     filterFields: { actual: filterFields, untouched: untouchedFilterFields },
     filterResults: FilterService.getUnfilteredCms(cmsData.cms),
+    showAside: false,
   };
   return appState;
 }

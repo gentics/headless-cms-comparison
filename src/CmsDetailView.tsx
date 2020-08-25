@@ -25,7 +25,6 @@ import {
 } from "react-icons/fi";
 import { GrLicense } from "react-icons/gr";
 import { MdUpdate } from "react-icons/md";
-import ListGroup from "react-bootstrap/ListGroup";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -33,7 +32,6 @@ import Card from "react-bootstrap/Card";
 import deepcopy from "ts-deepcopy";
 import CmsService from "./CmsService";
 import { useParams } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -71,13 +69,15 @@ export default function CmsDetailView(props: {
     );
   }
 
-  const tableValues: CmsTableData = [];
+  const genericValues: CmsTableData = [];
+  const categoryValues: { [category: string]: CmsTableData } = {};
+
   const basicFilterFields = props.filterFields.basic;
   Object.keys(basicFilterFields).forEach((key: string) => {
     const prop = cms.properties[key];
     if (prop) {
       if (prop.type === PropertyType.Boolean) {
-        tableValues.push({
+        genericValues.push({
           name: {
             name: prop.name,
             description: basicFilterFields[key].description,
@@ -97,14 +97,13 @@ export default function CmsDetailView(props: {
         subFieldKeys.forEach((subkey: string) => {
           const subprop: BooleanCmsProperty = catprop[subkey];
           if (subprop) {
-            const name = `${prop.name}: ${subprop.name}`;
-            tableValues.push({
+            (categoryValues[prop.name] = categoryValues[prop.name] || []).push({
               name: {
-                name,
+                name: subprop.name,
                 description: basicFilterSubFields[subkey].description,
               },
               value: {
-                name,
+                name: subprop.name,
                 value: subprop.value,
                 info: subprop.info,
               },
@@ -114,6 +113,36 @@ export default function CmsDetailView(props: {
       }
     }
   });
+
+  const createCard = (name: string, values: CmsTableData): JSX.Element => (
+    <Card>
+      <Card.Title>{name || "General"} Features</Card.Title>
+      <DataTable value={values}>
+        <Column
+          header="Feature"
+          field="name"
+          sortable
+          sortFunction={(e) => sortData(values, e)}
+          body={TitleTemplate}
+        />
+        <Column
+          header="Supported?"
+          field="value"
+          sortable
+          sortFunction={(e) => sortData(values, e)}
+          body={BooleanPropertyTemplate}
+        />
+      </DataTable>
+    </Card>
+  );
+
+  const genericCard = createCard("", genericValues);
+  const categoryCards = Object.keys(categoryValues)
+    .sort()
+    .map(
+      (categoryName: string): JSX.Element =>
+        createCard(categoryName, categoryValues[categoryName])
+    );
 
   return (
     <section id="detail-view" className="pb-5">
@@ -144,26 +173,14 @@ export default function CmsDetailView(props: {
             <PropertyList name={cms.name} filterResult={filterResult} />
 
             <h3 className="my-5" key="all">
-              All Features or {cms.name}
+              All Features of {cms.name}
             </h3>
-            <Card>
-              <DataTable value={tableValues}>
-                <Column
-                  header="Feature"
-                  field="name"
-                  sortable
-                  sortFunction={(e) => sortData(tableValues, e)}
-                  body={TitleTemplate}
-                />
-                <Column
-                  header="Supported?"
-                  field="value"
-                  sortable
-                  sortFunction={(e) => sortData(tableValues, e)}
-                  body={BooleanPropertyTemplate}
-                />
-              </DataTable>
-            </Card>
+
+            <Row>
+              <Col>{genericCard}</Col>
+              <Col>{categoryCards}</Col>
+            </Row>
+
             <span className="lastUpdated">
               <MdUpdate className="mr-1" /> This information was last updated on{" "}
               {new Date(cms.lastUpdated).toDateString()}

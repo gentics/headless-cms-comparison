@@ -13,11 +13,13 @@ import {
 import CmsService from "./CmsService";
 import Description from "./Description";
 
+type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
+
 type PropsType = {
   filterFields: FilterFieldSet;
-  specialFieldChangeHandler: (event: any) => void;
+  specialFieldChangeHandler: (event: InputChangeEvent) => void;
   basicFieldChangeHandler: (
-    event: any,
+    event: InputChangeEvent,
     fieldKey: string,
     categoryKey?: string
   ) => void;
@@ -100,15 +102,15 @@ export const FilterPropertyTable = (props: PropsType): JSX.Element => {
   );
 };
 
-function CheckboxRow(props: {
+const CheckboxRow = (props: {
   specialField: SpecialField;
-  changeHandler: (e: any) => void;
+  changeHandler: (e: InputChangeEvent) => void;
   fieldKey: string;
-}): JSX.Element {
+}): JSX.Element => {
   let checkboxes: JSX.Element[] = [];
   for (const possibleValue of props.specialField.possibleValues) {
     checkboxes.push(
-      <Checkbox
+      <SimpleCheckbox
         key={`${props.fieldKey}_${possibleValue}`}
         fieldKey={props.fieldKey}
         value={possibleValue}
@@ -131,14 +133,14 @@ function CheckboxRow(props: {
       <td>{checkboxes}</td>
     </tr>
   );
-}
+};
 
-function Checkbox(props: {
+const SimpleCheckbox = (props: {
   fieldKey: string;
   value: string;
   checked: boolean;
-  changeHandler: (e: any) => void;
-}) {
+  changeHandler: (e: InputChangeEvent) => void;
+}): JSX.Element => {
   return (
     <label style={{ paddingRight: "2px" }}>
       <input
@@ -151,9 +153,12 @@ function Checkbox(props: {
       {props.value}
     </label>
   );
-}
+};
 
-function CategoryRow(props: { title: string; description: string }) {
+const CategoryRow = (props: {
+  title: string;
+  description: string;
+}): JSX.Element => {
   return (
     <tr>
       <td colSpan={2}>
@@ -168,36 +173,21 @@ function CategoryRow(props: { title: string; description: string }) {
       </td>
     </tr>
   );
-}
+};
 
-function ScoreRow(props: {
+const ScoreRow = (props: {
   scoreField: ScoreField;
-  changeHandler: (event: any, fieldKey: string, categoryKey?: string) => void;
+  changeHandler: (
+    event: InputChangeEvent,
+    fieldKey: string,
+    categoryKey?: string
+  ) => void;
   fieldKey: string;
   categoryKey?: string;
-}): JSX.Element {
-  let style: any = {};
+}): JSX.Element => {
+  let style: React.CSSProperties = {};
   if (props.categoryKey) {
     style = { fontStyle: "italic", fontWeight: 800 };
-  }
-
-  let options: JSX.Element[] = [];
-
-  let i = 0;
-  for (const scoreValue of Object.values(ScoreValue)) {
-    options.push(
-      <option
-        key={
-          props.categoryKey
-            ? `${props.categoryKey}_${props.fieldKey}_${scoreValue}`
-            : `${props.fieldKey}_${scoreValue}`
-        }
-        value={scoreValue}
-      >
-        {scoreValue}
-      </option>
-    );
-    i++;
   }
 
   return (
@@ -213,84 +203,85 @@ function ScoreRow(props: {
         </div>
       </td>
       <td style={{ textAlign: "right" }}>
-        <div className="switch-toggle">
-          <input
-            id={props.categoryKey + "_" + props.fieldKey + "_1"}
-            name={props.categoryKey + "_" + props.fieldKey}
-            value={ScoreValue.NICE_TO_HAVE}
-            checked={props.scoreField.value === ScoreValue.NICE_TO_HAVE}
-            onChange={(e: any) =>
-              props.changeHandler(e, props.fieldKey, props.categoryKey)
-            }
-            type="radio"
-          />
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 250, hide: 400 }}
-            overlay={
-              <Tooltip id={props.categoryKey + "_" + props.fieldKey + "_1"}>
-                Nice to have option
-              </Tooltip>
-            }
-          >
-            <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_1"}>
-              <i className="fas fa-smile" aria-hidden="true"></i>
-            </label>
-          </OverlayTrigger>
-
-          <input
-            id={props.categoryKey + "_" + props.fieldKey + "_2"}
-            name={props.categoryKey + "_" + props.fieldKey}
-            value={ScoreValue.DONT_CARE}
-            checked={props.scoreField.value === ScoreValue.DONT_CARE}
-            onChange={(e: any) =>
-              props.changeHandler(e, props.fieldKey, props.categoryKey)
-            }
-            type="radio"
-          />
-
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 250, hide: 400 }}
-            overlay={
-              <Tooltip id={props.categoryKey + "_" + props.fieldKey + "_2"}>
-                I don't care about this option
-              </Tooltip>
-            }
-          >
-            <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_2"}>
-              <i className="fa fa-dice" aria-hidden="true"></i>
-            </label>
-          </OverlayTrigger>
-
-          <input
-            id={props.categoryKey + "_" + props.fieldKey + "_3"}
-            name={props.categoryKey + "_" + props.fieldKey}
-            value={ScoreValue.REQUIRED}
-            checked={props.scoreField.value === ScoreValue.REQUIRED}
-            onChange={(e: any) =>
-              props.changeHandler(e, props.fieldKey, props.categoryKey)
-            }
-            type="radio"
-          />
-          <OverlayTrigger
-            placement="top"
-            delay={{ show: 250, hide: 400 }}
-            overlay={
-              <Tooltip id={props.categoryKey + "_" + props.fieldKey + "_3"}>
-                Required option
-              </Tooltip>
-            }
-          >
-            <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_3"}>
-              <i className="fa fa-exclamation" aria-hidden="true"></i>
-            </label>
-          </OverlayTrigger>
-        </div>
+        <ScoreValueCheckbox
+          name={props.categoryKey + "_" + props.fieldKey}
+          value={props.scoreField.value || ScoreValue.DONT_CARE}
+          changeHandler={(e: InputChangeEvent) =>
+            props.changeHandler(e, props.fieldKey, props.categoryKey)
+          }
+        />
       </td>
     </tr>
   );
-}
+};
+
+const ScoreValueCheckbox = (props: {
+  name: string;
+  value: ScoreValue;
+  changeHandler: (e: InputChangeEvent) => void;
+}): JSX.Element => {
+  const { name, value, changeHandler } = props;
+  return (
+    <div className="switch-toggle">
+      <input
+        id={name + "_1"}
+        name={name}
+        value={ScoreValue.NICE_TO_HAVE}
+        checked={value === ScoreValue.NICE_TO_HAVE}
+        onChange={(e: InputChangeEvent) => changeHandler(e)}
+        type="radio"
+      />
+      <OverlayTrigger
+        placement="top"
+        delay={{ show: 250, hide: 400 }}
+        overlay={<Tooltip id={name + "_1"}>Nice to have option</Tooltip>}
+      >
+        <label htmlFor={name + "_1"}>
+          <i className="fas fa-smile" aria-hidden="true"></i>
+        </label>
+      </OverlayTrigger>
+
+      <input
+        id={name + "_2"}
+        name={name}
+        value={ScoreValue.DONT_CARE}
+        checked={value === ScoreValue.DONT_CARE}
+        onChange={(e: InputChangeEvent) => changeHandler(e)}
+        type="radio"
+      />
+
+      <OverlayTrigger
+        placement="top"
+        delay={{ show: 250, hide: 400 }}
+        overlay={
+          <Tooltip id={name + "_2"}>I don't care about this option</Tooltip>
+        }
+      >
+        <label htmlFor={name + "_2"}>
+          <i className="fa fa-dice" aria-hidden="true"></i>
+        </label>
+      </OverlayTrigger>
+
+      <input
+        id={name + "_3"}
+        name={name}
+        value={ScoreValue.REQUIRED}
+        checked={value === ScoreValue.REQUIRED}
+        onChange={(e: InputChangeEvent) => changeHandler(e)}
+        type="radio"
+      />
+      <OverlayTrigger
+        placement="top"
+        delay={{ show: 250, hide: 400 }}
+        overlay={<Tooltip id={name + "_3"}>Required option</Tooltip>}
+      >
+        <label htmlFor={name + "_3"}>
+          <i className="fa fa-exclamation" aria-hidden="true"></i>
+        </label>
+      </OverlayTrigger>
+    </div>
+  );
+};
 
 const NoResultsRow = (): JSX.Element => {
   return (

@@ -302,13 +302,6 @@ const FilterService = {
       possibleValues: Object.values(Category),
     };
 
-    specialFields.license = {
-      name: "Allowed Licenses",
-      description: "License of the system.",
-      values: Object.values(License),
-      possibleValues: Object.values(License),
-    };
-
     return specialFields;
   },
 

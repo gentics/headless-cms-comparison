@@ -1,6 +1,7 @@
 import React from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Card from "react-bootstrap/esm/Card";
 
 import {
   ScoreValue,
@@ -26,77 +27,92 @@ type PropsType = {
 };
 
 export const FilterPropertyTable = (props: PropsType): JSX.Element => {
-  let tableRows: JSX.Element[] = [];
   const {
     filterFields,
     specialFieldChangeHandler,
     basicFieldChangeHandler,
   } = props;
 
-  const specialFieldKeys = Object.keys(filterFields.special);
-  for (let fieldKey of specialFieldKeys) {
-    const currentField = props.filterFields.special[fieldKey];
-    tableRows.push(
-      <CheckboxRow
-        key={fieldKey}
-        specialField={currentField}
-        fieldKey={fieldKey}
-        changeHandler={specialFieldChangeHandler}
-      />
-    );
-  }
+  const generalRows: JSX.Element[] = [];
+  const categoryRows: {
+    [categoryName: string]: {
+      title: string;
+      description: string;
+      children: JSX.Element[];
+    };
+  } = {};
 
-  const basicFieldKeys = Object.keys(filterFields.basic);
-  for (let fieldKey of basicFieldKeys) {
-    const currentField = filterFields.basic[fieldKey];
-
-    if (CmsService.isScoreField(currentField)) {
-      tableRows.push(
-        <ScoreRow
+  Object.keys(filterFields.special)
+    .sort()
+    .forEach((fieldKey: string) => {
+      const currentField = props.filterFields.special[fieldKey];
+      generalRows.push(
+        <CheckboxRow
           key={fieldKey}
-          scoreField={currentField}
+          specialField={currentField}
           fieldKey={fieldKey}
-          changeHandler={basicFieldChangeHandler}
+          changeHandler={specialFieldChangeHandler}
         />
       );
-    } else {
-      tableRows.push(
-        <CategoryRow
-          key={fieldKey}
-          title={currentField.name}
-          description={currentField.description}
-        />
-      );
+    });
 
-      const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
+  Object.keys(filterFields.basic)
+    .sort()
+    .forEach((fieldKey: string) => {
+      const currentField = filterFields.basic[fieldKey];
 
-      for (const subKey of subFieldKeys) {
-        const currentField = (filterFields.basic[fieldKey] as CategoryField)[
-          subKey
-        ];
-        tableRows.push(
+      if (CmsService.isScoreField(currentField)) {
+        generalRows.push(
           <ScoreRow
-            key={`${fieldKey}_${subKey}`}
+            key={fieldKey}
             scoreField={currentField}
-            fieldKey={subKey}
+            fieldKey={fieldKey}
             changeHandler={basicFieldChangeHandler}
-            categoryKey={fieldKey}
           />
         );
-      }
-    }
-  }
+      } else {
+        const children: JSX.Element[] = CmsService.getKeysOfSubFields(
+          currentField
+        ).map((subKey: string) => {
+          const currentField = (filterFields.basic[fieldKey] as CategoryField)[
+            subKey
+          ];
+          return (
+            <ScoreRow
+              key={`${fieldKey}_${subKey}`}
+              scoreField={currentField}
+              fieldKey={subKey}
+              changeHandler={basicFieldChangeHandler}
+              categoryKey={fieldKey}
+            />
+          );
+        });
 
-  if (tableRows.length === 0) {
-    tableRows.push(<NoResultsRow key="no" />);
+        categoryRows[fieldKey] = {
+          title: currentField.name,
+          description: currentField.description,
+          children,
+        };
+      }
+    });
+
+  const cards: JSX.Element[] = [];
+  if (generalRows.length > 0) {
+    cards.push(
+      <CategoryCard key="general" title="General" children={generalRows} />
+    );
   }
+  Object.keys(categoryRows)
+    .sort()
+    .forEach((categoryName: string) => {
+      const category = categoryRows[categoryName];
+      cards.push(<CategoryCard key={categoryName} {...category} />);
+    });
 
   return (
     <div style={{ maxHeight: "100%", overflow: "yes" }}>
       <form id="filterForm">
-        <table>
-          <tbody>{tableRows}</tbody>
-        </table>
+        {cards.length > 0 ? cards : <NoResultsRow key="no" />}
       </form>
     </div>
   );
@@ -121,17 +137,15 @@ const CheckboxRow = (props: {
   }
 
   return (
-    <tr>
-      <td>
-        <div className="d-flex justify-content-between">
-          <span className="ml-2">
-            <Description description={props.specialField.description} />
-          </span>
-          <span className="mr-2">{props.specialField.name}</span>
-        </div>
-      </td>
-      <td>{checkboxes}</td>
-    </tr>
+    <>
+      <div className="d-flex justify-content-between">
+        <span className="ml-2">
+          <Description description={props.specialField.description} />
+        </span>
+        <span className="mr-2">{props.specialField.name}</span>
+      </div>
+      {checkboxes}
+    </>
   );
 };
 
@@ -155,23 +169,26 @@ const SimpleCheckbox = (props: {
   );
 };
 
-const CategoryRow = (props: {
+const CategoryCard = (props: {
   title: string;
-  description: string;
+  description?: string;
+  children: JSX.Element[];
 }): JSX.Element => {
+  const description = props.description ? (
+    <span className="ml-2">
+      <Description description={props.description} />
+    </span>
+  ) : null;
   return (
-    <tr>
-      <td colSpan={2}>
-        <div className="d-flex justify-content-between">
-          <span className="ml-2">
-            <Description description={props.description} />
-          </span>
-          <span className="mr-2">
-            <h4>{props.title}</h4>
-          </span>
-        </div>
-      </td>
-    </tr>
+    <Card>
+      <div className="d-flex justify-content-between">
+        {description}
+        <span className="mr-2">
+          <h4>{props.title}</h4>
+        </span>
+      </div>
+      {props.children}
+    </Card>
   );
 };
 
@@ -191,27 +208,23 @@ const ScoreRow = (props: {
   }
 
   return (
-    <tr>
-      <td>
-        <div className="">
-          <span className="ml-2">
-            <Description description={props.scoreField.description} />
-          </span>
-          <span className="mr-2" style={style}>
-            {props.scoreField.name}
-          </span>
-        </div>
-      </td>
-      <td style={{ textAlign: "right" }}>
-        <ScoreValueCheckbox
-          name={props.categoryKey + "_" + props.fieldKey}
-          value={props.scoreField.value || ScoreValue.DONT_CARE}
-          changeHandler={(e: InputChangeEvent) =>
-            props.changeHandler(e, props.fieldKey, props.categoryKey)
-          }
-        />
-      </td>
-    </tr>
+    <>
+      <div className="">
+        <span className="ml-2">
+          <Description description={props.scoreField.description} />
+        </span>
+        <span className="mr-2" style={style}>
+          {props.scoreField.name}
+        </span>
+      </div>
+      <ScoreValueCheckbox
+        name={props.categoryKey + "_" + props.fieldKey}
+        value={props.scoreField.value || ScoreValue.DONT_CARE}
+        changeHandler={(e: InputChangeEvent) =>
+          props.changeHandler(e, props.fieldKey, props.categoryKey)
+        }
+      />
+    </>
   );
 };
 
@@ -285,14 +298,12 @@ const ScoreValueCheckbox = (props: {
 
 const NoResultsRow = (): JSX.Element => {
   return (
-    <tr>
-      <td>
-        <span role="img" aria-label="Not amused">
-          😐
-        </span>{" "}
-        No modified properties
-      </td>
-    </tr>
+    <>
+      <span role="img" aria-label="Not amused">
+        😐
+      </span>{" "}
+      No modified properties
+    </>
   );
 };
 

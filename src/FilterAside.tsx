@@ -405,7 +405,7 @@ function ScoreRow(props: {
             }
           >
             <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_1"}>
-              <i className="fas fa-dice" aria-hidden="true"></i>
+              <i className="fas fa-smile" aria-hidden="true"></i>
             </label>
           </OverlayTrigger>
 
@@ -430,7 +430,7 @@ function ScoreRow(props: {
             }
           >
             <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_2"}>
-              <i className="fa fa-smile" aria-hidden="true"></i>
+              <i className="fa fa-dice" aria-hidden="true"></i>
             </label>
           </OverlayTrigger>
 

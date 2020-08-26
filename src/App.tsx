@@ -54,6 +54,12 @@ function App() {
     if (appState) {
       setAppState({ ...appState, showAside: !appState.showAside });
     }
+
+    if (!appState?.showAside) {
+      document.body.classList.add("sidebar-open");
+    } else {
+      document.body.classList.remove("sidebar-open");
+    }
   };
 
   const githubUrl = "https://github.com/gentics/headless-cms-comparison";

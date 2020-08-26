@@ -37,6 +37,16 @@ a {
   }
 }
 
+#root {
+  transition: all 0.3s;
+}
+
+.sidebar-open {
+  #root {
+    margin-left: 30rem;
+  }
+}
+
 nav {
   padding: 20px 0;
   text-transform: uppercase;

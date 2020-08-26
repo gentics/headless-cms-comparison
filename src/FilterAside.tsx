@@ -390,6 +390,7 @@ function ScoreRow(props: {
             id={props.categoryKey + "_" + props.fieldKey + "_1"}
             name={props.categoryKey + "_" + props.fieldKey}
             value={ScoreValue.NICE_TO_HAVE}
+            checked={props.scoreField.value === ScoreValue.NICE_TO_HAVE}
             onChange={(e: any) =>
               props.changeHandler(e, props.fieldKey, props.categoryKey)
             }
@@ -413,11 +414,11 @@ function ScoreRow(props: {
             id={props.categoryKey + "_" + props.fieldKey + "_2"}
             name={props.categoryKey + "_" + props.fieldKey}
             value={ScoreValue.DONT_CARE}
+            checked={props.scoreField.value === ScoreValue.DONT_CARE}
             onChange={(e: any) =>
               props.changeHandler(e, props.fieldKey, props.categoryKey)
             }
             type="radio"
-            checked={true}
           />
 
           <OverlayTrigger
@@ -438,6 +439,7 @@ function ScoreRow(props: {
             id={props.categoryKey + "_" + props.fieldKey + "_3"}
             name={props.categoryKey + "_" + props.fieldKey}
             value={ScoreValue.REQUIRED}
+            checked={props.scoreField.value === ScoreValue.REQUIRED}
             onChange={(e: any) =>
               props.changeHandler(e, props.fieldKey, props.categoryKey)
             }

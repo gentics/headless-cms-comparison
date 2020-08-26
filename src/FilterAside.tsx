@@ -389,7 +389,7 @@ function ScoreRow(props: {
           <input
             id={props.categoryKey + "_" + props.fieldKey + "_1"}
             name={props.categoryKey + "_" + props.fieldKey}
-            value="Nice-to-Have"
+            value={ScoreValue.NICE_TO_HAVE}
             onChange={(e: any) =>
               props.changeHandler(e, props.fieldKey, props.categoryKey)
             }
@@ -412,7 +412,7 @@ function ScoreRow(props: {
           <input
             id={props.categoryKey + "_" + props.fieldKey + "_2"}
             name={props.categoryKey + "_" + props.fieldKey}
-            value="Don't Care"
+            value={ScoreValue.DONT_CARE}
             onChange={(e: any) =>
               props.changeHandler(e, props.fieldKey, props.categoryKey)
             }
@@ -437,7 +437,7 @@ function ScoreRow(props: {
           <input
             id={props.categoryKey + "_" + props.fieldKey + "_3"}
             name={props.categoryKey + "_" + props.fieldKey}
-            value="Required"
+            value={ScoreValue.REQUIRED}
             onChange={(e: any) =>
               props.changeHandler(e, props.fieldKey, props.categoryKey)
             }

@@ -430,6 +430,7 @@ main {
 
       .github-corner {
         &:hover .octo-arm {
+          transform-origin: 130px 106px;
           animation: octocat-wave 560ms ease-in-out
         }
 

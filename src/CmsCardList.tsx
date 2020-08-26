@@ -56,6 +56,18 @@ function satisfactoryResultsExist(filterResults: FilterResult[]) {
   return filterResults.some((result) => result.satisfactory);
 }
 
+function CmsTeaser(props: { cms: Cms }) {
+  if (props.cms.teaser.value) {
+    return <p>{props.cms.teaser.value}</p>;
+  }
+  return (
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus beatae
+      dignissimos incidunt ipsa nisi sed tempora ut. Ex, itaque, rerum.
+    </p>
+  );
+}
+
 function CmsCard(props: {
   cms: Cms;
   filterResult: FilterResult;
@@ -65,7 +77,7 @@ function CmsCard(props: {
   return (
     <div className="mix">
       <div className={classes} key={props.filterResult.cmsKey}>
-        <GithubRibbon url={props.cms.name} />
+        <GithubRibbon cms={props.cms} />
         <LinkContainer
           to={`/detail/${props.filterResult.cmsKey}`}
           className="cmsCardLink"
@@ -73,12 +85,8 @@ function CmsCard(props: {
           <Card.Body className="text-left">
             <h2>{props.cms.name}</h2>
             <CmsCardText {...props} />
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid
-              assumenda ducimus eos est, iure nam praesentium? Aspernatur
-              consectetur eos explicabo itaque, nesciunt perspiciatis possimus
-              qui, quidem reiciendis rerum unde, voluptas!
-            </p>
+
+            <CmsTeaser cms={props.cms} />
           </Card.Body>
         </LinkContainer>
       </div>

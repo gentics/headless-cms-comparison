@@ -144,6 +144,8 @@ function parseCms(data: any): Cms {
     license: licenses,
     category: categories,
     properties,
+    gitHubURL: data.gitHubURL,
+    teaser: data.teaser,
   };
 
   return cms;

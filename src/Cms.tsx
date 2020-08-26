@@ -56,6 +56,8 @@ export interface Cms {
   category: Category[];
   systemRequirements: string | null;
   specialFeatures: string | null;
+  gitHubURL: any | null;
+  teaser: any | null;
   properties: {
     [x: string]: CmsProperty;
   };

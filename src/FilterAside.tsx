@@ -3,6 +3,8 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import { Sidebar } from "primereact/sidebar";
 import Form from "react-bootstrap/Form";
+import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 import {
   ScoreValue,
@@ -152,9 +154,9 @@ function Panel(props: {
     <Sidebar
       visible={showAside}
       onHide={() => toggleAside()}
-      style={{ width: "40em", overflow: "auto" }}
+      style={{ width: "30em", overflow: "auto" }}
     >
-      <Form className="w-50 d-flex justify-content-between">
+      <Form>
         {showAside ? (
           <>
             <div>
@@ -180,9 +182,7 @@ function Panel(props: {
           </>
         ) : null}
       </Form>
-      <Card>
-        <PropertyTable {...other} />
-      </Card>
+      <PropertyTable {...other} />
     </Sidebar>
   );
 }
@@ -264,9 +264,9 @@ function PropertyTable(props: {
   return (
     <div style={{ maxHeight: "100%", overflow: "yes" }}>
       <form id="filterForm">
-        <Table striped bordered hover className="mb-0">
+        <table>
           <tbody>{tableRows}</tbody>
-        </Table>
+        </table>
       </form>
     </div>
   );
@@ -355,6 +355,7 @@ function ScoreRow(props: {
 
   let options: JSX.Element[] = [];
 
+  let i = 0;
   for (const scoreValue of Object.values(ScoreValue)) {
     options.push(
       <option
@@ -368,12 +369,13 @@ function ScoreRow(props: {
         {scoreValue}
       </option>
     );
+    i++;
   }
 
   return (
     <tr>
       <td>
-        <div className="d-flex justify-content-between">
+        <div className="">
           <span className="ml-2">
             <Description description={props.scoreField.description} />
           </span>
@@ -383,15 +385,78 @@ function ScoreRow(props: {
         </div>
       </td>
       <td style={{ textAlign: "right" }}>
-        <select
-          name={props.categoryKey ? props.categoryKey : props.fieldKey}
-          value={props.scoreField.value as string}
-          onChange={(e: any) =>
-            props.changeHandler(e, props.fieldKey, props.categoryKey)
-          }
-        >
-          {options}
-        </select>
+        <div className="switch-toggle">
+          <input
+            id={props.categoryKey + "_" + props.fieldKey + "_1"}
+            name={props.categoryKey + "_" + props.fieldKey}
+            value="Nice-to-Have"
+            onChange={(e: any) =>
+              props.changeHandler(e, props.fieldKey, props.categoryKey)
+            }
+            type="radio"
+          />
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 400 }}
+            overlay={
+              <Tooltip id={props.categoryKey + "_" + props.fieldKey + "_1"}>
+                Nice to have option
+              </Tooltip>
+            }
+          >
+            <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_1"}>
+              <i className="fas fa-dice" aria-hidden="true"></i>
+            </label>
+          </OverlayTrigger>
+
+          <input
+            id={props.categoryKey + "_" + props.fieldKey + "_2"}
+            name={props.categoryKey + "_" + props.fieldKey}
+            value="Don't Care"
+            onChange={(e: any) =>
+              props.changeHandler(e, props.fieldKey, props.categoryKey)
+            }
+            type="radio"
+            checked={true}
+          />
+
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 400 }}
+            overlay={
+              <Tooltip id={props.categoryKey + "_" + props.fieldKey + "_2"}>
+                I don't care about this option
+              </Tooltip>
+            }
+          >
+            <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_2"}>
+              <i className="fa fa-smile" aria-hidden="true"></i>
+            </label>
+          </OverlayTrigger>
+
+          <input
+            id={props.categoryKey + "_" + props.fieldKey + "_3"}
+            name={props.categoryKey + "_" + props.fieldKey}
+            value="Required"
+            onChange={(e: any) =>
+              props.changeHandler(e, props.fieldKey, props.categoryKey)
+            }
+            type="radio"
+          />
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 400 }}
+            overlay={
+              <Tooltip id={props.categoryKey + "_" + props.fieldKey + "_3"}>
+                Required option
+              </Tooltip>
+            }
+          >
+            <label htmlFor={props.categoryKey + "_" + props.fieldKey + "_3"}>
+              <i className="fa fa-exclamation" aria-hidden="true"></i>
+            </label>
+          </OverlayTrigger>
+        </div>
       </td>
     </tr>
   );

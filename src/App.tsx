@@ -74,12 +74,12 @@ function App() {
             toggleAside={toggleAside}
           />
           <Header />
+          <FilterMenu
+            filterFields={appState.filterFields}
+            updateFilterFields={updateFilterFields}
+            toggleAside={toggleAside}
+          />
           <main>
-            <FilterMenu
-              filterFields={appState.filterFields}
-              updateFilterFields={updateFilterFields}
-              toggleAside={toggleAside}
-            />
             <CmsCardList
               filterResults={appState.filterResults}
               cms={appState.cms}

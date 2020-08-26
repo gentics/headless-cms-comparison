@@ -289,53 +289,72 @@ section.offset-filters {
   }
 
   &.filters {
-    .switch-toggle {
-      font-size: 0.8rem;
 
-      p {
-        margin-bottom: 5px;
-        font-family: $secondaryFont;
-        text-transform: uppercase;
-      }
-
-      label {
-        background: #fff;
-        color: $primaryColor !important;
-
-        min-width: 30px;
-        min-height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
-
-        &:first-of-type {
-          border-top-left-radius: .24rem;
-          border-bottom-left-radius: .24rem;
+  }
+}
+.p-sidebar {
+  background: #fff;
+  table {
+    font-size: .8rem;
+    tr {
+      td {
+        padding: 10px 0;
+        &:first-child {
+          text-align: left;
         }
-
-        &:last-of-type {
-          border-top-right-radius: .24rem;
-          border-bottom-right-radius: .24rem;
+        &:nth-child(3) {
+          width: 100px;
+          text-align: right;
         }
-      }
+        .switch-toggle {
+          font-size: 0.8rem;
 
-      input {
-        position: absolute;
-        opacity: 0;
-      }
+          p {
+            margin-bottom: 5px;
+            font-family: $secondaryFont;
+            text-transform: uppercase;
+          }
 
-      input + label {
-        padding: 7px;
-        float: left;
-        color: #fff;
-        cursor: pointer;
-      }
+          label {
+            background: #fff;
+            color: $primaryColor !important;
 
-      input:checked + label {
-        background: $secondaryColor;
-        color: #fff !important;
-        box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
+            min-width: 30px;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
+
+            &:first-of-type {
+              border-top-left-radius: .24rem;
+              border-bottom-left-radius: .24rem;
+            }
+
+            &:last-of-type {
+              border-top-right-radius: .24rem;
+              border-bottom-right-radius: .24rem;
+            }
+          }
+
+          input {
+            position: absolute;
+            opacity: 0;
+          }
+
+          input + label {
+            padding: 7px;
+            color: #fff;
+            display: inline-flex;
+            cursor: pointer;
+          }
+
+          input:checked + label {
+            background: $secondaryColor;
+            color: #fff !important;
+            box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
+          }
+        }
       }
     }
   }
@@ -471,19 +490,6 @@ main {
   }
 }
 
-section#detail-view {
-  .card {
-    &.info-box{
-
-    }
-    .p-datatable {
-      background: $primaryColor;
-      border-top-left-radius: .24rem !important;
-      border-top-right-radius: .24rem !important;
-    }
-  }
-}
-
 section#list-view, section#detail-view {
 
   .card {
@@ -519,11 +525,11 @@ section#list-view, section#detail-view {
       }
 
       tbody {
-        background: #f4f4f4;
+        background: #fff;
 
         tr {
           &:hover {
-            background: #fff;
+            background: #f4f4f4;
           }
 
           td {
@@ -535,7 +541,7 @@ section#list-view, section#detail-view {
             }
 
             &.cmsTableNameColumn {
-              background: #fff;
+              background: #f4f4f4;
             }
 
             a {
@@ -552,6 +558,34 @@ section#list-view, section#detail-view {
     }
   }
 
+}
+
+section#detail-view {
+  h5 {
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  .card {
+    &.info-box{
+
+    }
+    .p-datatable {
+      background: $primaryColor;
+      border-top-left-radius: .24rem !important;
+      border-top-right-radius: .24rem !important;
+    }
+    table {
+      tbody {
+        background: #fff;
+        tr {
+          &:hover {
+            background: #f4f4f4;
+          }
+        }
+      }
+    }
+  }
 }
 
 footer {

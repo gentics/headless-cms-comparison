@@ -115,25 +115,28 @@ export default function CmsDetailView(props: {
   });
 
   const createCard = (name: string, values: CmsTableData): JSX.Element => (
-    <Card>
-      <Card.Title>{name || "General"} Features</Card.Title>
-      <DataTable value={values}>
-        <Column
-          header="Feature"
-          field="name"
-          sortable
-          sortFunction={(e) => sortData(values, e)}
-          body={TitleTemplate}
-        />
-        <Column
-          header="Supported?"
-          field="value"
-          sortable
-          sortFunction={(e) => sortData(values, e)}
-          body={BooleanPropertyTemplate}
-        />
-      </DataTable>
-    </Card>
+    <div className="mb-5">
+      <h5>{name || "General"} Features</h5>
+      <Card>
+        <DataTable value={values}>
+          <Column
+            header="Feature"
+            field="name"
+            sortable
+            sortFunction={(e) => sortData(values, e)}
+            body={TitleTemplate}
+          />
+          <Column
+            header="Supported?"
+            field="value"
+            style={{ width: "20%", textAlign: "center" }}
+            sortable
+            sortFunction={(e) => sortData(values, e)}
+            body={BooleanPropertyTemplate}
+          />
+        </DataTable>
+      </Card>
+    </div>
   );
 
   const genericCard = createCard("", genericValues);
@@ -250,10 +253,16 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
 
   return (
     <div>
-      <Card className="info-box my-5">
+      <Card
+        className="info-box my-5"
+        style={{ display: requiredListItems.length > 0 ? "block" : "none" }}
+      >
         <div className="p-3">{requiredListItems}</div>
       </Card>
-      <Card className="info-box my-5">
+      <Card
+        className="info-box my-5"
+        style={{ display: niceToHaveListItems.length > 0 ? "block" : "none" }}
+      >
         <div className="p-3">{niceToHaveListItems}</div>
       </Card>
     </div>

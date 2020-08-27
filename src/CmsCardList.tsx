@@ -2,6 +2,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import { GrLicense } from "react-icons/gr";
 import { FiSlash, FiCheckCircle, FiAward, FiBox } from "react-icons/fi";
+import classnames from "classnames";
 import { FilterResult, Cms } from "./Cms";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -73,7 +74,12 @@ function CmsCard(props: {
   filterResult: FilterResult;
   cardNumber: number;
 }) {
-  const classes = "card card-line card-color-" + props.cardNumber;
+  const classes = classnames(
+    "card",
+    "card-line",
+    `card-color-${props.cardNumber}`,
+    { "card-deactivated": !props.filterResult.satisfactory }
+  );
   return (
     <div className="mix">
       <div className={classes} key={props.filterResult.cmsKey}>

@@ -44,59 +44,55 @@ export const FilterPropertyTable = (props: PropsType): JSX.Element => {
     };
   } = {};
 
-  Object.keys(filterFields.special)
-    .sort()
-    .forEach((fieldKey: string) => {
-      const currentField = props.filterFields.special[fieldKey];
+  Object.keys(filterFields.special).forEach((fieldKey: string) => {
+    const currentField = props.filterFields.special[fieldKey];
+    generalRows.push(
+      <CheckboxRow
+        key={fieldKey}
+        specialField={currentField}
+        fieldKey={fieldKey}
+        changeHandler={specialFieldChangeHandler}
+      />
+    );
+  });
+
+  Object.keys(filterFields.basic).forEach((fieldKey: string) => {
+    const currentField = filterFields.basic[fieldKey];
+
+    if (CmsService.isScoreField(currentField)) {
       generalRows.push(
-        <CheckboxRow
+        <ScoreRow
           key={fieldKey}
-          specialField={currentField}
+          scoreField={currentField}
           fieldKey={fieldKey}
-          changeHandler={specialFieldChangeHandler}
+          changeHandler={basicFieldChangeHandler}
         />
       );
-    });
-
-  Object.keys(filterFields.basic)
-    .sort()
-    .forEach((fieldKey: string) => {
-      const currentField = filterFields.basic[fieldKey];
-
-      if (CmsService.isScoreField(currentField)) {
-        generalRows.push(
+    } else {
+      const children: JSX.Element[] = CmsService.getKeysOfSubFields(
+        currentField
+      ).map((subKey: string) => {
+        const currentField = (filterFields.basic[fieldKey] as CategoryField)[
+          subKey
+        ];
+        return (
           <ScoreRow
-            key={fieldKey}
+            key={`${fieldKey}_${subKey}`}
             scoreField={currentField}
-            fieldKey={fieldKey}
+            fieldKey={subKey}
             changeHandler={basicFieldChangeHandler}
+            categoryKey={fieldKey}
           />
         );
-      } else {
-        const children: JSX.Element[] = CmsService.getKeysOfSubFields(
-          currentField
-        ).map((subKey: string) => {
-          const currentField = (filterFields.basic[fieldKey] as CategoryField)[
-            subKey
-          ];
-          return (
-            <ScoreRow
-              key={`${fieldKey}_${subKey}`}
-              scoreField={currentField}
-              fieldKey={subKey}
-              changeHandler={basicFieldChangeHandler}
-              categoryKey={fieldKey}
-            />
-          );
-        });
+      });
 
-        categoryRows[fieldKey] = {
-          title: currentField.name,
-          description: currentField.description,
-          children,
-        };
-      }
-    });
+      categoryRows[fieldKey] = {
+        title: currentField.name,
+        description: currentField.description,
+        children,
+      };
+    }
+  });
 
   const cards: JSX.Element[] = [];
   if (generalRows.length > 0) {
@@ -104,12 +100,10 @@ export const FilterPropertyTable = (props: PropsType): JSX.Element => {
       <CategoryCard key="general" title="General" children={generalRows} />
     );
   }
-  Object.keys(categoryRows)
-    .sort()
-    .forEach((categoryName: string) => {
-      const category = categoryRows[categoryName];
-      cards.push(<CategoryCard key={categoryName} {...category} />);
-    });
+  Object.keys(categoryRows).forEach((categoryName: string) => {
+    const category = categoryRows[categoryName];
+    cards.push(<CategoryCard key={categoryName} {...category} />);
+  });
 
   return (
     <div style={{ maxHeight: "100%", overflow: "yes" }}>

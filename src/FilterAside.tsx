@@ -86,11 +86,7 @@ export const FilterAside = (props: PropsType): JSX.Element => {
   );
 
   return (
-    <Sidebar
-      visible={showAside}
-      onHide={() => toggleAside()}
-      style={{ width: "30rem", overflow: "auto" }}
-    >
+    <Sidebar visible={showAside} onHide={() => toggleAside()}>
       <Form>
         {showAside ? (
           <Card title="Filter for properties" className="mt-5">

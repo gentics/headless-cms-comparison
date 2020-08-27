@@ -45,6 +45,9 @@ a {
 .sidebar-open {
   #root {
     margin-left: 30rem;
+    @media only screen and (max-width: 768px) {
+      margin-left: 0 !important;
+    }
   }
 
   .p-sidebar {
@@ -239,6 +242,11 @@ section#filter-menu {
 .p-sidebar {
   background: #fff;
   font-size: .8rem;
+  width: 30rem !important;
+  @media only screen and (max-width: 768px) {
+    width: 100vw !important;
+  }
+  overflow: auto;
 
   .p-sidebar-close {
     outline: 0 !important;

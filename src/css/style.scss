@@ -246,6 +246,7 @@ section#filter-menu {
   .p-sidebar-close {
     outline: 0 !important;
     user-select: none !important;
+    margin-top: 10px;
     &:hover {
       color: $primaryColor;
     }
@@ -280,7 +281,7 @@ section#filter-menu {
         cursor: pointer;
       }
       .p-card-content {
-
+        padding: 10px 0;
         background: #fff;
         .score-row {
           display: flex;

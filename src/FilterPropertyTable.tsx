@@ -1,7 +1,8 @@
 import React from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Card from "react-bootstrap/esm/Card";
+// import Card from "react-bootstrap/esm/Card";
+import { Card } from "primereact/card";
 
 import {
   ScoreValue,
@@ -13,6 +14,7 @@ import {
 
 import CmsService from "./CmsService";
 import Description from "./Description";
+import { AiFillInfoCircle } from "react-icons/ai";
 
 type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
@@ -137,15 +139,12 @@ const CheckboxRow = (props: {
   }
 
   return (
-    <>
-      <div className="d-flex justify-content-between">
-        <span className="ml-2">
-          <Description description={props.specialField.description} />
-        </span>
+    <div className="score-row">
+      <div className="core-field-name">
         <span className="mr-2">{props.specialField.name}</span>
       </div>
-      {checkboxes}
-    </>
+      <div className="score-checkboxes">{checkboxes}</div>
+    </div>
   );
 };
 
@@ -156,16 +155,19 @@ const SimpleCheckbox = (props: {
   changeHandler: (e: InputChangeEvent) => void;
 }): JSX.Element => {
   return (
-    <label style={{ paddingRight: "2px" }}>
+    <div>
       <input
         type="checkbox"
         name={props.fieldKey}
         value={props.value}
         checked={props.checked}
         onChange={props.changeHandler}
-      />{" "}
-      {props.value}
-    </label>
+        id={props.value}
+      />
+      <label htmlFor={props.value} style={{ paddingRight: "2px" }}>
+        {props.value}
+      </label>
+    </div>
   );
 };
 
@@ -175,18 +177,13 @@ const CategoryCard = (props: {
   children: JSX.Element[];
 }): JSX.Element => {
   const description = props.description ? (
-    <span className="ml-2">
+    <span className="description">
       <Description description={props.description} />
     </span>
   ) : null;
   return (
-    <Card>
-      <div className="d-flex justify-content-between">
-        {description}
-        <span className="mr-2">
-          <h4>{props.title}</h4>
-        </span>
-      </div>
+    <Card title={props.title} className="my-5">
+      {description}
       {props.children}
     </Card>
   );
@@ -202,20 +199,20 @@ const ScoreRow = (props: {
   fieldKey: string;
   categoryKey?: string;
 }): JSX.Element => {
-  let style: React.CSSProperties = {};
-  if (props.categoryKey) {
-    style = { fontStyle: "italic", fontWeight: 800 };
-  }
-
   return (
-    <>
-      <div className="">
-        <span className="ml-2">
-          <Description description={props.scoreField.description} />
-        </span>
-        <span className="mr-2" style={style}>
-          {props.scoreField.name}
-        </span>
+    <div className="score-row">
+      <div className="core-field-name">
+        <OverlayTrigger
+          placement="top"
+          delay={{ show: 100, hide: 200 }}
+          overlay={
+            <Tooltip id={"scoreFieldName"}>
+              {props.scoreField.description}
+            </Tooltip>
+          }
+        >
+          <span>{props.scoreField.name}</span>
+        </OverlayTrigger>
       </div>
       <ScoreValueCheckbox
         name={props.categoryKey + "_" + props.fieldKey}
@@ -224,7 +221,7 @@ const ScoreRow = (props: {
           props.changeHandler(e, props.fieldKey, props.categoryKey)
         }
       />
-    </>
+    </div>
   );
 };
 

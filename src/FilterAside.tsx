@@ -1,7 +1,7 @@
 import React from "react";
 import { Sidebar } from "primereact/sidebar";
 import Form from "react-bootstrap/Form";
-
+import { Card } from "primereact/card";
 import { PanelSettings, FilterFieldSet, CategoryField } from "./Cms";
 
 import FilterService from "./FilterService";
@@ -89,12 +89,12 @@ export const FilterAside = (props: PropsType): JSX.Element => {
     <Sidebar
       visible={showAside}
       onHide={() => toggleAside()}
-      style={{ width: "30em", overflow: "auto" }}
+      style={{ width: "30rem", overflow: "auto" }}
     >
       <Form>
         {showAside ? (
-          <>
-            <div>
+          <Card title="Filter for properties" className="mt-5">
+            <div className="p-3">
               <Form.Control
                 type="text"
                 name="fieldFilterString"
@@ -102,23 +102,25 @@ export const FilterAside = (props: PropsType): JSX.Element => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   handlePanelSettingsChange(e)
                 }
-                placeholder="Filter for properties..."
-                style={{ width: "300px" }}
               />
             </div>
-            <div className="d-flex align-items-center ml-2">
+            <div className="p-3 score-checkboxes">
               {" "}
-              <Form.Check
+              <input
                 type="checkbox"
                 name="showModifiedOnly"
-                label="Show modified properties only"
+                value={panelSettings.fieldFilterString}
                 checked={panelSettings.showModifiedOnly}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   handlePanelSettingsChange(e)
                 }
+                id="showModifiedOnly"
               />
+              <label htmlFor="showModifiedOnly">
+                Show modified properties only
+              </label>
             </div>
-          </>
+          </Card>
         ) : null}
       </Form>
       <FilterPropertyTable

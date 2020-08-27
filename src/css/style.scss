@@ -32,6 +32,7 @@ a {
 .card {
   box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
   border: 0;
+
   &:hover {
     box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
   }
@@ -45,6 +46,7 @@ a {
   #root {
     margin-left: 30rem;
   }
+
   .p-sidebar {
     box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
   }
@@ -112,36 +114,30 @@ header {
 
   }
 
-  svg {
-    .st0 {
-      fill: #FFFFFF;
+  .svg-line {
+    position: absolute;
+    bottom: 10px;
+    width: 1140px;
+    left: 50%;
+    transform: translateX(-50%);
+    g {
+      transform: translate(24%,0);
+    }
+
+    .st0, .st2 {
       stroke: #FFFFFF;
-      stroke-miterlimit: 10;
+      fill: #fff;
     }
 
     .st1 {
-      fill: #E6E6E6;
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-dasharray: 12.124, 12.124;
     }
 
-    .st2 {
-      fill: #3F3D56;
-    }
 
-    .st3 {
-      fill: $primaryColor;
-    }
+    opacity: 0.3;
 
-    .st4 {
-      fill: #A0616A;
-    }
-
-    .st5 {
-      fill: #2F2E41;
-    }
-
-    .st6 {
-      fill: #CCCCCC;
-    }
   }
 }
 
@@ -243,10 +239,12 @@ section#filter-menu {
 .p-sidebar {
   background: #fff;
   font-size: .8rem;
+
   .p-sidebar-close {
     outline: 0 !important;
     user-select: none !important;
     margin-top: 10px;
+
     &:hover {
       color: $primaryColor;
     }
@@ -256,47 +254,56 @@ section#filter-menu {
     box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07) !important;
     border: 0;
     background: $lightBackground;
+
     &:hover {
       box-shadow: 0 0.5rem 2rem 0 rgba(31, 45, 65, 0.25) !important;
     }
+
     .p-card-body {
       padding: 0;
       position: relative;
+
       .p-card-title {
         background: $primaryColor;
         border-top-left-radius: .24rem;
         border-top-right-radius: .24rem;
-        color:#fff;
+        color: #fff;
         margin: 0;
         text-transform: uppercase;
         font-size: 1rem;
         font-weight: bold;
         padding: .8rem;
       }
+
       .description {
         position: absolute;
-        top:1rem;
+        top: 1rem;
         right: 1rem;
-        color:#fff;
+        color: #fff;
         cursor: pointer;
       }
+
       .p-card-content {
         padding: 10px 0;
         background: #fff;
+
         .score-row {
           display: flex;
           justify-content: space-between;
           align-items: center;
           padding: 5px 20px;
+
           &:hover {
             background: #f4f4f4;
           }
+
           .score-field-name {
             font-weight: bold;
             cursor: help;
           }
 
         }
+
         .score-checkboxes {
           display: flex;
           flex-direction: column;
@@ -304,6 +311,7 @@ section#filter-menu {
           input {
             display: none;
           }
+
           input + label {
             position: relative;
             cursor: pointer;
@@ -314,7 +322,7 @@ section#filter-menu {
 
             &:after {
               content: '';
-              left:0;
+              left: 0;
               position: absolute;
               width: 1rem;
               height: 1rem;
@@ -326,17 +334,18 @@ section#filter-menu {
 
           input:checked + label {
             &:after {
-              content:'';
+              content: '';
               border: 1px solid $secondaryColor;
               background: $primaryColor;
             }
+
             &:before {
               content: "\f00c";
               font-family: 'Font Awesome 5 Free';
               font-weight: 900;
               color: #fff;
               font-size: 0.5rem;
-              left:4px;
+              left: 4px;
               position: absolute;
               z-index: 1;
             }
@@ -345,7 +354,6 @@ section#filter-menu {
       }
     }
   }
-
 
 
   .switch-toggle {
@@ -607,18 +615,22 @@ section#detail-view {
     font-size: 1.2rem;
     font-weight: bold;
   }
+
   .card {
-    &.info-box{
+    &.info-box {
 
     }
+
     .p-datatable {
       background: $primaryColor;
       border-top-left-radius: .24rem !important;
       border-top-right-radius: .24rem !important;
     }
+
     table {
       tbody {
         background: #fff;
+
         tr {
           &:hover {
             background: #f4f4f4;

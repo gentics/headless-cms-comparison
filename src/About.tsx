@@ -2,6 +2,8 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { Helmet } from "react-helmet";
+
 import styles from "./About.module.css";
 
 type PropTypes = {
@@ -11,6 +13,9 @@ type PropTypes = {
 const About = ({ url }: PropTypes) => {
   return (
     <main className="pb-5">
+      <Helmet>
+        <title>About</title>
+      </Helmet>
       <Container>
         <div className={styles.aboutContent}>
           <p>

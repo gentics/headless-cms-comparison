@@ -6,6 +6,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import deepcopy from "ts-deepcopy";
 
 import "./css/style.scss";
@@ -144,6 +145,10 @@ function App() {
 
   return (
     <div className="App">
+      <Helmet
+        defaultTitle="Headless CMS Comparison"
+        titleTemplate="Headless CMS Comparison - %s"
+      />
       <ErrorBoundary>{content}</ErrorBoundary>
     </div>
   );

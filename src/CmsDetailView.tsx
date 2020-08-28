@@ -35,6 +35,8 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { Helmet } from "react-helmet";
+
 import {
   TitleTemplate,
   BooleanPropertyTemplate,
@@ -115,7 +117,7 @@ export default function CmsDetailView(props: {
   });
 
   const createCard = (name: string, values: CmsTableData): JSX.Element => (
-    <div className="mb-5">
+    <div className="mb-5" key={name}>
       <h5>{name || "General"} Features</h5>
       <Card>
         <DataTable value={values}>
@@ -149,6 +151,9 @@ export default function CmsDetailView(props: {
 
   return (
     <section id="detail-view" className="pb-5">
+      <Helmet>
+        <title>{cms.name}</title>
+      </Helmet>
       <Container>
         <Row>
           <Col>

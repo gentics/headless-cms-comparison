@@ -23,6 +23,7 @@
     "react-cookie-consent": "^5.1.3",
     "react-dom": "^16.13.1",
     "react-ga": "^3.1.2",
+    "react-helmet": "^6.1.0",
     "react-icons": "^3.10.0",
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.2.0",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@types/js-cookie": "^2.2.6",
+    "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.1.5",
     "devextreme-themebuilder": "20.1-stable",
     "husky": "^4.2.5",

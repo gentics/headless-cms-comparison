@@ -40,6 +40,7 @@ export const FilterMenu = (props: PropsType): JSX.Element => {
   const presetButtons = allFilterPresets().map(
     (p: { name: string; preset: FilterPreset }) => (
       <li
+        key={p.preset}
         onClick={() => resetToPreset(p.preset)}
         className={activeClassFor(p.preset)}
       >

@@ -2,6 +2,8 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
+import { Helmet } from "react-helmet";
 import {
   Cms,
   BooleanCmsProperty,
@@ -11,7 +13,6 @@ import {
   CategoryCmsProperty,
   FilterFieldSet,
 } from "./Cms";
-import Container from "react-bootstrap/Container";
 import CmsService from "./CmsService";
 import {
   BooleanPropertyTemplate,
@@ -42,6 +43,9 @@ export default function CmsList(props: {
 
   return (
     <section id="list-view">
+      <Helmet>
+        <title>List</title>
+      </Helmet>
       <Container className="pb-5">
         <Card>
           <DataTable

@@ -83,7 +83,7 @@ nav {
       a {
         color: #000;
 
-        &:hover {
+        &:hover, &.active {
           color: $primaryColor;
           text-decoration: none;
         }
@@ -220,7 +220,7 @@ section#filter-menu {
         justify-content: center;
         border-bottom: 1px solid transparent;
 
-        &:hover {
+        &:hover, &.active {
           border-bottom: 2px solid $primaryColor;
           color: $primaryColor;
         }

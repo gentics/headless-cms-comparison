@@ -480,12 +480,19 @@ main {
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
           }
+          .progress-bar.bg-info {
+            background-color: map-get($cardColor, first)!important;
+          }
         }
       }
 
       ul {
         list-style: none;
         padding: 0;
+        li {
+          font-size: 0.8rem;
+          margin-bottom: 5px;
+        }
       }
 
       .github-corner {

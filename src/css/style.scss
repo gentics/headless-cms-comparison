@@ -467,6 +467,10 @@ main {
         margin-bottom: 20px;
       }
 
+      &.card-deactivated{
+        opacity: 0.2;
+      }
+
 
       @each $cardColor in $cardColors {
         $i: index($cardColors, $cardColor);

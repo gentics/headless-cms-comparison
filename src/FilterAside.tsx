@@ -2,14 +2,23 @@ import React from "react";
 import { Sidebar } from "primereact/sidebar";
 import Form from "react-bootstrap/Form";
 import { Card } from "primereact/card";
-import { PanelSettings, FilterFieldSet, CategoryField } from "./Cms";
+import {
+  PanelSettings,
+  FilterFieldSet,
+  CategoryField,
+  ActivePreset,
+  SHOW_CUSTOM,
+} from "./Cms";
 
 import FilterService from "./FilterService";
 import FilterPropertyTable from "./FilterPropertyTable";
 
 type PropsType = {
-  filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
-  updateFilterFields: (updatedFilterFields: FilterFieldSet) => void;
+  filterFields: { current: FilterFieldSet; untouched: FilterFieldSet };
+  updateFilterFields: (
+    updatedFilterFields: FilterFieldSet,
+    preset: ActivePreset
+  ) => void;
   showAside: boolean;
   toggleAside: () => void;
 };
@@ -40,7 +49,7 @@ export const FilterAside = (props: PropsType): JSX.Element => {
   const handleSpecialFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const updatedFilterFields = Object.assign({}, filterFields.actual);
+    const updatedFilterFields = Object.assign({}, filterFields.current);
     const fieldKey = event.target.name;
     const valueArray = updatedFilterFields.special[fieldKey].values;
     const value = event.target.value;
@@ -58,7 +67,7 @@ export const FilterAside = (props: PropsType): JSX.Element => {
 
     updatedFilterFields.special[fieldKey].values = valueArray;
 
-    updateFilterFields(updatedFilterFields);
+    updateFilterFields(updatedFilterFields, SHOW_CUSTOM);
   };
 
   const handleBasicFieldChange = (
@@ -67,7 +76,7 @@ export const FilterAside = (props: PropsType): JSX.Element => {
     categoryKey?: string
   ) => {
     // Clone object, otherwise react won't re-render
-    const updatedFilterFields = Object.assign({}, filterFields.actual);
+    const updatedFilterFields = Object.assign({}, filterFields.current);
 
     if (categoryKey) {
       (updatedFilterFields.basic[categoryKey] as CategoryField)[
@@ -77,7 +86,7 @@ export const FilterAside = (props: PropsType): JSX.Element => {
       updatedFilterFields.basic[fieldKey].value = event.target.value;
     }
 
-    updateFilterFields(updatedFilterFields);
+    updateFilterFields(updatedFilterFields, SHOW_CUSTOM);
   };
 
   const filteredFilterFields = FilterService.getFilteredFilterFields(

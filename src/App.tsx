@@ -16,7 +16,14 @@ import "./App.css";
 import CmsList from "./CmsList";
 import CmsCardList from "./CmsCardList";
 import CmsDetailView from "./CmsDetailView";
-import { AppState, Cms, FilterFieldSet, ReceivedCmsData } from "./Cms";
+import {
+  AppState,
+  Cms,
+  FilterFieldSet,
+  ReceivedCmsData,
+  ActivePreset,
+  SHOW_ALL,
+} from "./Cms";
 import CmsService from "./CmsService";
 import FilterService from "./FilterService";
 import Analytics from "./Analytics";
@@ -38,14 +45,19 @@ function App() {
     });
   }, []);
 
-  const updateFilterFields = (updatedFilterFields: FilterFieldSet): void => {
+  const updateFilterFields = (
+    updatedFilterFields: FilterFieldSet,
+    preset: ActivePreset
+  ): void => {
     if (appState) {
       const updatedAppState = deepcopy<AppState>(appState);
       updatedAppState.filterResults = FilterService.filterCms(
         updatedFilterFields,
         appState.cms
       );
-      updatedAppState.filterFields.actual = updatedFilterFields;
+      const filterFields = updatedAppState.filterFields;
+      filterFields.current = updatedFilterFields;
+      filterFields.activePreset = preset;
       setAppState(updatedAppState);
     }
   };
@@ -98,7 +110,7 @@ function App() {
 
           <main>
             <CmsList
-              filterFields={appState.filterFields.actual}
+              filterFields={appState.filterFields.current}
               cmsData={appState.cms}
             />
           </main>
@@ -108,7 +120,7 @@ function App() {
           <SmallHeader title={appState.cms} />
           <main>
             <CmsDetailView
-              filterFields={appState.filterFields.actual}
+              filterFields={appState.filterFields.current}
               filterResults={appState.filterResults}
               cmsData={appState.cms}
             />
@@ -151,7 +163,11 @@ function constructAppState(cmsData: {
 
   const appState: AppState = {
     cms: cmsData.cms,
-    filterFields: { actual: filterFields, untouched: untouchedFilterFields },
+    filterFields: {
+      current: filterFields,
+      untouched: untouchedFilterFields,
+      activePreset: SHOW_ALL,
+    },
     filterResults: FilterService.getUnfilteredCms(cmsData.cms),
     showAside: false,
   };

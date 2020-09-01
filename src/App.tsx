@@ -30,10 +30,10 @@ import FilterService from "./FilterService";
 import Analytics from "./Analytics";
 import About from "./About";
 import { ErrorBoundary } from "./ErrorBoundary";
-import Header from "./template/Header";
-import SmallHeader from "./template/SmallHeader";
-import Navigation from "./template/Navigation";
-import Footer from "./template/Footer";
+import Header from "./Header";
+import SmallHeader from "./SmallHeader";
+import Navigation from "./Navigation";
+import Footer from "./Footer";
 import FilterAside from "./FilterAside";
 import FilterMenu from "./FilterMenu";
 
@@ -76,6 +76,8 @@ function App() {
   };
 
   const githubUrl = "https://github.com/gentics/headless-cms-comparison";
+  const genticsUrl = "https://www.gentics.com/genticscms/index.en.html";
+
   const content = appState ? (
     <Router>
       <Navigation />
@@ -131,11 +133,11 @@ function App() {
         <Route exact path="/about">
           <SmallHeader title="About us" />
           <main>
-            <About url={githubUrl} />
+            <About githubUrl={githubUrl} genticsUrl={genticsUrl} />
           </main>
         </Route>
       </Switch>
-      <Footer />
+      <Footer genticsUrl={genticsUrl} />
       <Analytics />
     </Router>
   ) : (

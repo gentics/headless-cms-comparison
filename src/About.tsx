@@ -1,16 +1,15 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Helmet } from "react-helmet";
 
 import styles from "./About.module.css";
 
 type PropTypes = {
-  url: string;
+  githubUrl: string;
+  genticsUrl: string;
 };
 
-const About = ({ url }: PropTypes) => {
+const About = ({ githubUrl, genticsUrl }: PropTypes) => {
   return (
     <main className="pb-5">
       <Helmet>
@@ -20,17 +19,39 @@ const About = ({ url }: PropTypes) => {
         <div className={styles.aboutContent}>
           <p>
             The information provided by this website is based on a{" "}
-            <a href={url} target="_blank" rel="noopener noreferrer">
+            <a href={githubUrl} target="_blank" rel="noopener noreferrer">
               public Github repository
             </a>{" "}
-            and collected by Gentics.
+            and collected by{" "}
+            <a href={genticsUrl} target="_blank" rel="noopener noreferrer">
+              Gentics
+            </a>
+            .
           </p>
           <p>
-            We are the company behind the headless CMS Gentics Mesh, so it's
-            hard to call us unbiased - please take all information with a grain
-            of salt. However, we try to collect facts only here - if you
-            disagree with any of the information shown, please create pull
-            request!
+            We are the company behind the headless CMS{" "}
+            <a
+              href="https://getmesh.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Gentics Mesh
+            </a>
+            , so it's hard to call us unbiased - please take all information
+            with a grain of salt. However, we try to collect facts only here -
+            if you disagree with any of the information shown, please create
+            pull request!
+          </p>
+          <p>
+            This website is based on the great work of{" "}
+            <a
+              href="https://headlesscms.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              HeadlessCMS
+            </a>
+            , which worked as both an inspiration and a data source.
           </p>
         </div>
         <h2>Imprint</h2>

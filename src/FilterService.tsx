@@ -6,7 +6,6 @@ import {
   ScoreField,
   SpecialField,
   Category,
-  License,
   FilterFieldSet,
   BooleanCmsProperty,
   CategoryField,
@@ -161,18 +160,18 @@ const FilterService = {
 
   getFilteredFilterFields: (
     panelSettings: PanelSettings,
-    filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet }
+    filterFields: { current: FilterFieldSet; untouched: FilterFieldSet }
   ): FilterFieldSet => {
     if (
       !panelSettings.showModifiedOnly &&
       panelSettings.fieldFilterString.length === 0
     ) {
-      return filterFields.actual;
+      return filterFields.current;
     }
 
     const untouchedFields: FilterFieldSet = filterFields.untouched;
 
-    const workFields = deepcopy<FilterFieldSet>(filterFields.actual);
+    const workFields = deepcopy<FilterFieldSet>(filterFields.current);
 
     if (panelSettings.showModifiedOnly) {
       const specialFieldKeys = Object.keys(workFields.special);

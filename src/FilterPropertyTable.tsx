@@ -14,7 +14,6 @@ import {
 
 import CmsService from "./CmsService";
 import Description from "./Description";
-import { AiFillInfoCircle } from "react-icons/ai";
 
 type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 

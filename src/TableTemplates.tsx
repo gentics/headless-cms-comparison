@@ -1,5 +1,4 @@
 import React from "react";
-import Description from "./Description";
 import { FiCheckCircle, FiHelpCircle, FiSlash } from "react-icons/fi";
 import { ColumnProps } from "primereact/column";
 import { Link } from "react-router-dom";

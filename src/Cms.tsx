@@ -32,7 +32,11 @@ export type CmsData = { [cmsName: string]: Cms };
 
 export interface AppState {
   cms: CmsData;
-  filterFields: { actual: FilterFieldSet; untouched: FilterFieldSet };
+  filterFields: {
+    current: FilterFieldSet;
+    untouched: FilterFieldSet;
+    activePreset: ActivePreset;
+  };
   filterResults: FilterResult[];
   showAside: boolean;
 }
@@ -93,6 +97,12 @@ export const allFilterPresets = (): {
     { name: "GraphQL", preset: FilterPreset.GRAPHQL },
   ];
 };
+
+export const SHOW_ALL = "ALL";
+type SHOW_ALL = typeof SHOW_ALL;
+export const SHOW_CUSTOM = "CUSTOM";
+type SHOW_CUSTOM = typeof SHOW_CUSTOM;
+export type ActivePreset = FilterPreset | SHOW_ALL | SHOW_CUSTOM;
 
 ////////////
 // FIELDS //

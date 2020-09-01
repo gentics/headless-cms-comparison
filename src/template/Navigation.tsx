@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 const githubUrl = "https://github.com/gentics/headless-cms-comparison";
 const Navigation = () => {
   return (
@@ -14,13 +14,13 @@ const Navigation = () => {
           <div className="col-6 text-right align-self-center">
             <ul>
               <li>
-                <Link to="/card">Card view</Link>
+                <NavLink to="/card">Card view</NavLink>
               </li>
               <li>
-                <Link to="/list">List view</Link>
+                <NavLink to="/list">List view</NavLink>
               </li>
               <li>
-                <Link to="/about">About us</Link>
+                <NavLink to="/about">About us</NavLink>
               </li>
               <li>
                 <a href={githubUrl}>Github</a>

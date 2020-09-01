@@ -247,14 +247,15 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
 
   return (
     <div>
-      <h4
+      <h5
         key="required"
+        className="mt-5"
         style={{ display: requiredListItems.length > 0 ? "block" : "none" }}
       >
         Your required features of {props.name}
-      </h4>
+      </h5>
       <Card
-        className="info-box my-5"
+        className="info-box mb-5"
         style={{ display: requiredListItems.length > 0 ? "block" : "none" }}
       >
         <div className="p-datatable">
@@ -282,11 +283,15 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
         </div>
       </Card>
 
-      <h4 key="nice-to-have" className="mb-5">
+      <h5
+        key="nice-to-have"
+        className="mt-5"
+        style={{ display: niceToHaveListItems.length > 0 ? "block" : "none" }}
+      >
         Your nice-to-have features of {props.name}
-      </h4>
+      </h5>
       <Card
-        className="info-box my-5"
+        className="info-box mb-5"
         style={{ display: niceToHaveListItems.length > 0 ? "block" : "none" }}
       >
         <div className="p-datatable">
@@ -425,18 +430,22 @@ function NiceToHaveSummaryListItem(props: { filterResult: FilterResult }) {
   return (
     <tr className="">
       <td colSpan={2}>
-        {props.filterResult.hasNiceToHaveShare > 0 ? (
-          <FiAward style={{ marginRight: "0.5em", fontSize: "1.5em" }} />
-        ) : (
-          <FiSlash style={{ marginRight: "0.5em", fontSize: "1.5em" }} />
-        )}{" "}
-        <ProgressBar
-          style={{ width: "100%" }}
-          animated
-          now={props.filterResult.hasNiceToHaveShare * 100}
-          variant="info"
-          label={`${(props.filterResult.hasNiceToHaveShare * 100).toFixed(0)}%`}
-        />
+        <div className="d-flex">
+          {props.filterResult.hasNiceToHaveShare > 0 ? (
+            <FiAward style={{ marginRight: "0.5em", fontSize: "1.5em" }} />
+          ) : (
+            <FiSlash style={{ marginRight: "0.5em", fontSize: "1.5em" }} />
+          )}{" "}
+          <ProgressBar
+            style={{ width: "100%" }}
+            animated
+            now={props.filterResult.hasNiceToHaveShare * 100}
+            variant="info"
+            label={`${(props.filterResult.hasNiceToHaveShare * 100).toFixed(
+              0
+            )}%`}
+          />
+        </div>
       </td>
     </tr>
   );

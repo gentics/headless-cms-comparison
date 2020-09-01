@@ -607,6 +607,9 @@ section#list-view, section#detail-view {
           &:hover {
             background: #f4f4f4;
           }
+          &:first-child {
+            padding-top: 5px;
+          }
 
           td {
             width: 250px;

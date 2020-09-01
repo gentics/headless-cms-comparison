@@ -230,9 +230,6 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
   );
 
   if (requiredListItems.length > 0) {
-    requiredListItems.unshift(
-      <h3 key="required">Your required features of {props.name}</h3>
-    );
     requiredListItems.push(
       <RequiredSummaryListItem key="requiredSummary" {...props} />
     );
@@ -243,9 +240,6 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
   );
 
   if (niceToHaveListItems.length > 0) {
-    niceToHaveListItems.unshift(
-      <h3 key="nice-to-have">Your nice-to-have features of {props.name}</h3>
-    );
     niceToHaveListItems.push(
       <NiceToHaveSummaryListItem key="niceToHaveSummary" {...props} />
     );
@@ -253,17 +247,71 @@ function PropertyList(props: { filterResult: FilterResult; name: string }) {
 
   return (
     <div>
+      <h4
+        key="required"
+        style={{ display: requiredListItems.length > 0 ? "block" : "none" }}
+      >
+        Your required features of {props.name}
+      </h4>
       <Card
         className="info-box my-5"
         style={{ display: requiredListItems.length > 0 ? "block" : "none" }}
       >
-        <div className="p-3">{requiredListItems}</div>
+        <div className="p-datatable">
+          <table>
+            <thead className="p-datatable-thead">
+              <tr>
+                <th
+                  className="p-sortable-column"
+                  aria-sort="none"
+                  style={{ width: "80%", textAlign: "left" }}
+                >
+                  <span className="p-column-title">Feature</span>
+                </th>
+                <th
+                  className="p-sortable-column"
+                  aria-sort="none"
+                  style={{ width: "20%", textAlign: "center" }}
+                >
+                  <span className="p-column-title">Supported?</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>{requiredListItems}</tbody>
+          </table>
+        </div>
       </Card>
+
+      <h4 key="nice-to-have" className="mb-5">
+        Your nice-to-have features of {props.name}
+      </h4>
       <Card
         className="info-box my-5"
         style={{ display: niceToHaveListItems.length > 0 ? "block" : "none" }}
       >
-        <div className="p-3">{niceToHaveListItems}</div>
+        <div className="p-datatable">
+          <table>
+            <thead className="p-datatable-thead">
+              <tr>
+                <th
+                  className="p-sortable-column"
+                  aria-sort="none"
+                  style={{ width: "80%", textAlign: "left" }}
+                >
+                  <span className="p-column-title">Feature</span>
+                </th>
+                <th
+                  className="p-sortable-column"
+                  aria-sort="none"
+                  style={{ width: "20%", textAlign: "center" }}
+                >
+                  <span className="p-column-title">Supported?</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>{niceToHaveListItems}</tbody>
+          </table>
+        </div>
       </Card>
     </div>
   );
@@ -344,37 +392,39 @@ function ResultListItem(props: {
 }) {
   const icon = props.cmsHasProperty ? <FiCheckCircle /> : <FiSlash />;
   return (
-    <div
+    <tr
       className="resultListItem"
       // variant={props.cmsHasProperty ? undefined : "light"}
     >
-      <span>{props.property.name}</span>
-      {icon}
-    </div>
+      <td style={{ width: "80%", textAlign: "left" }}>
+        <span>{props.property.name}</span>
+      </td>
+      <td style={{ width: "20%", textAlign: "center" }}>{icon}</td>
+    </tr>
   );
 }
 
 function RequiredSummaryListItem(props: { filterResult: FilterResult }) {
   return (
-    <div
+    <tr
     // variant={props.filterResult.satisfactory ? "success" : "warning"}
     >
-      <h2 style={{ fontSize: "1.3em" }}>
-        {props.filterResult.satisfactory ? <FiCheckCircle /> : <FiSlash />}{" "}
-        {`CMS ${
-          props.filterResult.satisfactory ? `satisfies` : `does not satisfy`
-        } all your essential requirements.`}
-      </h2>
-    </div>
+      <td colSpan={2}>
+        <h5 className="my-3 text-center">
+          {props.filterResult.satisfactory ? <FiCheckCircle /> : <FiSlash />}{" "}
+          {`CMS ${
+            props.filterResult.satisfactory ? `satisfies` : `does not satisfy`
+          } all your essential requirements.`}
+        </h5>
+      </td>
+    </tr>
   );
 }
 
 function NiceToHaveSummaryListItem(props: { filterResult: FilterResult }) {
   return (
-    <div
-    // variant="info"
-    >
-      <div className="d-inline-flex w-100 align-items-center">
+    <tr className="">
+      <td colSpan={2}>
         {props.filterResult.hasNiceToHaveShare > 0 ? (
           <FiAward style={{ marginRight: "0.5em", fontSize: "1.5em" }} />
         ) : (
@@ -387,7 +437,7 @@ function NiceToHaveSummaryListItem(props: { filterResult: FilterResult }) {
           variant="info"
           label={`${(props.filterResult.hasNiceToHaveShare * 100).toFixed(0)}%`}
         />
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 }

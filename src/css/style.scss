@@ -62,13 +62,16 @@ nav {
   font-family: $secondaryFont;
 
   .logo {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: $primaryColor;
     font-weight: bold;
     background: linear-gradient(to right, $primaryColor, $secondaryColor);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-align: left;
+    span {
+      vertical-align: 2px;
+    }
   }
 
   ul {
@@ -471,7 +474,6 @@ main {
         opacity: 0.2;
       }
 
-
       @each $cardColor in $cardColors {
         $i: index($cardColors, $cardColor);
         &.card-color-#{$i} {
@@ -482,6 +484,7 @@ main {
           }
           .progress-bar.bg-info {
             background-color: map-get($cardColor, first)!important;
+            animation: none;
           }
         }
       }
@@ -566,6 +569,11 @@ section#list-view, section#detail-view {
       background: #ac7df8;
     }
 
+    .progress-bar.bg-info {
+      animation: none;
+      background-color: $primaryColor !important;
+    }
+
     .p-datatable-unfrozen-view {
       background: $primaryColor;
       border-top-right-radius: .24rem;
@@ -647,6 +655,7 @@ section#detail-view {
     }
 
     table {
+      width: 100%;
       tbody {
         background: #fff;
 

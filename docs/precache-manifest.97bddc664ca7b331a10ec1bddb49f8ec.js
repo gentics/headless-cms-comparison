@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3425dbbcff8020a1755ba7f6109a8c1e",
+    "revision": "39cb34e232eaebb93a8d00c10ee1aacd",
     "url": "/headless-cms-comparison/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/headless-cms-comparison/static/css/2.4a47f113.chunk.css"
   },
   {
-    "revision": "ca4d3a5185e44bdd50a1",
+    "revision": "86de38851bc624128d34",
     "url": "/headless-cms-comparison/static/css/main.89e51cf8.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/headless-cms-comparison/static/js/2.d6f5b792.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "ca4d3a5185e44bdd50a1",
-    "url": "/headless-cms-comparison/static/js/main.9f9f87d1.chunk.js"
+    "revision": "86de38851bc624128d34",
+    "url": "/headless-cms-comparison/static/js/main.b61416a6.chunk.js"
   },
   {
     "revision": "ffa15f6c53a646c12412",

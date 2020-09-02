@@ -79,7 +79,7 @@ function App() {
   const genticsUrl = "https://www.gentics.com/genticscms/index.en.html";
 
   const content = appState ? (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Navigation />
 
       <Switch>

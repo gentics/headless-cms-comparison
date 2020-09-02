@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
   Redirect,
@@ -79,7 +79,7 @@ function App() {
   const genticsUrl = "https://www.gentics.com/genticscms/index.en.html";
 
   const content = appState ? (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router /* basename={process.env.PUBLIC_URL} */>
       <Navigation />
 
       <Switch>

@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "39cb34e232eaebb93a8d00c10ee1aacd",
+    "revision": "54efaba76faaf5dd712a64cb57517800",
     "url": "/headless-cms-comparison/index.html"
   },
   {
-    "revision": "06366e2327c2161d555c",
+    "revision": "c4088125c41ace30c286",
     "url": "/headless-cms-comparison/static/css/2.4a47f113.chunk.css"
   },
   {
-    "revision": "86de38851bc624128d34",
+    "revision": "a083ceea94c57c6b9892",
     "url": "/headless-cms-comparison/static/css/main.89e51cf8.chunk.css"
   },
   {
-    "revision": "06366e2327c2161d555c",
-    "url": "/headless-cms-comparison/static/js/2.d6f5b792.chunk.js"
+    "revision": "c4088125c41ace30c286",
+    "url": "/headless-cms-comparison/static/js/2.1c2a035d.chunk.js"
   },
   {
     "revision": "e59e05b433162196f621becd990ea15d",
-    "url": "/headless-cms-comparison/static/js/2.d6f5b792.chunk.js.LICENSE.txt"
+    "url": "/headless-cms-comparison/static/js/2.1c2a035d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "86de38851bc624128d34",
-    "url": "/headless-cms-comparison/static/js/main.b61416a6.chunk.js"
+    "revision": "a083ceea94c57c6b9892",
+    "url": "/headless-cms-comparison/static/js/main.c8eedd9a.chunk.js"
   },
   {
     "revision": "ffa15f6c53a646c12412",
@@ -34,6 +34,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "c7a33805ffda0d32bd2a9904c8b02750",
     "url": "/headless-cms-comparison/static/media/color.c7a33805.png"
+  },
+  {
+    "revision": "8ac1b22f898c3d078c5a050da44eb5e9",
+    "url": "/headless-cms-comparison/static/media/illustration.8ac1b22f.svg"
   },
   {
     "revision": "567f57385ea3dde2c9aec797d07850d2",

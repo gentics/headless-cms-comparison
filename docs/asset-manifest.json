@@ -1,28 +1,29 @@
 {
   "files": {
     "main.css": "/headless-cms-comparison/static/css/main.89e51cf8.chunk.css",
-    "main.js": "/headless-cms-comparison/static/js/main.b61416a6.chunk.js",
-    "main.js.map": "/headless-cms-comparison/static/js/main.b61416a6.chunk.js.map",
+    "main.js": "/headless-cms-comparison/static/js/main.c8eedd9a.chunk.js",
+    "main.js.map": "/headless-cms-comparison/static/js/main.c8eedd9a.chunk.js.map",
     "runtime-main.js": "/headless-cms-comparison/static/js/runtime-main.f4273f00.js",
     "runtime-main.js.map": "/headless-cms-comparison/static/js/runtime-main.f4273f00.js.map",
     "static/css/2.4a47f113.chunk.css": "/headless-cms-comparison/static/css/2.4a47f113.chunk.css",
-    "static/js/2.d6f5b792.chunk.js": "/headless-cms-comparison/static/js/2.d6f5b792.chunk.js",
-    "static/js/2.d6f5b792.chunk.js.map": "/headless-cms-comparison/static/js/2.d6f5b792.chunk.js.map",
+    "static/js/2.1c2a035d.chunk.js": "/headless-cms-comparison/static/js/2.1c2a035d.chunk.js",
+    "static/js/2.1c2a035d.chunk.js.map": "/headless-cms-comparison/static/js/2.1c2a035d.chunk.js.map",
     "index.html": "/headless-cms-comparison/index.html",
-    "precache-manifest.97bddc664ca7b331a10ec1bddb49f8ec.js": "/headless-cms-comparison/precache-manifest.97bddc664ca7b331a10ec1bddb49f8ec.js",
+    "precache-manifest.9e5da2731042d163bbea5a5db6be1323.js": "/headless-cms-comparison/precache-manifest.9e5da2731042d163bbea5a5db6be1323.js",
     "service-worker.js": "/headless-cms-comparison/service-worker.js",
     "static/css/2.4a47f113.chunk.css.map": "/headless-cms-comparison/static/css/2.4a47f113.chunk.css.map",
     "static/css/main.89e51cf8.chunk.css.map": "/headless-cms-comparison/static/css/main.89e51cf8.chunk.css.map",
-    "static/js/2.d6f5b792.chunk.js.LICENSE.txt": "/headless-cms-comparison/static/js/2.d6f5b792.chunk.js.LICENSE.txt",
+    "static/js/2.1c2a035d.chunk.js.LICENSE.txt": "/headless-cms-comparison/static/js/2.1c2a035d.chunk.js.LICENSE.txt",
     "static/media/style.scss": "/headless-cms-comparison/static/media/background.4fc02b15.svg",
     "static/media/primereact.min.css": "/headless-cms-comparison/static/media/line.567f5738.gif",
+    "static/media/illustration.svg": "/headless-cms-comparison/static/media/illustration.8ac1b22f.svg",
     "static/media/primeicons.css": "/headless-cms-comparison/static/media/primeicons.79432094.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.f4273f00.js",
     "static/css/2.4a47f113.chunk.css",
-    "static/js/2.d6f5b792.chunk.js",
+    "static/js/2.1c2a035d.chunk.js",
     "static/css/main.89e51cf8.chunk.css",
-    "static/js/main.b61416a6.chunk.js"
+    "static/js/main.c8eedd9a.chunk.js"
   ]
 }

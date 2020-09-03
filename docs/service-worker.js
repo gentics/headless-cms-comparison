@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/headless-cms-comparison/precache-manifest.9e5da2731042d163bbea5a5db6be1323.js"
+  "/headless-cms-comparison/precache-manifest.c7ea1a56498359019701ae88913f8767.js"
 );
 
 self.addEventListener('message', (event) => {

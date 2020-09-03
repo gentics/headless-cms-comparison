@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "54efaba76faaf5dd712a64cb57517800",
+    "revision": "77392a07c17b8cec6b2e0e6df47591fd",
     "url": "/headless-cms-comparison/index.html"
   },
   {

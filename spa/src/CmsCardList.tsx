@@ -58,15 +58,7 @@ function satisfactoryResultsExist(filterResults: FilterResult[]) {
 }
 
 function CmsTeaser(props: { cms: Cms }) {
-  if (props.cms.teaser.value) {
-    return <p>{props.cms.teaser.value}</p>;
-  }
-  return (
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus beatae
-      dignissimos incidunt ipsa nisi sed tempora ut. Ex, itaque, rerum.
-    </p>
-  );
+  return <p>{props.cms.teaser.value}</p>;
 }
 
 function CmsCard(props: {

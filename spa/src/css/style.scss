@@ -123,27 +123,14 @@ header {
   .svg-line {
     position: absolute;
     bottom: 10px;
-    width: 1140px;
+    width: 800px;
     left: 50%;
     transform: translateX(-50%);
-    g {
-      transform: translate(24%,0);
-    }
-
-    .st0, .st2 {
-      stroke: #FFFFFF;
-      fill: #fff;
-    }
-
-    .st1 {
-      fill: none;
-      stroke: #FFFFFF;
-      stroke-dasharray: 12.124, 12.124;
-    }
-
-
     opacity: 0.3;
 
+    @media (max-width: 930px) {
+      display: none;
+    }
   }
 }
 

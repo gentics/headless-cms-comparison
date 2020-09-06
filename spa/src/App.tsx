@@ -5,6 +5,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useLocation,
 } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import deepcopy from "ts-deepcopy";
@@ -37,7 +38,15 @@ import Footer from "./Footer";
 import FilterAside from "./FilterAside";
 import FilterMenu from "./FilterMenu";
 
-function App() {
+const ScrollToTop = (): null => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+const App = (): JSX.Element => {
   const [appState, setAppState] = React.useState<AppState>();
 
   React.useEffect(() => {
@@ -80,6 +89,7 @@ function App() {
 
   const content = appState ? (
     <Router /* basename={process.env.PUBLIC_URL} */>
+      <ScrollToTop />
       <Navigation />
 
       <Switch>
@@ -154,7 +164,7 @@ function App() {
       <ErrorBoundary>{content}</ErrorBoundary>
     </div>
   );
-}
+};
 
 function constructAppState(cmsData: {
   fields?: { [x: string]: any };

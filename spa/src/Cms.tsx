@@ -39,6 +39,7 @@ export interface AppState {
   };
   filterResults: FilterResult[];
   showAside: boolean;
+  cookiesAccepted: boolean;
 }
 
 export interface ReceivedCmsData {

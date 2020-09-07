@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import { Sidebar } from "primereact/sidebar";
 import Form from "react-bootstrap/Form";
 import { Card } from "primereact/card";
@@ -21,6 +22,7 @@ type PropsType = {
   ) => void;
   showAside: boolean;
   toggleAside: () => void;
+  cookiesAccepted: boolean;
 };
 
 export const FilterAside = (props: PropsType): JSX.Element => {
@@ -84,6 +86,13 @@ export const FilterAside = (props: PropsType): JSX.Element => {
       ].value = event.target.value;
     } else {
       updatedFilterFields.basic[fieldKey].value = event.target.value;
+    }
+
+    if (props.cookiesAccepted) {
+      ReactGA.event({
+        category: "Filter",
+        action: `${categoryKey || ""}/${fieldKey}: ${event.target.value}`,
+      });
     }
 
     updateFilterFields(updatedFilterFields, SHOW_CUSTOM);

@@ -84,6 +84,12 @@ const App = (): JSX.Element => {
     }
   };
 
+  const setCookiesAccepted = (cookiesAccepted: boolean): void => {
+    if (appState) {
+      setAppState({ ...appState, cookiesAccepted });
+    }
+  };
+
   const githubUrl = "https://github.com/gentics/headless-cms-comparison";
   const genticsUrl = "https://www.gentics.com/genticscms/index.en.html";
 
@@ -103,12 +109,14 @@ const App = (): JSX.Element => {
             updateFilterFields={updateFilterFields}
             showAside={appState.showAside}
             toggleAside={toggleAside}
+            cookiesAccepted={appState.cookiesAccepted}
           />
           <Header />
           <FilterMenu
             filterFields={appState.filterFields}
             updateFilterFields={updateFilterFields}
             toggleAside={toggleAside}
+            cookiesAccepted={appState.cookiesAccepted}
           />
           <main>
             <CmsCardList
@@ -148,12 +156,12 @@ const App = (): JSX.Element => {
         </Route>
       </Switch>
       <Footer genticsUrl={genticsUrl} />
-      <Analytics />
+      <Analytics
+        accepted={appState.cookiesAccepted}
+        setAccepted={setCookiesAccepted}
+      />
     </Router>
-  ) : (
-    ""
-    // <Alert variant="info">Loading data...</Alert>
-  );
+  ) : null;
 
   return (
     <div className="App">
@@ -187,6 +195,7 @@ function constructAppState(cmsData: {
     },
     filterResults: FilterService.getUnfilteredCms(cmsData.cms),
     showAside: false,
+    cookiesAccepted: false,
   };
   return appState;
 }

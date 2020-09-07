@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 
 import {
   FilterFieldSet,
@@ -19,6 +20,7 @@ type PropsType = {
     preset: ActivePreset
   ) => void;
   toggleAside: () => void;
+  cookiesAccepted: boolean;
 };
 
 export const FilterMenu = (props: PropsType): JSX.Element => {
@@ -26,12 +28,15 @@ export const FilterMenu = (props: PropsType): JSX.Element => {
     props.updateFilterFields(props.filterFields.untouched, SHOW_ALL);
   };
 
-  const resetToPreset = (preset: FilterPreset): void => {
+  const resetToPreset = (preset: FilterPreset, name: string): void => {
     const newFilter = FilterService.getPresetFilterFields(
       props.filterFields.untouched,
       preset
     );
     props.updateFilterFields(newFilter, preset);
+    if (props.cookiesAccepted) {
+      ReactGA.event({ category: "ApplyFilterPreset", action: name });
+    }
   };
 
   const activeClassFor = (preset: ActivePreset): string =>
@@ -41,7 +46,7 @@ export const FilterMenu = (props: PropsType): JSX.Element => {
     (p: { name: string; preset: FilterPreset }) => (
       <li
         key={p.preset}
-        onClick={() => resetToPreset(p.preset)}
+        onClick={() => resetToPreset(p.preset, p.name)}
         className={activeClassFor(p.preset)}
       >
         {" "}

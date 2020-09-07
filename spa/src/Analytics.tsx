@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from "react";
-import CookieConsent from "react-cookie-consent";
-import Cookies from "js-cookie";
+import React, { useEffect } from "react";
+import CookieConsent, { Cookies } from "react-cookie-consent";
 import ReactGA from "react-ga";
 import { useLocation } from "react-router-dom";
 
-const Analytics = () => {
-  const [accepted, setAccepted] = useState(false);
-  function onAccepted() {
+type PropsType = {
+  accepted: boolean;
+  setAccepted: (accepted: boolean) => void;
+};
+
+const Analytics = ({ accepted, setAccepted }: PropsType) => {
+  const onAccepted = (): void => {
     setAccepted(true);
     ReactGA.initialize("UA-77960-5", {
       debug: process.env.NODE_ENV !== "production",
     });
-  }
+  };
+
   useEffect(() => {
     if (Cookies.get("CookieConsent")) {
       onAccepted();

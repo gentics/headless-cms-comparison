@@ -24,14 +24,6 @@ object-assign
   http://jedwatson.github.io/classnames
 */
 
-/*!
- * JavaScript Cookie v2.2.1
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
-
 /** @license React v0.19.1
  * scheduler.production.min.js
  *

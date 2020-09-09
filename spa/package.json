@@ -1,7 +1,7 @@
 {
   "name": "cms-comparison",
   "version": "1.0.0",
-  "homepage": "https://cmscomparison.info/",
+  "homepage": "https://cms-comparison.io/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",

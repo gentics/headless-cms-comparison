@@ -1,6 +1,6 @@
 # Headless CMS Comparison
 
-This repository contains both the data and the single page app that powers https://cmscomparison.info/
+This repository contains both the data and the single page app that powers https://cms-comparison.io/
 
 ## CMS Data
 

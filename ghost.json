@@ -236,7 +236,7 @@
       "value": null
     },
     "userManagement": {
-      "name": "Plugin System",
+      "name": "User Management",
       "value": "No"
     },
     "roleBasedPermissions": {

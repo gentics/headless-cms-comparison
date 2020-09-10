@@ -326,7 +326,7 @@
       "value": null
     },
     "userManagement": {
-      "name": "Plugin System",
+      "name": "User Management",
       "description": "Does the system provide a way to manage users?",
       "value": null
     },

@@ -14,7 +14,7 @@ import {
 import FilterService from "./FilterService";
 
 const CMS_REPO_BASE_URL =
-  "https://raw.githubusercontent.com/gentics/headless-cms-comparison/refactor/";
+  "https://raw.githubusercontent.com/gentics/headless-cms-comparison/master/";
 const CMS_LIST_PATH = `${CMS_REPO_BASE_URL}/cms-list.json`;
 
 let cmsData: Promise<any>;

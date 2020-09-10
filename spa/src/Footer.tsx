@@ -16,7 +16,7 @@ const Footer = ({ genticsUrl }: PropsType) => {
         <Row>
           <Col>
             <p>
-              CMS Comparison is hosted and maintained by{" "}
+              CMS Comparison is maintained by{" "}
               <a href={genticsUrl} target="_blank" rel="noopener noreferrer">
                 Gentics
               </a>

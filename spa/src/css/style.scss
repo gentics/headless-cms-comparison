@@ -126,7 +126,8 @@ header {
     width: 800px;
     left: 50%;
     transform: translateX(-50%);
-    opacity: 0.3;
+    opacity: 0.9;
+    stroke-width: 2px;
 
     @media (max-width: 930px) {
       display: none;
@@ -675,4 +676,10 @@ footer {
       color: #fff;
     }
   }
+}
+
+#main-filter-button {
+  color: #00000091;
+  border-bottom: 4px solid #975cf6 !important;
+  font-weight: bold;
 }

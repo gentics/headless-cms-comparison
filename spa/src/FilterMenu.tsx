@@ -65,10 +65,11 @@ export const FilterMenu = (props: PropsType): JSX.Element => {
           {presetButtons}
           <li
             onClick={() => props.toggleAside()}
+            id="main-filter-button"
             className={activeClassFor(SHOW_CUSTOM)}
           >
             {" "}
-            Custom{" "}
+            Custom Filter{" "}
           </li>
         </ul>
       </div>

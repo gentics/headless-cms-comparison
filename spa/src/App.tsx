@@ -51,9 +51,12 @@ const App = ({ initialAppState }: PropsType): JSX.Element => {
     if (initialAppState) {
       setAppState(initialAppState);
     } else {
-      CmsService.getCmsData().then((cmsData: ReceivedCmsData) => {
-        setAppState(constructAppState(cmsData));
-      });
+      CmsService.getCmsData().then(
+        (cmsData: ReceivedCmsData) => setAppState(constructAppState(cmsData)),
+        (err) => {
+          throw new Error(`Getting CMS data failed: ${err}`);
+        }
+      );
     }
   }, [initialAppState]);
 

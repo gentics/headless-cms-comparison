@@ -76,7 +76,7 @@ function fetchCmsData(
       universalFetch(CMS_REPO_BASE_URL + cms + ".json").then(
         (response: Response) => {
           if (!response.ok) {
-            throw Error(response.statusText);
+            throw new Error(response.statusText);
           }
           return response.json();
         },

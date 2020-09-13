@@ -1,0 +1,4 @@
+{
+  "presets": ["babel-preset-cra-universal"],
+  "plugins": ["@babel/plugin-transform-runtime"]
+}

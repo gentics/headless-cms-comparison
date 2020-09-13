@@ -17,19 +17,27 @@ const CMS_REPO_BASE_URL =
   "https://raw.githubusercontent.com/gentics/headless-cms-comparison/master/";
 const CMS_LIST_PATH = `${CMS_REPO_BASE_URL}/cms-list.json`;
 
-let cmsData: Promise<any>;
+let cmsData: Promise<ReceivedCmsData>;
+
+type FetchFn = (url: string) => Promise<Response>;
 
 const CmsService = {
-  getCmsData: function (): Promise<any> {
+  getCmsData: function (universalFetch: any = fetch): Promise<ReceivedCmsData> {
     if (!cmsData) {
-      cmsData = fetch(CMS_LIST_PATH)
-        .then((response) => response.json())
-        .then((data) => {
-          return fetchCmsData(data.fields, data.cms);
-        })
-        .then((rawCmsData) => {
-          return rawCmsData;
-        });
+      cmsData = universalFetch(CMS_LIST_PATH)
+        .then(
+          (response: Response) => response.json(),
+          (error: any) => {
+            throw new Error(`Fetching ${CMS_LIST_PATH} failed: ${error}`);
+          }
+        )
+        .then(
+          (data: { fields: any; cms: any }) =>
+            fetchCmsData(data.fields, data.cms, universalFetch),
+          (error: any) => {
+            throw new Error(`Parsing JSON ${CMS_LIST_PATH} failed: ${error}`);
+          }
+        );
     }
     return cmsData;
   },
@@ -57,35 +65,43 @@ const CmsService = {
  * fields: Object containing field-properties
  * cms: Array containing cms-objects
  */
-async function fetchCmsData(
+function fetchCmsData(
   fields: string,
-  cms: string[]
+  cms: string[],
+  universalFetch: FetchFn
 ): Promise<ReceivedCmsData> {
   let promises: Promise<any>[] = [];
   [fields, ...cms].forEach((cms: string) => {
     promises.push(
-      fetch(CMS_REPO_BASE_URL + cms + ".json")
-        .then((response) => {
+      universalFetch(CMS_REPO_BASE_URL + cms + ".json").then(
+        (response: Response) => {
           if (!response.ok) {
             throw Error(response.statusText);
           }
           return response.json();
-        })
-        .then((data) => {
-          return data;
-        })
+        },
+        (error: any) => {
+          throw new Error(`Fetching ${cms}.json failed: ${error}`);
+        }
+      )
     );
   });
 
-  const values = await Promise.all(promises);
-  const fieldsData = values[0];
-  let rawCms: Cms[] = values.slice(1);
-  rawCms = sortCmsByName(rawCms);
-  const parsedCms: { [x_1: string]: Cms } = {};
-  for (let i = 0; i < rawCms.length; i++) {
-    parsedCms[cms[i]] = parseCms(rawCms[i]);
-  }
-  return { fields: fieldsData, cms: parsedCms };
+  return Promise.all(promises).then(
+    (values) => {
+      const fieldsData = values[0];
+      let rawCms: Cms[] = values.slice(1);
+      rawCms = sortCmsByName(rawCms);
+      const parsedCms: { [x_1: string]: Cms } = {};
+      for (let i = 0; i < rawCms.length; i++) {
+        parsedCms[cms[i]] = parseCms(rawCms[i]);
+      }
+      return { fields: fieldsData, cms: parsedCms };
+    },
+    (error) => {
+      throw new Error(`Failed fetching CMS data: ${error}`);
+    }
+  );
 }
 
 function sortCmsByName(cmsArray: Cms[]) {
@@ -102,15 +118,17 @@ function parseCms(data: any): Cms {
   // Parse licenses
   const licenses: License[] = data.license.split("/");
   if (!licensesAreValid(licenses)) {
-    console.error(licenses);
-    throw new Error(`CMS ${data.name} has invalid or no licenses!`);
+    throw new Error(
+      `CMS ${data.name} has invalid or no licenses: ${licenses}!`
+    );
   }
 
   // Parse categories
   const categories: Category[] = data.category.split("/");
   if (!categoriesAreValid(categories)) {
-    console.error(categories);
-    throw new Error(`CMS ${data.name} has invalid or no categories!`);
+    throw new Error(
+      `CMS ${data.name} has invalid or no categories: ${categories}!`
+    );
   }
 
   // Parse properties

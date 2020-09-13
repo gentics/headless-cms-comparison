@@ -1,12 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  useLocation,
-} from "react-router-dom";
+import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import deepcopy from "ts-deepcopy";
 
@@ -46,14 +40,24 @@ const ScrollToTop = (): null => {
   return null;
 };
 
-const App = (): JSX.Element => {
-  const [appState, setAppState] = React.useState<AppState>();
+type PropsType = {
+  initialAppState?: AppState;
+};
+
+const App = ({ initialAppState }: PropsType): JSX.Element => {
+  let [appState, setAppState] = React.useState<AppState>();
 
   React.useEffect(() => {
-    CmsService.getCmsData().then((cmsData: ReceivedCmsData) => {
-      setAppState(constructAppState(cmsData));
-    });
-  }, []);
+    if (initialAppState) {
+      setAppState(initialAppState);
+    } else {
+      CmsService.getCmsData().then((cmsData: ReceivedCmsData) => {
+        setAppState(constructAppState(cmsData));
+      });
+    }
+  }, [initialAppState]);
+
+  appState = appState || initialAppState;
 
   const updateFilterFields = (
     updatedFilterFields: FilterFieldSet,
@@ -94,10 +98,7 @@ const App = (): JSX.Element => {
   const genticsUrl = "https://www.gentics.com/genticscms/index.en.html";
 
   const content = appState ? (
-    <Router /* basename={process.env.PUBLIC_URL} */>
-      <ScrollToTop />
-      <Navigation />
-
+    <>
       <Switch>
         <Route exact path="/">
           <Redirect to="/card" />
@@ -155,12 +156,11 @@ const App = (): JSX.Element => {
           </main>
         </Route>
       </Switch>
-      <Footer genticsUrl={genticsUrl} />
       <Analytics
         accepted={appState.cookiesAccepted}
         setAccepted={setCookiesAccepted}
       />
-    </Router>
+    </>
   ) : null;
 
   return (
@@ -169,15 +169,18 @@ const App = (): JSX.Element => {
         defaultTitle="Headless CMS Comparison"
         titleTemplate="Headless CMS Comparison - %s"
       />
+      <ScrollToTop />
+      <Navigation />
       <ErrorBoundary>{content}</ErrorBoundary>
+      <Footer genticsUrl={genticsUrl} />
     </div>
   );
 };
 
-function constructAppState(cmsData: {
+export const constructAppState = (cmsData: {
   fields?: { [x: string]: any };
   cms: { [x: string]: Cms };
-}): AppState {
+}): AppState => {
   const filterFields: FilterFieldSet = { basic: {}, special: {} };
   filterFields.basic = FilterService.initializeBasicFields(
     cmsData.fields?.properties
@@ -198,6 +201,6 @@ function constructAppState(cmsData: {
     cookiesAccepted: false,
   };
   return appState;
-}
+};
 
 export default App;

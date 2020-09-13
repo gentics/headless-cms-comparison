@@ -4,19 +4,22 @@
   "homepage": "https://cms-comparison.io/",
   "private": true,
   "dependencies": {
+    "@babel/core": "7.6.0",
+    "@cra-express/core": "4",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/classnames": "^2.2.10",
     "@types/jest": "^26.0.3",
     "@types/node": "^14.0.14",
+    "@types/node-fetch": "^2.5.7",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-bootstrap": "^0.24.5",
     "bootstrap": "^4.5.0",
     "classnames": "^2.2.6",
     "js-cookie": "^2.2.1",
-    "node-sass": "^4.14.1",
+    "node-fetch": "^2.6.1",
     "primeicons": "^4.0.0",
     "primereact": "^4.2.2",
     "react": "^16.13.1",
@@ -31,11 +34,13 @@
     "react-scripts": "3.4.3",
     "serve": "^11.3.2",
     "ts-deepcopy": "^0.1.4",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.6",
+    "webpack-merge": "^5.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-universal": "cra-universal build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -55,12 +60,17 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
     "@types/js-cookie": "^2.2.6",
     "@types/react-helmet": "^6.1.0",
     "@types/react-router-dom": "^5.1.5",
+    "cra-universal": "^4.5.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "sass": "^1.26.10",
+    "ts-loader": "^8.0.3"
   },
   "husky": {
     "hooks": {

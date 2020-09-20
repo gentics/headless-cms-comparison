@@ -10,6 +10,27 @@ The data is contained in JSON files in the root directory.
 
 The /spa directory contains the sources for the Single-Page App.
 
+### Server-Side Rendering
+
+Development:
+
+```bash
+yarn run start-universal
+```
+
+Production build:
+
+```bash
+yarn run build-universal
+```
+
+Quickly rebuild server only:
+
+```bash
+NODE_ENV=production npx webpack-cli --config node_modules/cra-universal/src/config/webpack.config.js --entry ./server/index.js
+```
+
+
 ## Contributing
 
 If you want to contribute a new CMS, please copy the [fields.json](fields.json).

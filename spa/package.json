@@ -39,6 +39,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-universal": "cra-universal start",
     "build": "react-scripts build",
     "build-universal": "cra-universal build",
     "test": "react-scripts test",

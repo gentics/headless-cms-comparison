@@ -1,4 +1,4 @@
-import webpackMerge from "webpack-merge";
+const webpackMerge = require("webpack-merge").default;
 
 const tsConfig = {
   resolve: {
@@ -21,7 +21,11 @@ const tsConfig = {
   },
 };
 
-export const webpackPlugins = [];
-export function modifyWebpack(config) {
+function modifyWebpack(config) {
   return webpackMerge(config, tsConfig);
 }
+
+module.exports = {
+  modifyWebpack: modifyWebpack,
+  webpackPlugins: [],
+};

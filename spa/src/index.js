@@ -3,16 +3,16 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { getInitialAppStateFromServer } from "./CmsService";
 
 getInitialAppStateFromServer()
   .then((appState) => {
     ReactDOM.hydrate(
       <React.StrictMode>
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <Router basename={process.env.PUBLIC_URL}>
           <App initialAppState={appState} />
-        </BrowserRouter>
+        </Router>
       </React.StrictMode>,
       document.getElementById("root")
     );

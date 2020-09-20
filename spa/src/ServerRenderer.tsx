@@ -1,7 +1,7 @@
 import path from "path";
 import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { StaticRouter } from "react-router-dom";
+import { renderToString } from "react-dom/server";
+import { StaticRouter as Router } from "react-router-dom";
 import { default as serverFetch } from "node-fetch";
 import { Helmet } from "react-helmet";
 import fs from "fs-extra";
@@ -81,10 +81,12 @@ class ServerRenderer {
 
   private createHtmlFile(outputDir: string, url: string): Promise<void> {
     const context: { url?: string } = {};
-    const htmlBody = renderToStaticMarkup(
-      <StaticRouter location={url} context={context}>
-        <App initialAppState={this.appState} />
-      </StaticRouter>
+    const htmlBody = renderToString(
+      <React.StrictMode>
+        <Router location={url} context={context}>
+          <App initialAppState={this.appState} />
+        </Router>
+      </React.StrictMode>
     );
     const htmlHelmet = Helmet.renderStatic();
 

@@ -1,3 +1,5 @@
+import deepcopy from "ts-deepcopy";
+
 import {
   Cms,
   CmsProperty,
@@ -10,6 +12,9 @@ import {
   CategoryField,
   PropertyType,
   ReceivedCmsData,
+  AppState,
+  FilterFieldSet,
+  SHOW_ALL,
 } from "./Cms";
 import FilterService from "./FilterService";
 
@@ -19,41 +24,37 @@ const CMS_LIST_PATH = `${CMS_REPO_BASE_URL}/cms-list.json`;
 
 let cmsData: Promise<ReceivedCmsData>;
 
-type FetchFn = (url: string) => Promise<Response>;
+const getCmsData = (universalFetch: any): Promise<ReceivedCmsData> => {
+  if (!cmsData) {
+    cmsData = universalFetch(CMS_LIST_PATH)
+      .then(
+        (response: Response) => response.json(),
+        (error: any) => {
+          throw new Error(`Fetching ${CMS_LIST_PATH} failed: ${error}`);
+        }
+      )
+      .then(
+        (data: { fields: any; cms: any }) =>
+          fetchCmsData(data.fields, data.cms, universalFetch),
+        (error: any) => {
+          throw new Error(`Parsing JSON ${CMS_LIST_PATH} failed: ${error}`);
+        }
+      );
+  }
+  return cmsData;
+};
 
-const CmsService = {
-  getCmsData: function (universalFetch: any = fetch): Promise<ReceivedCmsData> {
-    if (!cmsData) {
-      cmsData = universalFetch(CMS_LIST_PATH)
-        .then(
-          (response: Response) => response.json(),
-          (error: any) => {
-            throw new Error(`Fetching ${CMS_LIST_PATH} failed: ${error}`);
-          }
-        )
-        .then(
-          (data: { fields: any; cms: any }) =>
-            fetchCmsData(data.fields, data.cms, universalFetch),
-          (error: any) => {
-            throw new Error(`Parsing JSON ${CMS_LIST_PATH} failed: ${error}`);
-          }
-        );
-    }
-    return cmsData;
-  },
+export const getKeysOfSubFields = (
+  category: CategoryCmsProperty | CategoryField
+): string[] => {
+  return Object.keys(category).filter(
+    (key) => key !== "name" && key !== "description"
+  );
+};
 
-  getKeysOfSubFields: function (
-    category: CategoryCmsProperty | CategoryField
-  ): string[] {
-    return Object.keys(category).filter(
-      (key) => key !== "name" && key !== "description"
-    );
-  },
-
-  isScoreField: function (x: BasicField): x is ScoreField {
-    if (!x) return false;
-    return (x as ScoreField).value !== undefined;
-  },
+export const isScoreField = (x: BasicField): x is ScoreField => {
+  if (!x) return false;
+  return (x as ScoreField).value !== undefined;
 };
 
 /**
@@ -65,11 +66,11 @@ const CmsService = {
  * fields: Object containing field-properties
  * cms: Array containing cms-objects
  */
-function fetchCmsData(
+const fetchCmsData = (
   fields: string,
   cms: string[],
-  universalFetch: FetchFn
-): Promise<ReceivedCmsData> {
+  universalFetch: any
+): Promise<ReceivedCmsData> => {
   let promises: Promise<any>[] = [];
   [fields, ...cms].forEach((cms: string) => {
     promises.push(
@@ -102,9 +103,9 @@ function fetchCmsData(
       throw new Error(`Failed fetching CMS data: ${error}`);
     }
   );
-}
+};
 
-function sortCmsByName(cmsArray: Cms[]) {
+const sortCmsByName = (cmsArray: Cms[]): Cms[] => {
   return cmsArray.sort((a, b) =>
     a.name.toLowerCase() > b.name.toLowerCase()
       ? 1
@@ -112,9 +113,9 @@ function sortCmsByName(cmsArray: Cms[]) {
       ? -1
       : 0
   );
-}
+};
 
-function parseCms(data: any): Cms {
+const parseCms = (data: any): Cms => {
   // Parse licenses
   const licenses: License[] = data.license.split("/");
   if (!licensesAreValid(licenses)) {
@@ -145,7 +146,7 @@ function parseCms(data: any): Cms {
         description: currentProperty.description,
       };
       properties[key] = category;
-      const subPropertyKeys = CmsService.getKeysOfSubFields(currentProperty);
+      const subPropertyKeys = getKeysOfSubFields(currentProperty);
       for (const subKey of subPropertyKeys) {
         category[subKey] = parseValue(currentProperty[subKey]);
       }
@@ -167,7 +168,7 @@ function parseCms(data: any): Cms {
   };
 
   return cms;
-}
+};
 
 const parseValue = (p: any): BooleanCmsProperty => {
   const validRe = /^(Yes|No|null)/;
@@ -189,20 +190,51 @@ const parseValue = (p: any): BooleanCmsProperty => {
   return { name: p.name, value, info, type: PropertyType.Boolean };
 };
 
-function licensesAreValid(licenses: string[]): boolean {
+const licensesAreValid = (licenses: string[]): boolean => {
   return (
     licenses.length > 0 &&
     FilterService.getArrayIntersection(Object.values(License), licenses)
       .length === licenses.length
   );
-}
+};
 
-function categoriesAreValid(categories: string[]): boolean {
+const categoriesAreValid = (categories: string[]): boolean => {
   return (
     categories.length > 0 &&
     FilterService.getArrayIntersection(Object.values(Category), categories)
       .length === categories.length
   );
-}
+};
 
-export default CmsService;
+const constructAppState = (cmsData: {
+  fields?: { [x: string]: any };
+  cms: { [x: string]: Cms };
+}): AppState => {
+  const filterFields: FilterFieldSet = { basic: {}, special: {} };
+  filterFields.basic = FilterService.initializeBasicFields(
+    cmsData.fields?.properties
+  );
+  filterFields.special = FilterService.initializeSpecialFields();
+
+  const untouchedFilterFields = deepcopy<FilterFieldSet>(filterFields);
+
+  const appState: AppState = {
+    cms: cmsData.cms,
+    filterFields: {
+      current: filterFields,
+      untouched: untouchedFilterFields,
+      activePreset: SHOW_ALL,
+    },
+    filterResults: FilterService.getUnfilteredCms(cmsData.cms),
+    showAside: false,
+    cookiesAccepted: false,
+  };
+  return appState;
+};
+
+export const getInitialAppStateFromServer = async (
+  universalFetch: any = fetch
+): Promise<AppState> => {
+  const cmsData = await getCmsData(universalFetch);
+  return constructAppState(cmsData);
+};

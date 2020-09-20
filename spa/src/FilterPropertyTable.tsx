@@ -12,7 +12,7 @@ import {
   CategoryField,
 } from "./Cms";
 
-import CmsService from "./CmsService";
+import { getKeysOfSubFields, isScoreField } from "./CmsService";
 import Description from "./Description";
 
 type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
@@ -58,7 +58,7 @@ export const FilterPropertyTable = (props: PropsType): JSX.Element => {
   Object.keys(filterFields.basic).forEach((fieldKey: string) => {
     const currentField = filterFields.basic[fieldKey];
 
-    if (CmsService.isScoreField(currentField)) {
+    if (isScoreField(currentField)) {
       generalRows.push(
         <ScoreRow
           key={fieldKey}
@@ -68,22 +68,22 @@ export const FilterPropertyTable = (props: PropsType): JSX.Element => {
         />
       );
     } else {
-      const children: JSX.Element[] = CmsService.getKeysOfSubFields(
-        currentField
-      ).map((subKey: string) => {
-        const currentField = (filterFields.basic[fieldKey] as CategoryField)[
-          subKey
-        ];
-        return (
-          <ScoreRow
-            key={`${fieldKey}_${subKey}`}
-            scoreField={currentField}
-            fieldKey={subKey}
-            changeHandler={basicFieldChangeHandler}
-            categoryKey={fieldKey}
-          />
-        );
-      });
+      const children: JSX.Element[] = getKeysOfSubFields(currentField).map(
+        (subKey: string) => {
+          const currentField = (filterFields.basic[fieldKey] as CategoryField)[
+            subKey
+          ];
+          return (
+            <ScoreRow
+              key={`${fieldKey}_${subKey}`}
+              scoreField={currentField}
+              fieldKey={subKey}
+              changeHandler={basicFieldChangeHandler}
+              categoryKey={fieldKey}
+            />
+          );
+        }
+      );
 
       categoryRows[fieldKey] = {
         title: currentField.name,

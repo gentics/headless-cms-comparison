@@ -13,7 +13,7 @@ import {
   CategoryCmsProperty,
   FilterFieldSet,
 } from "./Cms";
-import CmsService from "./CmsService";
+import { getKeysOfSubFields } from "./CmsService";
 import {
   BooleanPropertyTemplate,
   NameTemplate,
@@ -94,7 +94,7 @@ function constructColumnDataStructure(
       );
     } else {
       const category: CategoryField = currentField;
-      const subFieldKeys = CmsService.getKeysOfSubFields(category);
+      const subFieldKeys = getKeysOfSubFields(category);
       for (const currentSubPropertyKey of subFieldKeys) {
         const currentSubField = category[currentSubPropertyKey];
         columns.push(
@@ -155,7 +155,7 @@ function convertCmsToTableDataStructure(
         tableCms[key] = { name: prop.name, value: prop.value };
       } else {
         const category: CategoryCmsProperty = prop;
-        const subPropertyKeys = CmsService.getKeysOfSubFields(category);
+        const subPropertyKeys = getKeysOfSubFields(category);
         for (const currentSubKey of subPropertyKeys) {
           const currentSubProperty: BooleanCmsProperty =
             category[currentSubKey];

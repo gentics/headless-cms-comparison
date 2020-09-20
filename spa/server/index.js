@@ -1,17 +1,18 @@
 import ServerRenderer from "../src/ServerRenderer";
 import path from "path";
-import fs from "fs";
+
+const outputDir = "/tmp/output";
 
 async function main() {
-  const buildDir = path.resolve(__dirname, "../dist/client/");
+  const buildDir = path.resolve(__dirname, "../client/");
 
   const sr = new ServerRenderer(buildDir);
   await sr.init();
-  await sr.create("/tmp/output");
+  await sr.create(outputDir);
 }
 
 main()
   .then(() => {
-    console.log("Done!");
+    console.log(`Done creating output in ${outputDir}.`);
   })
-  .catch((err) => console.error(err));
+  .catch(console.error);

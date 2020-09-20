@@ -30,7 +30,7 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import deepcopy from "ts-deepcopy";
-import CmsService from "./CmsService";
+import { getKeysOfSubFields } from "./CmsService";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
@@ -49,7 +49,7 @@ export default function CmsDetailView(props: {
   filterResults: FilterResult[];
   cmsData: CmsData;
 }) {
-  const { cmsKey } = useParams();
+  const { cmsKey } = useParams<{ cmsKey?: string }>();
   let filterResult: FilterResult;
   let cms: Cms;
 
@@ -93,9 +93,7 @@ export default function CmsDetailView(props: {
       } else {
         const basicFilterSubFields: CategoryField = basicFilterFields[key];
         const catprop: CategoryCmsProperty = prop;
-        const subFieldKeys = CmsService.getKeysOfSubFields(
-          basicFilterFields[key]
-        );
+        const subFieldKeys = getKeysOfSubFields(basicFilterFields[key]);
         subFieldKeys.forEach((subkey: string) => {
           const subprop: BooleanCmsProperty = catprop[subkey];
           if (subprop) {
@@ -348,7 +346,7 @@ function categorizePropertiesByScores(indexedPropertyArray: {
         ? (requiredProperties[propertyKey] = currentProperty)
         : (niceToHaveProperties[propertyKey] = currentProperty);
     } else {
-      const hasSubKeys = CmsService.getKeysOfSubFields(currentProperty);
+      const hasSubKeys = getKeysOfSubFields(currentProperty);
 
       for (const subKey of hasSubKeys) {
         const currentSubProperty = currentProperty[subKey];

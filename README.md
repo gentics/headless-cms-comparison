@@ -12,24 +12,23 @@ The /spa directory contains the sources for the Single-Page App.
 
 ### Server-Side Rendering
 
-Development:
+SPA development:
 
 ```bash
-yarn run start-universal
+yarn start
 ```
 
-Production build:
-
-```bash
-yarn run build-universal
-```
-
-Quickly rebuild server only:
+Server development:
 
 ```bash
 NODE_ENV=development npx webpack-cli --config node_modules/cra-universal/src/config/webpack.config.js
 ```
 
+Create a production build:
+
+```bash
+yarn run build-universal && node dist/server/bundle.js
+```
 
 ## Contributing
 

@@ -12,15 +12,8 @@ import "./App.css";
 import CmsList from "./CmsList";
 import CmsCardList from "./CmsCardList";
 import CmsDetailView from "./CmsDetailView";
-import {
-  AppState,
-  Cms,
-  FilterFieldSet,
-  ReceivedCmsData,
-  ActivePreset,
-  SHOW_ALL,
-} from "./Cms";
-import CmsService from "./CmsService";
+import { AppState, FilterFieldSet, ActivePreset } from "./Cms";
+import { getInitialAppStateFromServer } from "./CmsService";
 import FilterService from "./FilterService";
 import Analytics from "./Analytics";
 import About from "./About";
@@ -51,8 +44,8 @@ const App = ({ initialAppState }: PropsType): JSX.Element => {
     if (initialAppState) {
       setAppState(initialAppState);
     } else {
-      CmsService.getCmsData().then(
-        (cmsData: ReceivedCmsData) => setAppState(constructAppState(cmsData)),
+      getInitialAppStateFromServer().then(
+        (appState: AppState) => setAppState(appState),
         (err) => {
           throw new Error(`Getting CMS data failed: ${err}`);
         }
@@ -178,32 +171,6 @@ const App = ({ initialAppState }: PropsType): JSX.Element => {
       <Footer genticsUrl={genticsUrl} />
     </div>
   );
-};
-
-export const constructAppState = (cmsData: {
-  fields?: { [x: string]: any };
-  cms: { [x: string]: Cms };
-}): AppState => {
-  const filterFields: FilterFieldSet = { basic: {}, special: {} };
-  filterFields.basic = FilterService.initializeBasicFields(
-    cmsData.fields?.properties
-  );
-  filterFields.special = FilterService.initializeSpecialFields();
-
-  const untouchedFilterFields = deepcopy<FilterFieldSet>(filterFields);
-
-  const appState: AppState = {
-    cms: cmsData.cms,
-    filterFields: {
-      current: filterFields,
-      untouched: untouchedFilterFields,
-      activePreset: SHOW_ALL,
-    },
-    filterResults: FilterService.getUnfilteredCms(cmsData.cms),
-    showAside: false,
-    cookiesAccepted: false,
-  };
-  return appState;
 };
 
 export default App;

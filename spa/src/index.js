@@ -4,15 +4,20 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
+import { getInitialAppStateFromServer } from "./CmsService";
 
-ReactDOM.hydrate(
-  <React.StrictMode>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+getInitialAppStateFromServer()
+  .then((appState) => {
+    ReactDOM.hydrate(
+      <React.StrictMode>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
+          <App initialAppState={appState} />
+        </BrowserRouter>
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+  })
+  .catch(console.error);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

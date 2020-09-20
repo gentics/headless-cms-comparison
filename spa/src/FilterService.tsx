@@ -14,7 +14,7 @@ import {
   FilterPreset,
 } from "./Cms";
 import deepcopy from "ts-deepcopy";
-import CmsService from "./CmsService";
+import { getKeysOfSubFields, isScoreField } from "./CmsService";
 
 const FilterService = {
   /**
@@ -64,7 +64,7 @@ const FilterService = {
         const currentField = filterFields.basic[fieldKey];
         const currentCmsProperty = currentCms.properties[fieldKey];
 
-        if (CmsService.isScoreField(currentField)) {
+        if (isScoreField(currentField)) {
           if (isOfInterest(currentField)) {
             const fieldIsRequired = isRequired(currentField);
 
@@ -89,7 +89,7 @@ const FilterService = {
           } as CategoryField;
           const hasNotCategoryField = Object.assign({}, hasCategoryField);
 
-          const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
+          const subFieldKeys = getKeysOfSubFields(currentField);
           for (const subFieldKey of subFieldKeys) {
             const currentSubField = currentField[subFieldKey] as ScoreField;
             const currentCmsSubProperty = currentCmsProperty[
@@ -189,13 +189,13 @@ const FilterService = {
       for (const fieldKey of basicFieldKeys) {
         const currentField = workFields.basic[fieldKey];
 
-        if (CmsService.isScoreField(currentField)) {
+        if (isScoreField(currentField)) {
           const untouchedField = untouchedFields.basic[fieldKey] as ScoreField;
           if (currentField.value === untouchedField.value) {
             delete workFields.basic[fieldKey];
           }
         } else {
-          const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
+          const subFieldKeys = getKeysOfSubFields(currentField);
           for (const subFieldKey of subFieldKeys) {
             const currentSubField = (workFields.basic[
               fieldKey
@@ -231,14 +231,14 @@ const FilterService = {
       const basicFieldKeys = Object.keys(workFields.basic);
       for (const fieldKey of basicFieldKeys) {
         const currentField = workFields.basic[fieldKey];
-        if (CmsService.isScoreField(currentField)) {
+        if (isScoreField(currentField)) {
           if (!fieldNameContainsString(currentField, fieldFilterString)) {
             delete workFields.basic[fieldKey];
           }
         } else {
           if (!fieldNameContainsString(currentField, fieldFilterString)) {
             // If category itself does not match the search string, filter the subProperties in the category
-            const subFieldKeys = CmsService.getKeysOfSubFields(currentField);
+            const subFieldKeys = getKeysOfSubFields(currentField);
 
             for (const subFieldKey of subFieldKeys) {
               const currentSubField = (currentField as CategoryField)[
@@ -279,10 +279,10 @@ const FilterService = {
 
     for (const key of fieldKeys) {
       const currentField = fields[key];
-      if (CmsService.isScoreField(currentField)) {
+      if (isScoreField(currentField)) {
         currentField.value = ScoreValue.DONT_CARE;
       } else {
-        const subPropertyKeys = CmsService.getKeysOfSubFields(currentField);
+        const subPropertyKeys = getKeysOfSubFields(currentField);
         for (const subKey of subPropertyKeys) {
           const currentSubField = currentField[subKey] as ScoreField;
           currentSubField.value = ScoreValue.DONT_CARE;
@@ -399,7 +399,7 @@ function cmsHasProperty(cmsProperty: BooleanCmsProperty): boolean {
 }
 
 function categoryFieldIsEmpty(categoryProperty: CategoryField): boolean {
-  return CmsService.getKeysOfSubFields(categoryProperty).length === 0;
+  return getKeysOfSubFields(categoryProperty).length === 0;
 }
 
 function arraysAreEqual(a: any[], b: any[]): boolean {

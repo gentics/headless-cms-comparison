@@ -6,9 +6,9 @@ import { default as serverFetch } from "node-fetch";
 import { Helmet } from "react-helmet";
 import fs from "fs-extra";
 
-import App, { constructAppState } from "./App";
+import App from "./App";
 import { AppState, ReceivedCmsData } from "./Cms";
-import CmsService from "./CmsService";
+import { getInitialAppStateFromServer } from "./CmsService";
 import CmsList from "../../cms-list.json";
 
 class ServerRenderer {
@@ -43,13 +43,11 @@ class ServerRenderer {
   public async create(outputDir: string): Promise<void> {
     let cmsData: ReceivedCmsData;
     try {
-      cmsData = await CmsService.getCmsData(serverFetch);
+      this.appState = await getInitialAppStateFromServer(serverFetch);
     } catch (err) {
       console.error(`Fetching CMS data failed: ${err}`);
       return;
     }
-
-    this.appState = constructAppState(cmsData);
 
     try {
       await this.copyFiles(outputDir);
@@ -61,6 +59,7 @@ class ServerRenderer {
 
   private async copyFiles(outputDir: string): Promise<void> {
     await fs.copy(this.sourceDir, outputDir, {
+      dereference: true,
       filter: (src: string, dest: string) => !src.match(/index\.html$/),
     });
   }

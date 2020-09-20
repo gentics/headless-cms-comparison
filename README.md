@@ -27,7 +27,7 @@ yarn run build-universal
 Quickly rebuild server only:
 
 ```bash
-NODE_ENV=production npx webpack-cli --config node_modules/cra-universal/src/config/webpack.config.js --entry ./server/index.js
+NODE_ENV=development npx webpack-cli --config node_modules/cra-universal/src/config/webpack.config.js
 ```
 
 

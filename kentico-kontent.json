@@ -1,27 +1,27 @@
 {
-  "lastUpdated": "2018-07-30",
-  "name": "Kentico Cloud",
-  "version": "08-2018",
+  "lastUpdated": "2020-09-14",
+  "name": "Kentico Kontent",
+  "version": "09-2020",
   "license": "Proprietary",
   "inception": "08-2015",
-  "category": "Essential/Professional",
+  "category": "Professional/Enterprise",
   "systemRequirements": {
     "name": "System Requirements",
     "value": null
   },
   "specialFeatures": {
     "name": "Special Features",
-    "value": "Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
+    "value": "Web Spotlight, Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
   },
   "supportedDatabases": {
     "name": "Supported Databases",
     "value": null
   },
   "teaser": {
-    "value": "Kentico Kontent offers Content as a Service to gain full control over content presentation across all digital channels."
+    "value": "Kentico Kontent delivers all the benefits of a headless CMS while empowering your marketing team to manage the experience across your digital channels."
   },
   "gitHubURL": {
-    "value": ""
+    "value": "https://github.com/Kentico/Home#kentico-kontent"
   },
   "properties": {
     "openSource": {
@@ -45,6 +45,8 @@
       "value": "Yes"
     },
     "graphQl": {
+      "name": "GraphQL",
+
       "api": {
         "name": "API",
         "value": "No"
@@ -56,10 +58,11 @@
       "subscriptions": {
         "name": "Subscriptions",
         "value": "No"
-      },
-      "name": "GraphQL"
+      }
     },
     "rest": {
+      "name": "REST",
+
       "api": {
         "name": "API",
         "value": "Yes"
@@ -83,17 +86,18 @@
       "upload": {
         "name": "Upload",
         "value": "Yes"
-      },
-      "name": "REST"
+      }
     },
     "search": {
+      "name": "Search",
+
       "api": {
         "name": "API",
         "value": "No"
       },
       "feature_fullTextSearch": {
         "name": "Full Text Search",
-        "value": "No"
+        "value": "Yes"
       },
       "feature_stemming": {
         "name": "Stemming",
@@ -121,9 +125,8 @@
       },
       "feature_searchWithinUploads": {
         "name": "Search within uploads",
-        "value": "No"
-      },
-      "name": "Search"
+        "value": "Yes"
+      }
     },
     "image": {
       "manipulation": {
@@ -178,9 +181,11 @@
     },
     "cli": {
       "name": "CLI",
-      "value": "No"
+      "value": "Yes"
     },
     "sdk": {
+      "name": "SDK",
+
       "java": {
         "name": "Java",
         "value": "Yes"
@@ -208,8 +213,7 @@
       "typeScript": {
         "name": "TypeScript",
         "value": "Yes"
-      },
-      "name": "SDK"
+      }
     },
     "webHooks": {
       "name": "Web Hooks",
@@ -233,11 +237,11 @@
     },
     "customizableUi": {
       "name": "Customizable UI",
-      "value": "No"
+      "value": "Yes"
     },
     "userManagement": {
       "name": "User Management",
-      "value": "No"
+      "value": "Yes"
     },
     "roleBasedPermissions": {
       "name": "Role Based Permissions",
@@ -245,11 +249,11 @@
     },
     "documentLevelPermissions": {
       "name": "Document Level Permissions",
-      "value": "No"
+      "value": "Yes"
     },
     "oauth2Support": {
       "name": "OAuth 2.0 Support",
-      "value": "Yes"
+      "value": "No"
     },
     "auditing": {
       "name": "Auditing",
@@ -310,7 +314,7 @@
       },
       "branches": {
         "name": "Branches",
-        "value": "No"
+        "value": "Yes"
       },
       "modelsSchemas": {
         "name": "Models / Schemas",
@@ -322,7 +326,7 @@
       },
       "migration": {
         "name": "Migration",
-        "value": "No"
+        "value": "Yes"
       },
       "name": "Content"
     },

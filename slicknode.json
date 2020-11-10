@@ -1,0 +1,449 @@
+{
+  "lastUpdated": {
+    "name": "Last Updated",
+    "description": "Date when the entry was re/submitted",
+    "value": "2020-11-10"
+  },
+  "name": {
+    "name": "Name",
+    "description": "Name of the CMS System",
+    "value": "Slicknode"
+  },
+  "version": {
+    "name": "Version",
+    "description": "Version of the system",
+    "value": null
+  },
+  "license": {
+    "name": "License",
+    "description": "License of the system. Separated by slashes '/', a subset of the following values are allowed: GPLv3, Proprietary, Apache-2.0, BSD 3-Clause, MIT",
+    "value": "Proprietary"
+  },
+  "inception": {
+    "name": "Inception",
+    "description": "When was the project started?",
+    "value": "2019"
+  },
+  "category": {
+    "name": "Category",
+    "description": "Which featureset is offered by the cms? String containing a subset of the following values separated by slashes'/': Essential,Professional,Enterprise. E.g. xyz-CMS has professional and enterprise functionality: 'Professional/Enterprise'",
+    "value": "Essential/Professional/Enterprise"
+  },
+  "systemRequirements": {
+    "name": "System Requirements",
+    "description": "",
+    "value": null
+  },
+  "specialFeatures": {
+    "name": "Special Features",
+    "description": "Noteworthy Features",
+    "value": "Serverless, GraphQL SDL-Based, Git-based schema management, Modular Architecture, Extensible (Custom Resolvers, Merge GraphQL APIs, Apollo Federation, etc.)"
+  },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "description": "",
+    "value": null
+  },
+  "teaser": {
+    "name": "Description",
+    "description": "",
+    "value": "Cloud-native managed content infrastructure. Extensible, modular building blocks to create digital experiences at any scale"
+  },
+  "gitHubURL": {
+    "name": "GitHub URL",
+    "description": "",
+    "value": "https://github.com/slicknode/slicknode"
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "description": "Yes/No",
+      "value": "No"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "description": "Yes/No",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "description": "Yes/No",
+      "value": "No"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "description": "Yes/No",
+      "value": null
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "description": "Yes/No",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "name": "GraphQL",
+      "description": "GraphQL Functionalities",
+
+      "api": {
+        "name": "API",
+        "description": "Yes/No",
+        "value": "Yes"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "description": "Does the API support GraphQL mutation?",
+        "value": "Yes"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "description": "Does the API support GraphQL subscriptions?",
+        "value": "No"
+      }
+    },
+    "rest": {
+      "name": "REST",
+      "description": "REST Functionalities",
+
+      "api": {
+        "name": "API",
+        "description": "Does the system provide a REST or HTTP API?",
+        "value": null
+      },
+      "create": {
+        "name": "Create",
+        "description": "Can elements be created via REST?",
+        "value": null
+      },
+      "read": {
+        "name": "Read",
+        "description": "Can elements be read via REST?",
+        "value": null
+      },
+      "update": {
+        "name": "Update",
+        "description": "Can elements be updated via REST?",
+        "value": null
+      },
+      "delete": {
+        "name": "Delete",
+        "description": "Can elements be deleted via REST?",
+        "value": null
+      },
+      "upload": {
+        "name": "Upload",
+        "description": "Can uploads be performed via REST?",
+        "value": null
+      }
+    },
+    "search": {
+      "name": "Search",
+      "description": "Search Functionalities",
+
+      "api": {
+        "name": "API",
+        "description": "Yes/No",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "description": "Yes/No",
+        "value": "No"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "description": "Yes/No",
+        "value": "No"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "description": "Yes/No",
+        "value": "No"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "description": "Yes/No",
+        "value": "Yes"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "description": "Yes/No",
+        "value": "Yes"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "description": "Yes/No",
+        "value": "No"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "description": "Yes/No",
+        "value": "No"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "description": "Is it possible to search within uploaded documents (PDF, Doc)?",
+        "value": "No"
+      }
+    },
+    "image": {
+      "name": "Image",
+      "description": "Image Functionalities",
+
+      "manipulation": {
+        "name": "Manipulation",
+        "description": "",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "description": "Can a focal point be set to images in order to apply smart cropping?",
+        "value": "Yes"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "description": "Can faces in images be detected and added to the metadata of the images?",
+        "value": "No"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "description": "Is it possible to optimize images (e.g. WebP, Progressive JPEG)?",
+        "value": "No"
+      }
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "description": "Can fingerprints of assets (image, video, audio) be generated in order to find similar assets?",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "description": "Can Assets be distributed to a CDN in order to speed-up content delivery?",
+      "value": "Yes"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "description": "Can uploads be scanned via an antivirus system?",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "description": "Is it possible to hook into the upload process to directly process uploaded assets (e.g. re-encode videos, shrink large images)?",
+      "value": "Yes"
+    },
+    "clustering": {
+      "name": "Clustering",
+      "description": "Can the system be setup in a cluster (e.g. HA)? - On Premise only",
+      "value": null
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "description": "Can the system be run via docker? - On Premise only",
+      "value": null
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "description": "Yes/No",
+      "value": "Yes"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "description": "Can the whole system or parts be exported and later imported?",
+      "value": "Yes"
+    },
+    "cli": {
+      "name": "CLI",
+      "description": "Is there a CLI which can be used to interact with the System from the console?",
+      "value": "Yes"
+    },
+    "sdk": {
+      "name": "SDK",
+      "description": "Support for specific SDKs",
+
+      "java": {
+        "name": "Java",
+        "description": "Yes/No",
+        "value": null
+      },
+      "cSharp": {
+        "name": "C#",
+        "description": "Yes/No",
+        "value": null
+      },
+      "php": {
+        "name": "PHP",
+        "description": "Yes/No",
+        "value": null
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "description": "Yes/No",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "description": "Yes/No",
+        "value": "Yes"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "description": "Yes/No",
+        "value": "Yes"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "description": "Yes/No",
+        "value": "Yes"
+      }
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "description": "Yes/No",
+      "value": "Yes"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "description": "Yes/No",
+      "value": "Yes"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "description": "Is there a feature for bulk imports?",
+      "value": "No"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "description": "Is it possible to manage forms with the System? (e.g. Add a poll to a website and store the data  in the CMS)",
+      "value": "No"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "description": "Can the system be extended via custom plugins?",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "description": "Can the UI be customized? (e.g. by adding custom form elements)",
+      "value": "No"
+    },
+    "userManagement": {
+      "name": "User Management",
+      "description": "Does the system provide a way to manage users?",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "description": "Are permissions bound to roles?",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "description": "Can individual documents have dedicated permissions?",
+      "value": "Yes"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "description": "Is it possible to connect to an OAuth 2.0 provider to authenticate users?",
+      "value": "No"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "description": "Will actions be logged? Is it possible to see what changes have been made by whom?",
+      "value": "Yes"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "description": "Can keys be used to authenticate the access to the API?",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "description": "Is it possible to have multiple projects/spaces which dedicated contents?",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "description": "Yes/No",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "description": "Can contents be structured in a tree? Can folders be used?",
+      "value": "Yes"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "description": "Is it possible to tag contents or other elements in the system?",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "description": "How can individual contents be linked to each other?",
+
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "description": "n:1-Relations",
+        "value": "Yes"
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "description": "n:m, etc.",
+        "value": "Yes"
+      }
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "description": "Was an official statement regarding GDPR compliance provided? (Cloud Only)",
+      "value": null
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "description": "Is it possible to quickly find and anonymize stored contents which contain user specific information (e.g. Name, Address, Date of Birth) using a dedicated API?",
+      "value": null
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "description": "Will conflicts for concurrent updates / edits be detected?",
+      "value": "No"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "description": "Will contents be versioned?",
+      "value": "Yes"
+    },
+    "content": {
+      "name": "Content",
+      "description": "Content-specific Functionalities",
+
+      "scheduling": {
+        "name": "Scheduling",
+        "description": "Is it possible to publish a specific content on a specific date?",
+        "value": "No"
+      },
+      "branches": {
+        "name": "Branches",
+        "description": "Can contents be branched in order to e.g. refactor the content structure for a relaunch of the connected website?",
+        "value": "Yes"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "description": "Does the System provide a strict content schema?",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "description": "Are the content models versioned? Can older versions be accessed?",
+        "value": "Yes"
+      },
+      "migration": {
+        "name": "Migration",
+        "description": "Is it possible to automatically migrate contents if the underlying schema changes? (e.g. Change field type from number to string)",
+        "value": "No"
+      }
+    },
+    "workflows": {
+      "name": "Workflows",
+      "description": "Does the system support editing workflows?",
+      "value": "Yes"
+    }
+  }
+}

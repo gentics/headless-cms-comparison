@@ -1,0 +1,328 @@
+{
+    "lastUpdated": "2020-12-03",
+    "name": "sensenet",
+    "version": "11-2020",
+    "license": "GPLv3",
+    "inception": "12-2016",
+    "category": "Professional/Enterprise",
+    "systemRequirements": {
+      "name": "System Requirements",
+      "value": null
+    },
+    "specialFeatures": {
+      "name": "Special Features",
+      "value": "document preview, Office Online editing, simple approval, advanced field types, advanced permission system, extendable REST API"
+    },
+    "supportedDatabases": {
+      "name": "Supported Databases",
+      "description": "",
+      "value": "MSSQL, MongoDB"
+    },
+    "teaser": {
+      "value": "A repository of unlimited content and a flexible development platform"
+    },
+    "gitHubURL": {
+      "value": "https://github.com/SenseNet/sensenet"
+    },
+    "properties": {
+      "openSource": {
+        "name": "Open Source",
+        "value": "Yes"
+      },
+      "cloudService": {
+        "name": "Cloud Service",
+        "value": "Yes"
+      },
+      "onPremisesInstallation": {
+        "name": "On Premises Installation",
+        "value": "Yes"
+      },
+      "cloudServiceHostedInEurope": {
+        "name": "Cloud Service Hosted in Europe",
+        "value": "Yes"
+      },
+      "commercialSupportAvailable": {
+        "name": "Commercial Support Available?",
+        "value": "Yes"
+      },
+      "graphQl": {
+        "api": {
+          "name": "API",
+          "value": "No"
+        },
+        "mutations": {
+          "name": "Mutations",
+          "value": "No"
+        },
+        "subscriptions": {
+          "name": "Subscriptions",
+          "value": "No"
+        }
+      },
+      "rest": {
+        "api": {
+          "name": "API",
+          "value": "Yes"
+        },
+        "create": {
+          "name": "Create",
+          "value": "Yes"
+        },
+        "read": {
+          "name": "Read",
+          "value": "Yes"
+        },
+        "update": {
+          "name": "Update",
+          "value": "Yes"
+        },
+        "delete": {
+          "name": "Delete",
+          "value": "Yes"
+        },
+        "upload": {
+          "name": "Upload",
+          "value": "Yes"
+        }
+      },
+      "search": {
+        "api": {
+          "name": "API",
+          "value": "Yes"
+        },
+        "feature_fullTextSearch": {
+          "name": "Full Text Search",
+          "value": "Yes"
+        },
+        "feature_stemming": {
+          "name": "Stemming",
+          "value": "No"
+        },
+        "feature_stopWords": {
+          "name": "Stop Words",
+          "value": "Yes"
+        },
+        "feature_autoCompletion": {
+          "name": "Autocompletion",
+          "value": "No"
+        },
+        "feature_autoSuggestions": {
+          "name": "Autosuggestion",
+          "value": "No"
+        },
+        "feature_resultHighlighting": {
+          "name": "Result Highlighting",
+          "value": "No"
+        },
+        "feature_geospatialSearch": {
+          "name": "Geospatial Search",
+          "value": "No"
+        },
+        "feature_searchWithinUploads": {
+          "name": "Search within uploads",
+          "value": "Yes"
+        }
+      },
+      "image": {
+        "manipulation": {
+          "name": "Manipulation",
+          "value": "No"
+        },
+        "focalPointSupport": {
+          "name": "Focalpoint Support",
+          "value": "No"
+        },
+        "faceDetection": {
+          "name": "Facedetection",
+          "value": "No"
+        },
+        "optimziedImageEncoding": {
+          "name": "Optimized Image Encoding",
+          "value": "No"
+        }
+      },
+      "assetFingerprinting": {
+        "name": "Asset fingerprinting",
+        "value": "No"
+      },
+      "cdnSupport": {
+        "name": "CDN Support",
+        "value": "No"
+      },
+      "antivirusScanning": {
+        "name": "Antivirus Scanning",
+        "value": "No"
+      },
+      "customBinaryHandler": {
+        "name": "Custom Binary Handler",
+        "value": "No"
+      },
+      "clustering": {
+        "name": "Clustering",
+        "value": "No"
+      },
+      "dockerSupport": {
+        "name": "Docker Support",
+        "value": "Yes"
+      },
+      "backupFeature": {
+        "name": "Backup Feature",
+        "value": "Yes"
+      },
+      "importExport": {
+        "name": "Import/Export",
+        "value": "No"
+      },
+      "cli": {
+        "name": "CLI",
+        "value": "No"
+      },
+      "sdk": {
+        "java": {
+          "name": "Java",
+          "value": "No"
+        },
+        "cSharp": {
+          "name": "C#",
+          "value": "Yes"
+        },
+        "php": {
+          "name": "PHP",
+          "value": "No"
+        },
+        "javaScript": {
+          "name": "JavaScript",
+          "value": "Yes"
+        },
+        "react": {
+          "name": "React",
+          "value": "Yes"
+        },
+        "angular": {
+          "name": "AngularJS",
+          "value": "No"
+        },
+        "typeScript": {
+          "name": "TypeScript",
+          "value": "Yes"
+        }
+      },
+      "webHooks": {
+        "name": "Web Hooks",
+        "value": "No"
+      },
+      "eventBus": {
+        "name": "Eventbus",
+        "value": "No"
+      },
+      "bulkImport": {
+        "name": "Bulk Import",
+        "value": "Yes"
+      },
+      "clientSideForms": {
+        "name": "Client Side Forms",
+        "value": "Yes"
+      },
+      "pluginSystem": {
+        "name": "Plugin System",
+        "value": "No"
+      },
+      "customizableUi": {
+        "name": "Customizable UI",
+        "value": "Yes"
+      },
+      "userManagement": {
+        "name": "User Management",
+        "value": "Yes"
+      },
+      "roleBasedPermissions": {
+        "name": "Role Based Permissions",
+        "value": "Yes"
+      },
+      "documentLevelPermissions": {
+        "name": "Document Level Permissions",
+        "value": "Yes"
+      },
+      "oauth2Support": {
+        "name": "OAuth 2.0 Support",
+        "value": "Yes"
+      },
+      "auditing": {
+        "name": "Auditing",
+        "value": "No"
+      },
+      "apiKeys": {
+        "name": "API Keys",
+        "value": "Yes"
+      },
+      "projectSupport": {
+        "name": "Project Support",
+        "value": "Yes"
+      },
+      "i18n": {
+        "name": "I18N Localized Content",
+        "value": "No"
+      },
+      "contentTrees": {
+        "name": "Content Trees",
+        "value": "Yes"
+      },
+      "tagging": {
+        "name": "Tagging",
+        "value": "Yes"
+      },
+      "contentRelations": {
+        "supportQueryingIncomingRelations": {
+          "name": "Support for querying incoming relations",
+          "value": "Yes"
+        },
+        "supportNestingFields": {
+          "name": "Support for nesting fields/elements",
+          "value": "Yes"
+        }
+      },
+      "gdprStatement": {
+        "name": "GDPR Statement",
+        "value": "Yes"
+      },
+      "gdprApi": {
+        "name": "GDPR API",
+        "value": "No"
+      },
+      "editingConflictDetection": {
+        "name": "Editing Conflict Detection",
+        "value": "Yes"
+      },
+      "versioning": {
+        "name": "Versioning",
+        "value": "Yes"
+      },
+      "content": {
+        "scheduling": {
+          "name": "Scheduling",
+          "value": "Yes"
+        },
+        "branches": {
+          "name": "Branches",
+          "value": "Yes"
+        },
+        "modelsSchemas": {
+          "name": "Models / Schemas",
+          "value": "Yes"
+        },
+        "modelsSchemaVersioning": {
+          "name": "Model / Schema Versioning",
+          "value": "No"
+        },
+        "migration": {
+          "name": "Migration",
+          "value": "No"
+        }
+      },
+      "workflows": {
+        "name": "Workflows",
+        "value": "No"
+      }
+    }
+  }
+  

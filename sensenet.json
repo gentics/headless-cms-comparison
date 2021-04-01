@@ -209,7 +209,7 @@
       },
       "webHooks": {
         "name": "Web Hooks",
-        "value": "No"
+        "value": "Yes"
       },
       "eventBus": {
         "name": "Eventbus",

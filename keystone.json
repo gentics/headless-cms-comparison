@@ -1,0 +1,449 @@
+{
+  "lastUpdated": {
+    "name": "Last Updated",
+    "description": "2021-07-12",
+    "value": null
+  },
+  "name": {
+    "name": "Name",
+    "description": "Keystone JS",
+    "value": null
+  },
+  "version": {
+    "name": "Version",
+    "description": "6",
+    "value": null
+  },
+  "license": {
+    "name": "License",
+    "description": "MIT",
+    "value": null
+  },
+  "inception": {
+    "name": "Inception",
+    "description": "2013",
+    "value": null
+  },
+  "category": {
+    "name": "Category",
+    "description": "Essential/Professional/Enterprise",
+    "value": null
+  },
+  "systemRequirements": {
+    "name": "System Requirements",
+    "description": "Node.js",
+    "value": null
+  },
+  "specialFeatures": {
+    "name": "Special Features",
+    "description": "Automated CRUD, Extensible GraphQL API, Next-gen WYSIWYG, 100% Typescript, Custom roles & access",
+    "value": null
+  },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "description": "Postgres, SQLite",
+    "value": null
+  },
+  "teaser": {
+    "name": "Description",
+    "description": "The superpowered open source CMS for developers. Describe your schema, and get a powerful GraphQL API & beautiful editing environment in return. Built on Node.js, Next.js & Prisma.",
+    "value": null
+  },
+  "gitHubURL": {
+    "name": "GitHub URL",
+    "description": "https://github.com/keystonejs/keystone",
+    "value": null
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "description": "Yes",
+      "value": null
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "description": "No",
+      "value": null
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "description": "No",
+      "value": null
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "description": "No",
+      "value": null
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "description": "No",
+      "value": null
+    },
+    "graphQl": {
+      "name": "GraphQL",
+      "description": "GraphQL Functionalities",
+
+      "api": {
+        "name": "API",
+        "description": "Yes",
+        "value": null
+      },
+      "mutations": {
+        "name": "Mutations",
+        "description": "Yes",
+        "value": null
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "description": "Yes",
+        "value": null
+      }
+    },
+    "rest": {
+      "name": "REST",
+      "description": "REST Functionalities",
+
+      "api": {
+        "name": "API",
+        "description": "No",
+        "value": null
+      },
+      "create": {
+        "name": "Create",
+        "description": "No",
+        "value": null
+      },
+      "read": {
+        "name": "Read",
+        "description": "No",
+        "value": null
+      },
+      "update": {
+        "name": "Update",
+        "description": "No",
+        "value": null
+      },
+      "delete": {
+        "name": "Delete",
+        "description": "No",
+        "value": null
+      },
+      "upload": {
+        "name": "Upload",
+        "description": "No",
+        "value": null
+      }
+    },
+    "search": {
+      "name": "Search",
+      "description": "Search Functionalities",
+
+      "api": {
+        "name": "API",
+        "description": "Yes",
+        "value": null
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "description": "No",
+        "value": null
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "description": "Yes",
+        "value": null
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "description": "No",
+        "value": null
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "description": "No",
+        "value": null
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "description": "No",
+        "value": null
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "description": "No",
+        "value": null
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "description": "No",
+        "value": null
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "description": "No",
+        "value": null 
+      }
+    },
+    "image": {
+      "name": "Image",
+      "description": "Image Functionalities",
+
+      "manipulation": {
+        "name": "Manipulation",
+        "description": "No",
+        "value": null
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "description": "No",
+        "value": null
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "description": "No",
+        "value": null
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "description": "No",
+        "value": null
+      }
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "description": "No",
+      "value": null
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "description": "No",
+      "value": null
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "description": "No",
+      "value": null
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "description": "No",
+      "value": null
+    },
+    "clustering": {
+      "name": "Clustering",
+      "description": "No",
+      "value": null
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "description": "Yes",
+      "value": null
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "description": "No",
+      "value": null
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "description": "Yes",
+      "value": null
+    },
+    "cli": {
+      "name": "CLI",
+      "description": "Yes",
+      "value": null
+    },
+    "sdk": {
+      "name": "SDK",
+      "description": "Support for specific SDKs",
+
+      "java": {
+        "name": "Java",
+        "description": "No", 
+        "value": null
+      },
+      "cSharp": {
+        "name": "C#",
+        "description": "No",
+        "value": null
+      },
+      "php": {
+        "name": "PHP",
+        "description": "No",
+        "value": null
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "description": "Yes",
+        "value": null
+      },
+      "react": {
+        "name": "React",
+        "description": "Yes",
+        "value": null
+      },
+      "angular": {
+        "name": "AngularJS",
+        "description": "No", 
+        "value": null
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "description": "Yes",
+        "value": null
+      }
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "description": "No",
+      "value": null
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "description": "No",
+      "value": null
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "description": "Yes",
+      "value": null
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "description": "Yes",
+      "value": null
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "description": "Yes",
+      "value": null
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "description": "Yes",
+      "value": null
+    },
+    "userManagement": {
+      "name": "User Management",
+      "description": "Yes",
+      "value": null
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "description": "Yes",
+      "value": null
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "description": "Yes",
+      "value": null
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "description": "Yes",
+      "value": null
+    },
+    "auditing": {
+      "name": "Auditing",
+      "description": "Yes",
+      "value": null
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "description": "Yes",
+      "value": null
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "description": "Yes",
+      "value": null
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "description": "No",
+      "value": null
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "description": "No",
+      "value": null
+    },
+    "tagging": {
+      "name": "Tagging",
+      "description": "Yes",
+      "value": null
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "description": "Yes",
+
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "description": "YEs",
+        "value": null
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "description": "Yes",
+        "value": null
+      }
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "description": "No",
+      "value": null
+    },
+    "gdprApi": { 
+      "name": "GDPR API",
+      "description": "No",
+      "value": null
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "description": "No",
+      "value": null
+    },
+    "versioning": {
+      "name": "Versioning",
+      "description": "No",
+      "value": null
+    },
+    "content": {
+      "name": "Content", 
+      "description": "Content-specific Functionalities",
+
+      "scheduling": {
+        "name": "Scheduling",
+        "description": "No",
+        "value": null
+      },
+      "branches": {
+        "name": "Branches",
+        "description": "No",
+        "value": null
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "description": "Yes",
+        "value": null
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "description": "No",
+        "value": null
+      },
+      "migration": {
+        "name": "Migration",
+        "description": "No",
+        "value": null
+      }
+    },
+    "workflows": {
+      "name": "Workflows",
+      "description": "No",
+      "value": null
+    }
+  }
+}

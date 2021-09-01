@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2020-02-10",
+  "lastUpdated": "2021-09-01",
   "name": "Enonic XP",
-  "version": "7.3",
+  "version": "7.7",
   "license": "GPLv3",
   "inception": "2015-03",
   "category": "Professional/Enterprise",
@@ -18,10 +18,10 @@
     "value": "Embedded NoSQL"
   },
   "teaser": {
-    "value": ""
+    "value": "Low friction content platform - smoother projects for better customer journeys"
   },
   "gitHubURL": {
-    "value": ""
+    "value": "https://github.com/enonic/xp"
   },
   "properties": {
     "openSource": {

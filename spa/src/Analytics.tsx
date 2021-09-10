@@ -20,10 +20,11 @@ const Analytics = ({ accepted, setAccepted }: PropsType) => {
     if (Cookies.get("CookieConsent")) {
       onAccepted();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const location = useLocation();
-  React.useEffect(() => {
+  useEffect(() => {
     if (accepted) {
       ReactGA.pageview(location.pathname + location.search);
     }

@@ -1,6 +1,7 @@
 {
   "fields": "fields",
   "cms": [
+    "agility-cms",
     "butter-cms",
     "cloudcms",
     "comfortable-io",
@@ -14,9 +15,11 @@
     "ghost",
     "graphcms",
     "kentico-kontent",
+    "keystone",
     "ponzu",
     "prismic",
     "sanity",
+    "sensenet",
     "slicknode",
     "squidex",
     "storyblok",

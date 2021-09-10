@@ -1,0 +1,333 @@
+{
+  "lastUpdated": "2020-11-12",
+  "name": "Agility CMS",
+  "version": "11-2020",
+  "license": "Proprietary",
+  "inception": "01-2008",
+  "category": "Essential/Professional/Enterprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": null
+  },
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Page Management, Preview and Publishing, Content Modelling, Multi-Site Support, Content-Level Security, Website Deployment Integrations, Hosted in Microsoft Azure, Canadian Data Center Available"
+  },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": null
+  },
+  "teaser": {
+    "value": "When it comes to choosing a CMS, you shouldn't have to compromise. With all the features of a headless CMS and the familiar authoring tools that marketers know and love, Agility will make everyone on your team happy."
+  },
+  "gitHubURL": {
+    "value": "https://github.com/agility"
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "No"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "No"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": "No"
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "No"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "No"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "No"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Yes"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Yes"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Yes"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Yes"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": null
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": null
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": null
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": null
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": null
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": null
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "Yes"
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": "No"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": "No"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "Yes"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "Yes"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": null
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": null
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": null
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": null
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "Yes"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "No"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": "No"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": "Yes"
+      },
+      "php": {
+        "name": "PHP",
+        "value": "No"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "Yes"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "No"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "No"
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "Yes"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": null
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "Yes"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "Yes"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "Yes"
+    },
+    "userManagement": {
+      "name": "User Management",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "Yes"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "Yes"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "Yes"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "Yes"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "value": "Yes"
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "value": "Yes"
+      }
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": "Yes"
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "No"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "Yes"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "No"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "No"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "No"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "Yes"
+    }
+  }
+}

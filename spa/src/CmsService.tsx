@@ -38,7 +38,7 @@ const CmsService = {
     category: CategoryCmsProperty | CategoryField
   ): string[] {
     return Object.keys(category).filter(
-      (key) => key !== "name" && key !== "description"
+      (key) => !["name", "description", "value", "type"].includes(key)
     );
   },
 
@@ -80,25 +80,36 @@ async function fetchCmsData(
   const values = await Promise.all(promises);
   const fieldsData = values[0];
   let rawCms: Cms[] = values.slice(1);
-  rawCms = sortCmsByName(rawCms);
   const parsedCms: { [x_1: string]: Cms } = {};
   for (let i = 0; i < rawCms.length; i++) {
     parsedCms[cms[i]] = parseCms(rawCms[i]);
   }
+  rawCms = sortCmsByName(rawCms);
   return { fields: fieldsData, cms: parsedCms };
 }
 
 function sortCmsByName(cmsArray: Cms[]) {
-  return cmsArray.sort((a, b) =>
-    a.name.toLowerCase() > b.name.toLowerCase()
-      ? 1
-      : b.name.toLowerCase() > a.name.toLowerCase()
-      ? -1
-      : 0
-  );
+  return cmsArray.sort((a, b) => {
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
 }
 
 function parseCms(data: any): Cms {
+  // These fields can be provided as a direct value or by a value-object.
+  // Normalize them here to a direct value for later access.
+  [
+    "lastUpdated",
+    "name",
+    "version",
+    "license",
+    "inception",
+    "category",
+  ].forEach((key) => {
+    if (data[key] != null && typeof data[key] === "object") {
+      data[key] = data[key].value;
+    }
+  });
+
   // Parse licenses
   const licenses: License[] = data.license.split("/");
   if (!licensesAreValid(licenses)) {
@@ -107,7 +118,11 @@ function parseCms(data: any): Cms {
   }
 
   // Parse categories
-  const categories: Category[] = data.category.split("/");
+  const categories: Category[] = (data.category as string)
+    .split("/")
+    .map((str) => str.trim())
+    .filter((str) => (Category as any)[str])
+    .sort() as Category[];
   if (!categoriesAreValid(categories)) {
     console.error(categories);
     throw new Error(`CMS ${data.name} has invalid or no categories!`);
@@ -118,8 +133,11 @@ function parseCms(data: any): Cms {
   const propertyKeys: string[] = Object.keys(data.properties);
   for (const key of propertyKeys) {
     const currentProperty: any = data.properties[key];
-    if (currentProperty.value !== undefined) {
-      properties[key] = parseValue(currentProperty);
+    if (currentProperty.value != null) {
+      const parsedValue = parseValue(currentProperty);
+      if (parsedValue != null) {
+        properties[key] = parsedValue;
+      }
     } else {
       const category: CategoryCmsProperty = {
         type: PropertyType.Category,
@@ -151,15 +169,21 @@ function parseCms(data: any): Cms {
   return cms;
 }
 
-const parseValue = (p: any): BooleanCmsProperty => {
+const parseValue = (p: any): null | BooleanCmsProperty => {
   const validRe = /^(Yes|No|null)/;
   const infoRe = /^(Yes|No)[,\s*](.*)$/;
   let value: boolean | undefined = undefined;
   let info: string | undefined = undefined;
 
+  if (p == null) {
+    console.warn("Provided null as value!");
+    return null;
+  }
+
   if (p.value) {
-    if (validRe.test(p.value)) {
-      value = p.value.startsWith("Yes");
+    if (typeof p.value === "boolean" || validRe.test(p.value)) {
+      value =
+        typeof p.value === "boolean" ? p.value : p.value.startsWith("Yes");
       const match = infoRe.exec(p.value);
       if (match) {
         info = match[2];

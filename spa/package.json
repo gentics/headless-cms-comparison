@@ -1,6 +1,6 @@
 {
   "name": "cms-comparison",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://cms-comparison.io/",
   "private": true,
   "dependencies": {

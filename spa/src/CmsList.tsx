@@ -150,12 +150,21 @@ function convertCmsToTableDataStructure(
 
   Object.keys(filterFields.basic).forEach((key: string) => {
     const prop = cms.properties[key];
-    if (prop) {
-      if (prop.type === PropertyType.Boolean) {
-        tableCms[key] = { name: prop.name, value: prop.value };
+    if (!prop) {
+      return;
+    }
+
+    if (prop.type === PropertyType.Boolean) {
+      tableCms[key] = { name: prop.name, value: prop.value };
+      return;
+    }
+
+    if (prop.type === PropertyType.Category) {
+      const category: CategoryCmsProperty = prop;
+      const subPropertyKeys = CmsService.getKeysOfSubFields(category);
+      if (subPropertyKeys.length === 0) {
+        tableCms[key] = category;
       } else {
-        const category: CategoryCmsProperty = prop;
-        const subPropertyKeys = CmsService.getKeysOfSubFields(category);
         for (const currentSubKey of subPropertyKeys) {
           const currentSubProperty: BooleanCmsProperty =
             category[currentSubKey];

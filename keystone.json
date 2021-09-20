@@ -1,449 +1,367 @@
 {
   "lastUpdated": {
     "name": "Last Updated",
-    "description": "2021-07-12",
-    "value": null
+    "value": "2021-07-12"
   },
   "name": {
     "name": "Name",
-    "description": "Keystone JS",
-    "value": null
+    "value": "Keystone JS"
   },
   "version": {
     "name": "Version",
-    "description": "6",
-    "value": null
+    "value": "6"
   },
   "license": {
     "name": "License",
-    "description": "MIT",
-    "value": null
+    "value": "MIT"
   },
   "inception": {
     "name": "Inception",
-    "description": "2013",
-    "value": null
+    "value": "2013"
   },
   "category": {
     "name": "Category",
-    "description": "Essential/Professional/Enterprise",
-    "value": null
+    "value": "Essential/Professional/Enterprise"
   },
   "systemRequirements": {
     "name": "System Requirements",
-    "description": "Node.js",
-    "value": null
+    "value": "Node.js"
   },
   "specialFeatures": {
     "name": "Special Features",
-    "description": "Automated CRUD, Extensible GraphQL API, Next-gen WYSIWYG, 100% Typescript, Custom roles & access",
-    "value": null
+    "value": "Automated CRUD, Extensible GraphQL API, Next-gen WYSIWYG, 100% Typescript, Custom roles & access"
   },
   "supportedDatabases": {
     "name": "Supported Databases",
-    "description": "Postgres, SQLite",
-    "value": null
+    "value": "Postgres, SQLite"
   },
   "teaser": {
-    "name": "Description",
-    "description": "The superpowered open source CMS for developers. Describe your schema, and get a powerful GraphQL API & beautiful editing environment in return. Built on Node.js, Next.js & Prisma.",
-    "value": null
+    "name": "value",
+    "value": "The superpowered open source CMS for developers. Describe your schema, and get a powerful GraphQL API & beautiful editing environment in return. Built on Node.js, Next.js & Prisma."
   },
   "gitHubURL": {
     "name": "GitHub URL",
-    "description": "https://github.com/keystonejs/keystone",
-    "value": null
+    "value": "https://github.com/keystonejs/keystone"
   },
   "properties": {
     "openSource": {
       "name": "Open Source",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "cloudService": {
       "name": "Cloud Service",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "onPremisesInstallation": {
       "name": "On Premises Installation",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "cloudServiceHostedInEurope": {
       "name": "Cloud Service Hosted in Europe",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "commercialSupportAvailable": {
       "name": "Commercial Support Available?",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "graphQl": {
       "name": "GraphQL",
-      "description": "GraphQL Functionalities",
+      "value": "GraphQL Functionalities",
 
       "api": {
         "name": "API",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       },
       "mutations": {
         "name": "Mutations",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       },
       "subscriptions": {
         "name": "Subscriptions",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       }
     },
     "rest": {
       "name": "REST",
-      "description": "REST Functionalities",
+      "value": "REST Functionalities",
 
       "api": {
         "name": "API",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "create": {
         "name": "Create",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "read": {
         "name": "Read",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "update": {
         "name": "Update",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "delete": {
         "name": "Delete",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "upload": {
         "name": "Upload",
-        "description": "No",
-        "value": null
+        "value": "No"
       }
     },
     "search": {
       "name": "Search",
-      "description": "Search Functionalities",
+      "value": "Search Functionalities",
 
       "api": {
         "name": "API",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       },
       "feature_fullTextSearch": {
         "name": "Full Text Search",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "feature_stemming": {
         "name": "Stemming",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       },
       "feature_stopWords": {
         "name": "Stop Words",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "feature_autoCompletion": {
         "name": "Autocompletion",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "feature_autoSuggestions": {
         "name": "Autosuggestion",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "feature_resultHighlighting": {
         "name": "Result Highlighting",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "feature_geospatialSearch": {
         "name": "Geospatial Search",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "feature_searchWithinUploads": {
         "name": "Search within uploads",
-        "description": "No",
-        "value": null 
+        "value": "No"
       }
     },
     "image": {
       "name": "Image",
-      "description": "Image Functionalities",
+      "value": "Image Functionalities",
 
       "manipulation": {
         "name": "Manipulation",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "focalPointSupport": {
         "name": "Focalpoint Support",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "faceDetection": {
         "name": "Facedetection",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "optimziedImageEncoding": {
         "name": "Optimized Image Encoding",
-        "description": "No",
-        "value": null
+        "value": "No"
       }
     },
     "assetFingerprinting": {
       "name": "Asset fingerprinting",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "cdnSupport": {
       "name": "CDN Support",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "antivirusScanning": {
       "name": "Antivirus Scanning",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "customBinaryHandler": {
       "name": "Custom Binary Handler",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "clustering": {
       "name": "Clustering",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "dockerSupport": {
       "name": "Docker Support",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "backupFeature": {
       "name": "Backup Feature",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "importExport": {
       "name": "Import/Export",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "cli": {
       "name": "CLI",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "sdk": {
       "name": "SDK",
-      "description": "Support for specific SDKs",
+      "value": "Support for specific SDKs",
 
       "java": {
         "name": "Java",
-        "description": "No", 
-        "value": null
+        "value": "No"
       },
       "cSharp": {
         "name": "C#",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "php": {
         "name": "PHP",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "javaScript": {
         "name": "JavaScript",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       },
       "react": {
         "name": "React",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       },
       "angular": {
         "name": "AngularJS",
-        "description": "No", 
-        "value": null
+        "value": "No"
       },
       "typeScript": {
         "name": "TypeScript",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       }
     },
     "webHooks": {
       "name": "Web Hooks",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "eventBus": {
       "name": "Eventbus",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "bulkImport": {
       "name": "Bulk Import",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "clientSideForms": {
       "name": "Client Side Forms",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "pluginSystem": {
       "name": "Plugin System",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "customizableUi": {
       "name": "Customizable UI",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "userManagement": {
       "name": "User Management",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "roleBasedPermissions": {
       "name": "Role Based Permissions",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "documentLevelPermissions": {
       "name": "Document Level Permissions",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "oauth2Support": {
       "name": "OAuth 2.0 Support",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "auditing": {
       "name": "Auditing",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "apiKeys": {
       "name": "API Keys",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "projectSupport": {
       "name": "Project Support",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "i18n": {
       "name": "I18N Localized Content",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "contentTrees": {
       "name": "Content Trees",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "tagging": {
       "name": "Tagging",
-      "description": "Yes",
-      "value": null
+      "value": "Yes"
     },
     "contentRelations": {
       "name": "Content Relations",
-      "description": "Yes",
+      "value": "Yes",
 
       "supportQueryingIncomingRelations": {
         "name": "Support for querying incoming relations",
-        "description": "YEs",
-        "value": null
+        "value": "Yes"
       },
       "supportNestingFields": {
         "name": "Support for nesting fields/elements",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       }
     },
     "gdprStatement": {
       "name": "GDPR Statement",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
-    "gdprApi": { 
+    "gdprApi": {
       "name": "GDPR API",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "editingConflictDetection": {
       "name": "Editing Conflict Detection",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "versioning": {
       "name": "Versioning",
-      "description": "No",
-      "value": null
+      "value": "No"
     },
     "content": {
-      "name": "Content", 
-      "description": "Content-specific Functionalities",
+      "name": "Content",
+      "value": "Content-specific Functionalities",
 
       "scheduling": {
         "name": "Scheduling",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "branches": {
         "name": "Branches",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "modelsSchemas": {
         "name": "Models / Schemas",
-        "description": "Yes",
-        "value": null
+        "value": "Yes"
       },
       "modelsSchemaVersioning": {
         "name": "Model / Schema Versioning",
-        "description": "No",
-        "value": null
+        "value": "No"
       },
       "migration": {
         "name": "Migration",
-        "description": "No",
-        "value": null
+        "value": "No"
       }
     },
     "workflows": {
       "name": "Workflows",
-      "description": "No",
-      "value": null
+      "value": "No"
     }
   }
 }

@@ -1,0 +1,330 @@
+{
+  "lastUpdated": "2021-09-22",
+  "name": "Flotiq",
+  "version": "09-2021",
+  "license": "Proprietary",
+  "inception": "01-2020",
+  "category": "Essential/Professional/Enterprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": null
+  },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": null
+  },
+  "teaser": {
+    "value": "Flotiq is an API-first content management platform that works with any technology, framework, and language. We decided to solve common content workflow problems by creating a tool that makes collaboration easier. Bridging the worlds of developers and content managers together, we help them work more efficiently and reach that common flow which just gets things done."
+  },
+  "gitHubURL": {
+    "value": "https://github.com/flotiq"
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "No"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "Yes"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": "No"
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "No"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "No"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Yes"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Yes"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Yes"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Yes"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": "No"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": "No"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": "No"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": "No"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": "No"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": "Yes"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "No"
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": "No"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": "No"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "No"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "Yes"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": "No"
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": "No"
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": null
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": "No"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "No"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "Yes"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": "Yes"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": "Yes"
+      },
+      "php": {
+        "name": "PHP",
+        "value": "Yes"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "Yes"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "Yes"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "Yes"
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "No"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": "No"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "No"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "Yes"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "No"
+    },
+    "userManagement": {
+      "name": "User Management",
+      "value": "No"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "No"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "No"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "No"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "No"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "No"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "No"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "Yes"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "No"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "value": "Yes"
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "value": "Yes"
+      }
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": "No"
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "Yes"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "No"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "No"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "No"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "No"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "No"
+    }
+  }
+}

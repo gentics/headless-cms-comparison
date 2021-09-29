@@ -42,7 +42,7 @@
   "supportedDatabases": {
     "name": "Supported Databases",
     "description": "",
-    "value": "MySQL, MariaDB, PostgreSQL"
+    "value": "MySQL, MariaDB, PostgreSQL, SQLite"
   },
   "teaser": {
     "name": "Description",
@@ -68,7 +68,7 @@
     "onPremisesInstallation": {
       "name": "On Premises Installation",
       "description": "Yes/No",
-      "value": "No"
+      "value": "Yes"
     },
     "cloudServiceHostedInEurope": {
       "name": "Cloud Service Hosted in Europe",

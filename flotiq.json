@@ -34,7 +34,7 @@
     },
     "cloudServiceHostedInEurope": {
       "name": "Cloud Service Hosted in Europe",
-      "value": "No"
+      "value": "Yes"
     },
     "commercialSupportAvailable": {
       "name": "Commercial Support Available?",
@@ -93,11 +93,11 @@
       },
       "feature_stemming": {
         "name": "Stemming",
-        "value": "No"
+        "value": "Yes"
       },
       "feature_stopWords": {
         "name": "Stop Words",
-        "value": "No"
+        "value": "Yes"
       },
       "feature_autoCompletion": {
         "name": "Autocompletion",
@@ -170,7 +170,7 @@
     },
     "importExport": {
       "name": "Import/Export",
-      "value": "No"
+      "value": "Yes"
     },
     "cli": {
       "name": "CLI",
@@ -217,7 +217,7 @@
     },
     "bulkImport": {
       "name": "Bulk Import",
-      "value": "No"
+      "value": "Yes"
     },
     "clientSideForms": {
       "name": "Client Side Forms",
@@ -249,7 +249,7 @@
     },
     "auditing": {
       "name": "Auditing",
-      "value": "No"
+      "value": "Yes"
     },
     "apiKeys": {
       "name": "API Keys",
@@ -324,7 +324,7 @@
     },
     "workflows": {
       "name": "Workflows",
-      "value": "No"
+      "value": "Yes"
     }
   }
 }

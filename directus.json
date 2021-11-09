@@ -51,7 +51,7 @@
       },
       "mutations": {
         "name": "Mutations",
-        "value": "No"
+        "value": "Yes"
       },
       "subscriptions": {
         "name": "Subscriptions",

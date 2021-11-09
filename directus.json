@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2018-07-28",
+  "lastUpdated": "2021-11-04",
   "name": "Directus",
-  "version": "7.0.0",
+  "version": "v9.0.0-rc.101",
   "license": "GPLv3",
   "inception": "01-2012",
   "category": "Essential/Professional",
   "systemRequirements": {
     "name": "System Requirements",
-    "value": "Apache/NGINX, PHP, MYSQL"
+    "value": "Apache/NGINX, NodeJS, MYSQL"
   },
   "specialFeatures": {
     "name": "Special Features",
@@ -15,7 +15,7 @@
   },
   "supportedDatabases": {
     "name": "Supported Databases",
-    "value": "MySQL & Variants"
+    "value": "PostgreSQL, MySQL, SQLite, OracleDB, MariaDB and MS-SQL"
   },
   "teaser": {
     "value": "Directus is a database-first platform that provides an instant REST API for custom SQL databases and an intuitive Admin App for non-technical users to manage that content."

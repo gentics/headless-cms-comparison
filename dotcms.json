@@ -1,0 +1,338 @@
+{
+  "lastUpdated": "2022-01-11",
+  "name": "dotCMS",
+  "version": "22.01",
+  "license": "GPLv3",
+  "inception": "01-2009",
+  "category": "Professional/Enterprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": null
+  },
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Hybrid Headless, Integrated CDN, SSO, Mutli-site/Mutli-tenant, GrapQL"
+  },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": "PostgreSQL"
+  },
+  "teaser": {
+    "value": "dotCMS is a Hybrid-headless CMS that allows organizations to build, manage, and deploy applications such as websites, single-page apps, mobile apps, and more."
+  },
+  "gitHubURL": {
+    "value": "https://github.com/dotCMS/core"
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "Yes"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "Yes"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": "Yes"
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "name": "GraphQL",
+
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "Yes"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "Yes"
+      }
+    },
+    "rest": {
+      "name": "REST",
+
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Yes"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Yes"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Yes"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Yes"
+      }
+    },
+    "search": {
+      "name": "Search",
+
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": "No"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": "No"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": "Yes"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": "Yes"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": "Yes"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": "Yes"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "Yes"
+      }
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": "Yes"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": "Yes"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "Yes"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": "No"
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "Yes"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": "Yes"
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": "Yes"
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": "Yes"
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": "Yes"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "Yes"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "Yes"
+    },
+    "sdk": {
+      "name": "SDK",
+
+      "java": {
+        "name": "Java",
+        "value": "Yes"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": "No"
+      },
+      "php": {
+        "name": "PHP",
+        "value": "No"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "Yes"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "Yes"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "Yes"
+      }
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "Yes"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": "No"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "Yes"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "Yes"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "Yes"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "Yes"
+    },
+    "userManagement": {
+      "name": "User Management",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "Yes"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "Yes"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "Yes"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "No"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "value": "Yes"
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "value": "Yes"
+      }
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": "Yes"
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "Yes"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "Yes"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "No"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "No"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "Yes"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "Yes"
+    }
+  }
+}

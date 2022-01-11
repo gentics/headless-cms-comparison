@@ -7,7 +7,7 @@
   "category": "Professional/Enterprise",
   "systemRequirements": {
     "name": "System Requirements",
-    "value": null
+    "value": "docker/java"
   },
   "specialFeatures": {
     "name": "Special Features",
@@ -53,11 +53,11 @@
       },
       "mutations": {
         "name": "Mutations",
-        "value": "Yes"
+        "value": "No"
       },
       "subscriptions": {
         "name": "Subscriptions",
-        "value": "Yes"
+        "value": "No"
       }
     },
     "rest": {
@@ -101,7 +101,7 @@
       },
       "feature_stemming": {
         "name": "Stemming",
-        "value": "No"
+        "value": "Yes"
       },
       "feature_stopWords": {
         "name": "Stop Words",
@@ -273,7 +273,7 @@
     },
     "contentTrees": {
       "name": "Content Trees",
-      "value": "No"
+      "value": "Yes"
     },
     "tagging": {
       "name": "Tagging",

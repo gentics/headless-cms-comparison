@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2019-12-01",
+  "lastUpdated": "2022-01-27",
   "name": "DatoCMS",
-  "version": "11-2019",
+  "version": "01-2022",
   "license": "Proprietary",
   "inception": "08-2016",
   "category": "Essential/Professional/Enterprise",
@@ -11,7 +11,7 @@
   },
   "specialFeatures": {
     "name": "Special Features",
-    "value": "Headless Live Preview, Matrix fields"
+    "value": "Nested Blocks, Headless Live Preview, Matrix fields"
   },
   "supportedDatabases": {
     "name": "Supported Databases",
@@ -55,7 +55,7 @@
       },
       "subscriptions": {
         "name": "Subscriptions",
-        "value": "No"
+        "value": "Yes"
       },
       "name": "GraphQL"
     },
@@ -245,7 +245,7 @@
     },
     "documentLevelPermissions": {
       "name": "Document Level Permissions",
-      "value": "No"
+      "value": "Yes"
     },
     "oauth2Support": {
       "name": "OAuth 2.0 Support",
@@ -253,7 +253,7 @@
     },
     "auditing": {
       "name": "Auditing",
-      "value": "No"
+      "value": "Yes"
     },
     "apiKeys": {
       "name": "API Keys",
@@ -328,7 +328,7 @@
     },
     "workflows": {
       "name": "Workflows",
-      "value": "No"
+      "value": "Yes"
     }
   }
 }

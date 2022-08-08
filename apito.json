@@ -1,0 +1,334 @@
+{
+  "lastUpdated": "2020-03-25",
+  "name": "Apito",
+  "version": "v2-stable",
+  "license": "Proprietary",
+  "inception": "08-2022",
+  "category": "Essential/Professional/Enterprise",
+  "systemRequirements": {
+    "name": "System Requirements",
+    "value": null
+  },
+  "specialFeatures": {
+    "name": "Special Features",
+    "value": "Apito Functions & Swagger Based REST Api Generation with Complex API Filtering Options & GraphQL API Explorer"
+  },
+  "supportedDatabases": {
+    "name": "Supported Databases",
+    "value": "Apito Cloud, PostgreSQL, MySQL, ArangoDB"
+  },
+  "teaser": {
+    "value": "The Most Powerful Headless Content Management as a Service with CDN, Webhooks, Team Collaborations, Content Revision, Cloud Functions and Much more"
+  },
+  "gitHubURL": {
+    "value": ""
+  },
+  "properties": {
+    "openSource": {
+      "name": "Open Source",
+      "value": "No"
+    },
+    "cloudService": {
+      "name": "Cloud Service",
+      "value": "Yes"
+    },
+    "onPremisesInstallation": {
+      "name": "On Premises Installation",
+      "value": "Yes"
+    },
+    "cloudServiceHostedInEurope": {
+      "name": "Cloud Service Hosted in Europe",
+      "value": "Yes"
+    },
+    "commercialSupportAvailable": {
+      "name": "Commercial Support Available?",
+      "value": "Yes"
+    },
+    "graphQl": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "mutations": {
+        "name": "Mutations",
+        "value": "Yes"
+      },
+      "subscriptions": {
+        "name": "Subscriptions",
+        "value": "No"
+      },
+      "name": "GraphQL"
+    },
+    "rest": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "create": {
+        "name": "Create",
+        "value": "Yes"
+      },
+      "read": {
+        "name": "Read",
+        "value": "Yes"
+      },
+      "update": {
+        "name": "Update",
+        "value": "Yes"
+      },
+      "delete": {
+        "name": "Delete",
+        "value": "Yes"
+      },
+      "upload": {
+        "name": "Upload",
+        "value": "Yes"
+      },
+      "name": "REST"
+    },
+    "search": {
+      "api": {
+        "name": "API",
+        "value": "Yes"
+      },
+      "feature_fullTextSearch": {
+        "name": "Full Text Search",
+        "value": "Yes"
+      },
+      "feature_stemming": {
+        "name": "Stemming",
+        "value": "No"
+      },
+      "feature_stopWords": {
+        "name": "Stop Words",
+        "value": "Yes"
+      },
+      "feature_autoCompletion": {
+        "name": "Autocompletion",
+        "value": "Yes"
+      },
+      "feature_autoSuggestions": {
+        "name": "Autosuggestion",
+        "value": "Yes"
+      },
+      "feature_resultHighlighting": {
+        "name": "Result Highlighting",
+        "value": "Yes"
+      },
+      "feature_geospatialSearch": {
+        "name": "Geospatial Search",
+        "value": "Yes"
+      },
+      "feature_searchWithinUploads": {
+        "name": "Search within uploads",
+        "value": "Yes"
+      },
+      "name": "Search"
+    },
+    "image": {
+      "manipulation": {
+        "name": "Manipulation",
+        "value": "Yes"
+      },
+      "focalPointSupport": {
+        "name": "Focalpoint Support",
+        "value": "No"
+      },
+      "faceDetection": {
+        "name": "Facedetection",
+        "value": "No"
+      },
+      "optimziedImageEncoding": {
+        "name": "Optimized Image Encoding",
+        "value": "Yes"
+      },
+      "name": "Image"
+    },
+    "assetFingerprinting": {
+      "name": "Asset fingerprinting",
+      "value": null
+    },
+    "cdnSupport": {
+      "name": "CDN Support",
+      "value": "Yes"
+    },
+    "antivirusScanning": {
+      "name": "Antivirus Scanning",
+      "value": "No"
+    },
+    "customBinaryHandler": {
+      "name": "Custom Binary Handler",
+      "value": "No"
+    },
+    "clustering": {
+      "name": "Clustering",
+      "value": "Yes"
+    },
+    "dockerSupport": {
+      "name": "Docker Support",
+      "value": "Yes"
+    },
+    "backupFeature": {
+      "name": "Backup Feature",
+      "value": "Yes"
+    },
+    "importExport": {
+      "name": "Import/Export",
+      "value": "Yes"
+    },
+    "cli": {
+      "name": "CLI",
+      "value": "No"
+    },
+    "sdk": {
+      "java": {
+        "name": "Java",
+        "value": "No"
+      },
+      "cSharp": {
+        "name": "C#",
+        "value": "No"
+      },
+      "php": {
+        "name": "PHP",
+        "value": "No"
+      },
+      "javaScript": {
+        "name": "JavaScript",
+        "value": "Yes"
+      },
+      "react": {
+        "name": "React",
+        "value": "Yes"
+      },
+      "angular": {
+        "name": "AngularJS",
+        "value": "Yes"
+      },
+      "typeScript": {
+        "name": "TypeScript",
+        "value": "Yes"
+      },
+      "name": "SDK"
+    },
+    "webHooks": {
+      "name": "Web Hooks",
+      "value": "Yes"
+    },
+    "eventBus": {
+      "name": "Eventbus",
+      "value": "No"
+    },
+    "bulkImport": {
+      "name": "Bulk Import",
+      "value": "No"
+    },
+    "clientSideForms": {
+      "name": "Client Side Forms",
+      "value": "No"
+    },
+    "pluginSystem": {
+      "name": "Plugin System",
+      "value": "No"
+    },
+    "customizableUi": {
+      "name": "Customizable UI",
+      "value": "No"
+    },
+    "userManagement": {
+      "name": "User Management",
+      "value": "Yes"
+    },
+    "roleBasedPermissions": {
+      "name": "Role Based Permissions",
+      "value": "Yes"
+    },
+    "documentLevelPermissions": {
+      "name": "Document Level Permissions",
+      "value": "Yes"
+    },
+    "oauth2Support": {
+      "name": "OAuth 2.0 Support",
+      "value": "No"
+    },
+    "auditing": {
+      "name": "Auditing",
+      "value": "No"
+    },
+    "apiKeys": {
+      "name": "API Keys",
+      "value": "Yes"
+    },
+    "projectSupport": {
+      "name": "Project Support",
+      "value": "Yes"
+    },
+    "i18n": {
+      "name": "I18N Localized Content",
+      "value": "Yes"
+    },
+    "contentTrees": {
+      "name": "Content Trees",
+      "value": "No"
+    },
+    "tagging": {
+      "name": "Tagging",
+      "value": "Yes"
+    },
+    "contentRelations": {
+      "name": "Content Relations",
+
+      "supportQueryingIncomingRelations": {
+        "name": "Support for querying incoming relations",
+        "value": "Yes"
+      },
+      "supportNestingFields": {
+        "name": "Support for nesting fields/elements",
+        "value": "Yes"
+      }
+    },
+    "gdprStatement": {
+      "name": "GDPR Statement",
+      "value": "Yes"
+    },
+    "gdprApi": {
+      "name": "GDPR API",
+      "value": "No"
+    },
+    "editingConflictDetection": {
+      "name": "Editing Conflict Detection",
+      "value": "No"
+    },
+    "versioning": {
+      "name": "Versioning",
+      "value": "Yes"
+    },
+    "content": {
+      "scheduling": {
+        "name": "Scheduling",
+        "value": "No"
+      },
+      "branches": {
+        "name": "Branches",
+        "value": "Yes"
+      },
+      "modelsSchemas": {
+        "name": "Models / Schemas",
+        "value": "Yes"
+      },
+      "modelsSchemaVersioning": {
+        "name": "Model / Schema Versioning",
+        "value": "No"
+      },
+      "migration": {
+        "name": "Migration",
+        "value": "No"
+      },
+      "name": "Content"
+    },
+    "workflows": {
+      "name": "Workflows",
+      "value": "No"
+    }
+  }
+}

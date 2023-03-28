@@ -55,7 +55,7 @@
       },
       "subscriptions": {
         "name": "Subscriptions",
-        "value": "No"
+        "value": "Yes"
       },
       "name": "GraphQL"
     },
@@ -207,7 +207,7 @@
       },
       "typeScript": {
         "name": "TypeScript",
-        "value": "No"
+        "value": "Yes"
       },
       "name": "SDK"
     },
@@ -328,7 +328,7 @@
     },
     "workflows": {
       "name": "Workflows",
-      "value": "No"
+      "value": "Yes"
     }
   }
 }

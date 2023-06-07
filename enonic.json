@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2021-09-01",
+  "lastUpdated": "2023-06-07",
   "name": "Enonic XP",
-  "version": "7.7",
+  "version": "7.12",
   "license": "GPLv3",
   "inception": "2015-03",
   "category": "Professional/Enterprise",
   "systemRequirements": {
     "name": "System Requirements",
-    "value": "Apache/NGINX, PHP, MYSQL. Compute 2vCPU and 2GB memory min."
+    "value": "Compute 2vCPU and 2GB memory min."
   },
   "specialFeatures": {
     "name": "Special Features",
@@ -146,7 +146,7 @@
     },
     "assetFingerprinting": {
       "name": "Asset fingerprinting",
-      "value": "No"
+      "value": "Yes"
     },
     "cdnSupport": {
       "name": "CDN Support",

@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2020-09-14",
-  "name": "Kentico Kontent",
-  "version": "09-2020",
+  "lastUpdated": "2023-06-13",
+  "name": "Kontent.ai",
+  "version": "06-2023",
   "license": "Proprietary",
   "inception": "08-2015",
   "category": "Professional/Enterprise",
@@ -11,17 +11,17 @@
   },
   "specialFeatures": {
     "name": "Special Features",
-    "value": "Web Spotlight, Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations"
+    "value": "Web Spotlight, Union Types/Polymorphic relations, SSO, Integrated API Explorer, Sortable Relations, Types Generator"
   },
   "supportedDatabases": {
     "name": "Supported Databases",
     "value": null
   },
   "teaser": {
-    "value": "Kentico Kontent delivers all the benefits of a headless CMS while empowering your marketing team to manage the experience across your digital channels."
+    "value": "Kontent.ai is the headless CMS that enables organizations to govern all things content to deliver standout experiences, now and in the future."
   },
   "gitHubURL": {
-    "value": "https://github.com/Kentico/Home#kentico-kontent"
+    "value": "https://github.com/kontent-ai"
   },
   "properties": {
     "openSource": {
@@ -49,7 +49,7 @@
 
       "api": {
         "name": "API",
-        "value": "No"
+        "value": "Yes"
       },
       "mutations": {
         "name": "Mutations",
@@ -273,7 +273,7 @@
     },
     "contentTrees": {
       "name": "Content Trees",
-      "value": "No"
+      "value": "Yes"
     },
     "tagging": {
       "name": "Tagging",
@@ -322,7 +322,7 @@
       },
       "modelsSchemaVersioning": {
         "name": "Model / Schema Versioning",
-        "value": "No"
+        "value": "Yes"
       },
       "migration": {
         "name": "Migration",

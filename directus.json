@@ -2,7 +2,7 @@
   "lastUpdated": "2021-11-04",
   "name": "Directus",
   "version": "v9.0.0-rc.101",
-  "license": "GPLv3",
+  "license": "BUSL-1.1",
   "inception": "01-2012",
   "category": "Essential/Professional",
   "systemRequirements": {
@@ -11,7 +11,7 @@
   },
   "specialFeatures": {
     "name": "Special Features",
-    "value": "custom status (Draft, Reveiw, Published)"
+    "value": "Custom Status (Draft, Reveiw, Published), Realtime, User APIs"
   },
   "supportedDatabases": {
     "name": "Supported Databases",
@@ -38,7 +38,7 @@
     },
     "cloudServiceHostedInEurope": {
       "name": "Cloud Service Hosted in Europe",
-      "value": "No"
+      "value": "Yes"
     },
     "commercialSupportAvailable": {
       "name": "Commercial Support Available?",
@@ -55,7 +55,7 @@
       },
       "subscriptions": {
         "name": "Subscriptions",
-        "value": "No"
+        "value": "Yes"
       },
       "name": "GraphQL"
     },
@@ -132,7 +132,7 @@
       },
       "focalPointSupport": {
         "name": "Focalpoint Support",
-        "value": ""
+        "value": "Yes"
       },
       "faceDetection": {
         "name": "Facedetection",
@@ -191,7 +191,7 @@
       },
       "php": {
         "name": "PHP",
-        "value": "Yes"
+        "value": "No"
       },
       "javaScript": {
         "name": "JavaScript",
@@ -310,7 +310,7 @@
       },
       "branches": {
         "name": "Branches",
-        "value": "No"
+        "value": "Yes"
       },
       "modelsSchemas": {
         "name": "Models / Schemas",
